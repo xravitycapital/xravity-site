@@ -18,15 +18,46 @@
     "p3": "I have collaborated with startups and brands to build unique digital identities. In my free time, I enjoy photography, writing, and exploring new frontiers in tech."
   },
   "timeline": [
-    { "year": "2024 — Present", "title": "First Project", "org": "Startup Inc.", "desc": "Led design and frontend development." },
-    { "year": "2022 — 2024", "title": "Freelance Designer", "org": "Self-employed", "desc": "Brand identity and UI/UX for various clients." },
-    { "year": "2021 — 2022", "title": "Design Intern", "org": "Creative Agency", "desc": "Assisted with visual design and prototyping." }
+    {
+      "year": "2024 — Present",
+      "title": "First Project",
+      "org": "Startup Inc.",
+      "desc": "Led design and frontend development."
+    },
+    {
+      "year": "2022 — 2024",
+      "title": "Freelance Designer",
+      "org": "Self-employed",
+      "desc": "Brand identity and UI/UX for various clients."
+    },
+    {
+      "year": "2021 — 2022",
+      "title": "Design Intern",
+      "org": "Creative Agency",
+      "desc": "Assisted with visual design and prototyping."
+    }
   ],
   "skills": [
-    { "icon": "🎨", "name": "Brand Design", "level": "Visual Identity & Strategy" },
-    { "icon": "💻", "name": "Frontend Dev", "level": "React · Vue · TypeScript" },
-    { "icon": "🖼", "name": "UI/UX Design", "level": "Figma · Prototyping" },
-    { "icon": "📸", "name": "Photography", "level": "Portrait & Landscape" }
+    {
+      "icon": "🎨",
+      "name": "Brand Design",
+      "level": "Visual Identity & Strategy"
+    },
+    {
+      "icon": "💻",
+      "name": "Frontend Dev",
+      "level": "React · Vue · TypeScript"
+    },
+    {
+      "icon": "🖼",
+      "name": "UI/UX Design",
+      "level": "Figma · Prototyping"
+    },
+    {
+      "icon": "📸",
+      "name": "Photography",
+      "level": "Portrait & Landscape"
+    }
   ],
   "gallery": {
     "title": "Photo Gallery",
@@ -37,9 +68,21 @@
     "title": "Get in Touch",
     "sub": "Open for collaboration and conversation",
     "links": [
-      { "platform": "Email", "url": "mailto:hello@xravity.com", "icon": "✉" },
-      { "platform": "GitHub", "url": "https://github.com/xravity", "icon": "⟡" },
-      { "platform": "Twitter", "url": "https://twitter.com/xravity", "icon": "✎" }
+      {
+        "platform": "Email",
+        "url": "mailto:hello@xravity.com",
+        "icon": "✉"
+      },
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/xravitycapital",
+        "icon": "⟡"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/xravitycapital",
+        "icon": "✎"
+      }
     ]
   },
   "customSections": []
