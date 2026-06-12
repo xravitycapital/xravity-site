@@ -6,40 +6,49 @@
   <title>Content Manager — Xravity</title>
   <style>
     body { margin: 0; background: #0d0d14; }
-    /* Let identity widget's modal show above everything */
-    #netlify-identity-widget { z-index: 9999; }
   </style>
 </head>
 <body>
-  <!-- Load Identity widget first so it can process invite/recovery tokens -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script>
-    // Let identity handle URL hash (recovery_token, invitation_token, etc.)
-    window.netlifyIdentity.on("init", function(user) {
-      if (user) {
-        // Logged in — load the CMS
-        loadDecapCMS();
-      } else if (window.location.hash && (
-        window.location.hash.includes('recovery_token') ||
-        window.location.hash.includes('invitation_token') ||
-        window.location.hash.includes('confirmation_token')
-      )) {
-        // Has invite/recovery token — Identity widget will show the form
-        // CMS loads after login
-        window.netlifyIdentity.on("login", function() {
-          window.location.href = "/admin/";
-        });
-      } else {
-        // No user, no token — load CMS which shows its own login UI
-        loadDecapCMS();
-      }
-    });
+    (function() {
+      var widget = window.netlifyIdentity;
+      var hash = window.location.hash;
+      var hasToken = !!(hash && (
+        hash.indexOf('invite_token') !== -1 ||
+        hash.indexOf('recovery_token') !== -1 ||
+        hash.indexOf('confirmation_token') !== -1
+      ));
 
-    function loadDecapCMS() {
-      var s = document.createElement('script');
-      s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
-      document.body.appendChild(s);
-    }
+      // After successful login, strip hash and reload to show CMS
+      widget.on('login', function() {
+        if (window.location.hash) {
+          window.location.replace('/admin/');
+        } else {
+          loadCMS();
+        }
+      });
+
+      widget.on('init', function(user) {
+        if (user && !hasToken) {
+          // Logged in, no stray token — show CMS
+          loadCMS();
+        } else if (hasToken) {
+          // Identity widget will show Set Password / Confirm form
+          // Do nothing — let the widget handle it
+          // The 'login' handler above will trigger loadCMS after success
+        } else {
+          // Not logged in, no invite token — show CMS (which has its own login UI)
+          loadCMS();
+        }
+      });
+
+      function loadCMS() {
+        var s = document.createElement('script');
+        s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+        document.body.appendChild(s);
+      }
+    })();
   </script>
 </body>
 </html>
