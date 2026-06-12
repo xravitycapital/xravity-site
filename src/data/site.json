@@ -1,0 +1,46 @@
+{
+  "site": {
+    "name": "Xravity",
+    "description": "Designer, Developer, Dreamer — A personal universe of design, code, and stories.",
+    "url": "https://xravity.netlify.app",
+    "footer": "© 2026 Xravity. Crafted with gravity and grace."
+  },
+  "hero": {
+    "tag": "Designer · Developer · Dreamer",
+    "name": "ravity",
+    "sub": "Where creativity meets gravity. A personal universe of design, code, and stories.",
+    "cta": "Explore"
+  },
+  "about": {
+    "title": "Resume & Experience",
+    "p1": "Hi, I am <span class=\"highlight\">Xravity</span> — a creator passionate about design and technology. I believe good design should be clean and powerful, like <span class=\"highlight\">gravity</span> itself — naturally drawing the eye.",
+    "p2": "I specialize in brand design, front-end development, and digital art. My work spans visual design, interactive experiences, and code.",
+    "p3": "I have collaborated with startups and brands to build unique digital identities. In my free time, I enjoy photography, writing, and exploring new frontiers in tech."
+  },
+  "timeline": [
+    { "year": "2024 — Present", "title": "First Project", "org": "Startup Inc.", "desc": "Led design and frontend development." },
+    { "year": "2022 — 2024", "title": "Freelance Designer", "org": "Self-employed", "desc": "Brand identity and UI/UX for various clients." },
+    { "year": "2021 — 2022", "title": "Design Intern", "org": "Creative Agency", "desc": "Assisted with visual design and prototyping." }
+  ],
+  "skills": [
+    { "icon": "🎨", "name": "Brand Design", "level": "Visual Identity & Strategy" },
+    { "icon": "💻", "name": "Frontend Dev", "level": "React · Vue · TypeScript" },
+    { "icon": "🖼", "name": "UI/UX Design", "level": "Figma · Prototyping" },
+    { "icon": "📸", "name": "Photography", "level": "Portrait & Landscape" }
+  ],
+  "gallery": {
+    "title": "Photo Gallery",
+    "sub": "A collection of moments captured through my lens.",
+    "photos": []
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "sub": "Open for collaboration and conversation",
+    "links": [
+      { "platform": "Email", "url": "mailto:hello@xravity.com", "icon": "✉" },
+      { "platform": "GitHub", "url": "https://github.com/xravity", "icon": "⟡" },
+      { "platform": "Twitter", "url": "https://twitter.com/xravity", "icon": "✎" }
+    ]
+  },
+  "customSections": []
+}

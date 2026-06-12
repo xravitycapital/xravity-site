@@ -1,0 +1,73 @@
+---
+import siteData from '../data/site.json';
+const photos = siteData.gallery.photos || [];
+---
+
+<section id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section-tag" data-i18n="gallery_tag">02 · Gallery</p>
+        <h2 class="section-title" style="margin-bottom:0;" data-i18n="gallery_title">
+          {siteData.gallery.title}
+        </h2>
+      </div>
+    </div>
+    <p class="section-subtitle" data-i18n="gallery_sub">
+      {siteData.gallery.sub}
+    </p>
+
+    <div class="gallery-grid" id="galleryGrid">
+      {photos.length === 0
+        ? <div class="gallery-item" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.8rem;color:var(--text-light);font-family:var(--font-mono);font-size:0.8rem;">
+            <span style="font-size:2.2rem;font-weight:300;">+</span>
+            <span>Photos coming soon</span>
+          </div>
+        : photos.map(photo => (
+            <div class="gallery-item">
+              <img src={photo.src} alt={photo.caption || ''} loading="lazy" />
+              <div class="gallery-item-info">
+                <span>{photo.caption || 'Untitled'}</span>
+              </div>
+            </div>
+          ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <img id="lightboxImg" src="" alt="Lightbox preview" />
+  <div class="lightbox-caption" id="lightboxCaption" style="display:none;"></div>
+</div>
+
+<script>
+  const lightbox = document.getElementById('lightbox')!;
+  const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightboxCaption')!;
+  const lightboxClose = document.getElementById('lightboxClose')!;
+
+  document.querySelectorAll('.gallery-item img').forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = (img as HTMLImageElement).src;
+      lightbox.classList.add('active');
+      const info = (img.parentElement?.querySelector('.gallery-item-info span') as HTMLElement)?.textContent;
+      if (info) {
+        lightboxCaption.textContent = info;
+        lightboxCaption.style.display = 'block';
+      } else {
+        lightboxCaption.style.display = 'none';
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
+  lightbox.addEventListener('click', e => {
+    if (e.target === lightbox) lightbox.classList.remove('active');
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') lightbox.classList.remove('active');
+  });
+</script>

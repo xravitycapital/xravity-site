@@ -1,0 +1,24 @@
+---
+import siteData from '../data/site.json';
+---
+
+<section id="hero">
+  <div class="hero-content">
+    <p class="hero-tag" data-i18n="hero_tag">
+      {siteData.hero.tag}
+    </p>
+    <h1 class="hero-name">
+      <span class="x">X</span><span data-i18n="hero_name">{siteData.hero.name}</span>
+    </h1>
+    <p class="hero-sub" data-i18n="hero_sub">
+      {siteData.hero.sub}
+    </p>
+    <a href="#about" class="hero-cta" data-i18n="hero_cta">
+      {siteData.hero.cta}
+    </a>
+  </div>
+  <div class="scroll-indicator" onclick="document.getElementById('about')?.scrollIntoView({behavior:'smooth'})">
+    <span class="line"></span>
+    <small data-i18n="scroll">Scroll</small>
+  </div>
+</section>

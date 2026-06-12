@@ -1,0 +1,288 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+}
+
+const {
+  title = 'Xravity — Personal Universe',
+  description = 'Xravity — Personal Universe. Designer, Developer, Dreamer.',
+  lang = 'en'
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'} data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#fafaf7" />
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>X</text></svg>" />
+</head>
+<body>
+  <!-- Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" title="Back to top">&#8593;</button>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+    <span>&#9788;</span>
+  </button>
+
+  <!-- Custom Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particles"></canvas>
+
+  <slot />
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    import { t } from '../utils/i18n';
+
+    // ─── Theme ───
+    const themeToggle = document.getElementById('themeToggle')!;
+    const savedTheme = localStorage.getItem('xravity_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.querySelector('span')!.innerHTML = savedTheme === 'dark' ? '&#9790;' : '&#9788;';
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const next = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      themeToggle.querySelector('span')!.innerHTML = next === 'dark' ? '&#9790;' : '&#9788;';
+      localStorage.setItem('xravity_theme', next);
+    });
+
+    // ─── Progress Bar & Back to Top ───
+    const progressBar = document.getElementById('progress-bar')!;
+    const backTop = document.getElementById('back-to-top')!;
+    window.addEventListener('scroll', () => {
+      const sc = window.scrollY;
+      const ch = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (ch > 0 ? (sc / ch * 100) : 0) + '%';
+      backTop.classList.toggle('visible', sc > 500);
+
+      // Nav active state
+      const sections = document.querySelectorAll('section[id]');
+      let cur = '';
+      sections.forEach(s => {
+        if (sc >= s.offsetTop - 120) cur = s.id;
+      });
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+      });
+    });
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ─── Custom Cursor ───
+    const dot = document.getElementById('cursor-dot')!;
+    const ring = document.getElementById('cursor-ring')!;
+    let mx = 0, my = 0, dx = 0, dy = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+    function bindHover() {
+      document.querySelectorAll('a,button,.blog-card,.gallery-item,.contact-link,.skill-card,.section-block')
+        .forEach(el => {
+          el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+          el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+        });
+    }
+    bindHover();
+
+    (function animateCursor() {
+      dx += (mx - dx) * 0.3;
+      dy += (my - dy) * 0.3;
+      dot.style.left = dx + 'px';
+      dot.style.top = dy + 'px';
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = (rx - 20) + 'px';
+      ring.style.top = (ry - 20) + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    // ─── Particles ───
+    const canvas = document.getElementById('particles') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d')!;
+    let w = 0, h = 0;
+    function resize() { w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+    resize();
+    addEventListener('resize', resize);
+
+    function particleColors() {
+      const style = getComputedStyle(document.documentElement);
+      return {
+        rgb: style.getPropertyValue('--particle-color').trim(),
+        a: parseFloat(style.getPropertyValue('--particle-alpha')),
+        la: parseFloat(style.getPropertyValue('--particle-line-alpha'))
+      };
+    }
+
+    class Particle {
+      x: number = 0;
+      y: number = 0;
+      size: number = 1;
+      vx: number = 0;
+      vy: number = 0;
+      life: number = 0;
+      maxLife: number = 1;
+      alpha: number = 0.5;
+
+      constructor() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.size = Math.random() * 2.2 + 0.8;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.life = Math.random();
+        this.maxLife = this.life;
+        this.alpha = Math.random() * 0.55 + 0.18;
+      }
+      update() {
+        const ddx = mx - this.x, ddy = my - this.y;
+        const d = Math.sqrt(ddx * ddx + ddy * ddy);
+        const R = 250;
+        if (d < R && d > 0) {
+          const f = (R - d) / R;
+          const a = Math.atan2(ddy, ddx);
+          this.x += Math.cos(a) * f * 2.2;
+          this.y += Math.sin(a) * f * 2.2;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life -= 0.0012;
+        if (this.life <= 0) this.life = this.maxLife;
+        if (this.x < -20) this.x = w + 20;
+        if (this.x > w + 20) this.x = -20;
+        if (this.y < -20) this.y = h + 20;
+        if (this.y > h + 20) this.y = -20;
+      }
+      draw(c: { rgb: string; a: number }) {
+        const al = this.alpha * (0.5 + 0.5 * Math.sin((this.life / this.maxLife) * Math.PI));
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + c.rgb + ',' + al + ')';
+        ctx.fill();
+        if (this.size > 1.8) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size * 1.8, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + c.rgb + ',' + (al * 0.15) + ')';
+          ctx.fill();
+        }
+      }
+    }
+
+    const particles: Particle[] = [];
+    for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+    (function animateParticles() {
+      ctx.clearRect(0, 0, w, h);
+      const c = particleColors();
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const pdx = particles[i].x - particles[j].x;
+          const pdy = particles[i].y - particles[j].y;
+          const pd = Math.sqrt(pdx * pdx + pdy * pdy);
+          if (pd < 140) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = 'rgba(' + c.rgb + ',' + (c.la * (1 - pd / 140)) + ')';
+            ctx.lineWidth = 0.9;
+            ctx.stroke();
+          }
+        }
+      }
+      particles.forEach(p => { p.update(); p.draw(c); });
+      requestAnimationFrame(animateParticles);
+    })();
+
+    // ─── Toast helper ───
+    function toast(msg: string) {
+      const t = document.getElementById('toast')!;
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout((t as any)._tid);
+      (t as any)._tid = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+    (window as any).toast = toast;
+
+    // ─── Language Toggle ───
+    let curLang = localStorage.getItem('xravity_lang') || 'en';
+    const langBtn = document.getElementById('langToggle');
+    if (langBtn) {
+      const updateLangBtn = () => {
+        langBtn.innerHTML = curLang === 'zh' ? 'EN | <strong>中文</strong>' : '<strong>EN</strong> | 中文';
+      };
+      updateLangBtn();
+
+      langBtn.addEventListener('click', () => {
+        curLang = curLang === 'en' ? 'zh' : 'en';
+        localStorage.setItem('xravity_lang', curLang);
+        document.documentElement.lang = curLang === 'zh' ? 'zh-CN' : 'en';
+        updateLangBtn();
+        applyTranslations(curLang);
+        toast(curLang === 'zh' ? '已切换到中文' : 'Switched to English');
+      });
+    }
+
+    // ─── Bilingual ───
+    async function applyTranslations(lang: string) {
+      const map: Record<string, string> = {};
+      try {
+        const res = await fetch('/data/translations.json');
+        const data = await res.json();
+        // English keys
+        for (const [k, v] of Object.entries(data)) {
+          if (k !== 'zh' && typeof v === 'string') map[k] = v;
+        }
+        // Chinese overrides
+        if (lang === 'zh' && data.zh) {
+          for (const [k, v] of Object.entries(data.zh)) {
+            if (typeof v === 'string') map[k] = v;
+          }
+        }
+      } catch(e) {}
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = (el as HTMLElement).dataset.i18n;
+        if (!key || !map[key]) return;
+        if (lang === 'en') {
+          const orig = el.getAttribute('data-orig-en');
+          if (orig !== null) el.innerHTML = orig;
+        } else {
+          if (!el.hasAttribute('data-orig-en')) {
+            el.setAttribute('data-orig-en', el.innerHTML);
+          }
+          el.innerHTML = map[key];
+        }
+      });
+    }
+
+    // Init language
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTranslations(curLang);
+    });
+    // apply on load if DOM already ready
+    if (document.readyState !== 'loading') {
+      applyTranslations(curLang);
+    }
+  </script>
+</body>
+</html>

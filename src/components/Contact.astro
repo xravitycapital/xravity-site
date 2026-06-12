@@ -1,0 +1,21 @@
+---
+import siteData from '../data/site.json';
+---
+
+<section id="contact">
+  <div class="container">
+    <p class="section-tag" data-i18n="contact_tag">04 · Contact</p>
+    <h2 class="section-title" data-i18n="contact_title">{siteData.contact.title}</h2>
+    <p style="color:var(--text-muted);margin-bottom:1rem;" data-i18n="contact_sub">
+      {siteData.contact.sub}
+    </p>
+    <div class="contact-links">
+      {siteData.contact.links.map(link => (
+        <a href={link.url} class="contact-link" target="_blank" rel="noopener">
+          <span>{link.icon}</span>
+          <span>{link.platform}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

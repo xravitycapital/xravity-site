@@ -1,0 +1,114 @@
+backend:
+  name: git-gateway
+  branch: main
+
+publish_mode: editorial_workflow
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+site_url: "https://xravity.netlify.app"
+display_url: "https://xravity.netlify.app"
+logo_url: "https://xravity.netlify.app/favicon.svg"
+
+# ─── Collections ───
+collections:
+  # ── Blog Posts ──
+  - name: "blog"
+    label: "Blog Posts"
+    label_singular: "Blog Post"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "blog/{{slug}}"
+    editor:
+      preview: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Excerpt", name: "excerpt", widget: "text", hint: "Short summary shown on the blog list page." }
+      - { label: "Tags", name: "tags", widget: "list", default: [] }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  # ── Site Settings (edits src/data/site.json) ──
+  - name: "settings"
+    label: "Site Settings"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: "general"
+        label: "General Settings"
+        file: "src/data/site.json"
+        fields:
+          - label: "Site"
+            name: "site"
+            widget: "object"
+            fields:
+              - { label: "Site Name", name: "name", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "URL", name: "url", widget: "string" }
+              - { label: "Footer Text", name: "footer", widget: "string" }
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Tag Line", name: "tag", widget: "string" }
+              - { label: "Name (after X)", name: "name", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - { label: "CTA Text", name: "cta", widget: "string" }
+          - label: "About"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "Section Title", name: "title", widget: "string" }
+              - { label: "Paragraph 1 (HTML)", name: "p1", widget: "text" }
+              - { label: "Paragraph 2", name: "p2", widget: "text" }
+              - { label: "Paragraph 3", name: "p3", widget: "text" }
+          - label: "Timeline"
+            name: "timeline"
+            widget: "list"
+            fields:
+              - { label: "Period", name: "year", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Organization", name: "org", widget: "string" }
+              - { label: "Description", name: "desc", widget: "text" }
+          - label: "Skills"
+            name: "skills"
+            widget: "list"
+            fields:
+              - { label: "Icon (emoji)", name: "icon", widget: "string" }
+              - { label: "Skill Name", name: "name", widget: "string" }
+              - { label: "Level / Description", name: "level", widget: "string" }
+          - label: "Gallery"
+            name: "gallery"
+            widget: "object"
+            fields:
+              - { label: "Section Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Photos"
+                name: "photos"
+                widget: "list"
+                fields:
+                  - { label: "Image", name: "src", widget: "image" }
+                  - { label: "Caption", name: "caption", widget: "string" }
+          - label: "Contact"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Section Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "sub", widget: "text" }
+              - label: "Links"
+                name: "links"
+                widget: "list"
+                fields:
+                  - { label: "Platform Name", name: "platform", widget: "string" }
+                  - { label: "URL", name: "url", widget: "string" }
+                  - { label: "Icon (emoji)", name: "icon", widget: "string" }
+          - label: "Custom Sections"
+            name: "customSections"
+            widget: "list"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Content (HTML)", name: "content", widget: "text" }

@@ -1,0 +1,44 @@
+---
+import siteData from '../data/site.json';
+---
+
+<section id="about">
+  <div class="container">
+    <p class="section-tag" data-i18n="about_tag">01 · About</p>
+    <h2 class="section-title" data-i18n="about_title">{siteData.about.title}</h2>
+
+    <div class="about-grid">
+      <div class="about-text">
+        <p data-i18n="about_p1" set:html={siteData.about.p1} />
+        <p data-i18n="about_p2">{siteData.about.p2}</p>
+        <p data-i18n="about_p3">{siteData.about.p3}</p>
+      </div>
+      <div>
+        <div class="timeline">
+          {siteData.timeline.map(item => (
+            <div class="timeline-item">
+              <div class="timeline-content">
+                <div class="timeline-year">{item.year}</div>
+                <div class="timeline-title">{item.title}</div>
+                <div class="timeline-desc">{item.desc} — <em>{item.org}</em></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <p class="section-tag" style="margin-top:5rem;" data-i18n="skills_tag">Expertise</p>
+    <h3 class="section-title" style="font-size:1.8rem;margin-bottom:2rem;" data-i18n="skills_title">Skills</h3>
+
+    <div class="skills-grid">
+      {siteData.skills.map(skill => (
+        <div class="skill-card">
+          <div class="skill-icon">{skill.icon}</div>
+          <div class="skill-name">{skill.name}</div>
+          <div class="skill-level">{skill.level}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

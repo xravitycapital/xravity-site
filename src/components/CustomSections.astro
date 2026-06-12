@@ -1,0 +1,19 @@
+---
+import siteData from '../data/site.json';
+const sections = siteData.customSections || [];
+---
+
+<section id="custom">
+  <div class="container">
+    <p class="section-tag" data-i18n="custom_tag">Custom Modules</p>
+    {sections.length === 0
+      ? <p style="text-align:center;color:var(--text-muted);padding:2rem;">No custom modules yet. Add them via Decap CMS.</p>
+      : sections.map(s => (
+          <div class="section-block" style="margin-bottom:1.5rem;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);">
+            <h3 class="section-title" style="font-size:1.6rem;margin-bottom:1rem;">{s.title}</h3>
+            <div set:html={s.content} />
+          </div>
+        ))
+    }
+  </div>
+</section>
