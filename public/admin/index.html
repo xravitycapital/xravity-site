@@ -10,6 +10,33 @@
   </style>
 </head>
 <body>
+  <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- Netlify Identity Widget (for login) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+  <script>
+    // Register Netlify CMS as the backend for Decap CMS
+    CMS.registerBackend('git-gateway', function(config) {
+      return {
+        name: 'git-gateway',
+        init: function(args) {
+          return {
+            authComponent: 'netlify-identity-widget'
+          };
+        }
+      };
+    });
+  </script>
 </body>
 </html>
