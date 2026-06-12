@@ -24,6 +24,16 @@ const {
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>X</text></svg>" />
 </head>
 <body>
+  <!-- Redirect Netlify Identity invite/recovery tokens to /admin/ -->
+  <script>
+    (function() {
+      var h = window.location.hash;
+      if (h && (h.includes('invite_token') || h.includes('recovery_token') || h.includes('confirmation_token') || h.includes('error'))) {
+        window.location.href = '/admin/' + window.location.hash + window.location.search;
+      }
+    })();
+  </script>
+
   <!-- Progress Bar -->
   <div id="progress-bar"></div>
 
