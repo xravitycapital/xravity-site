@@ -14,8 +14,10 @@
       justify-content: center;
       color: #e8e8f0;
       gap: 1.5rem;
+      transition: opacity 0.3s;
     }
-    #login-prompt h1 { font-size: 1.4rem; font-weight: 500; }
+    #login-prompt h1 { font-size: 1.4rem; font-weight: 500; margin: 0; }
+    #login-prompt p { color: #8888a0; font-size: 0.9rem; margin: 0; }
     #login-prompt button {
       padding: 0.85rem 2.5rem;
       font-size: 1rem;
@@ -28,11 +30,23 @@
       font-family: inherit;
     }
     #login-prompt button:hover { background: #d4a843; color: #0d0d14; }
+    #login-prompt button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .spinner {
+      display: inline-block;
+      width: 22px; height: 22px;
+      border: 2px solid #333;
+      border-top-color: #d4a843;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <div id="login-prompt">
     <h1>Content Manager</h1>
+    <p id="status-text"></p>
     <button id="loginBtn">Login with Netlify Identity</button>
   </div>
 
@@ -41,9 +55,17 @@
     (function() {
       var widget = window.netlifyIdentity;
       var hash = window.location.hash;
-      var prompt = document.getElementById('login-prompt')!;
-      var loginBtn = document.getElementById('loginBtn')!;
+      var prompt = document.getElementById('login-prompt');
+      var loginBtn = document.getElementById('loginBtn');
+      var statusText = document.getElementById('status-text');
       var cmsStarted = false;
+
+      // Guard: widget script failed to load
+      if (!widget) {
+        prompt.innerHTML =
+          '<h1>Error</h1><p style="color:#e55;">Failed to load authentication.<br>Please refresh the page.</p>';
+        return;
+      }
 
       function startCMS() {
         if (cmsStarted) return;
@@ -54,28 +76,71 @@
         document.body.appendChild(s);
       }
 
-      // Handle invite/recovery tokens
-      if (hash && (hash.indexOf('invite_token') !== -1 || hash.indexOf('recovery_token') !== -1 || hash.indexOf('confirmation_token') !== -1)) {
-        prompt.querySelector('h1')!.textContent = 'Set Your Password';
+      // ── Invite / Recovery / Confirmation token flow ──
+      if (hash && (
+          hash.indexOf('invite_token') !== -1 ||
+          hash.indexOf('recovery_token') !== -1 ||
+          hash.indexOf('confirmation_token') !== -1
+      )) {
+        var h1 = prompt.querySelector('h1');
+        if (h1) h1.textContent = 'Set Your Password';
         loginBtn.style.display = 'none';
-        widget.on('login', function() { window.location.replace('/admin/'); });
-        // Let widget process the token — it will show the Set Password form
+        statusText.textContent = 'Loading…';
+
+        widget.on('login', function() {
+          window.location.replace('/admin/');
+        });
+        // init() processes the token and shows the password-setup form
+        widget.init();
         return;
       }
 
-      // Manual login button
-      loginBtn.addEventListener('click', function() { widget.open(); });
+      // ── Normal login flow ──
+      statusText.innerHTML = '<span class="spinner"></span>';
+      loginBtn.disabled = true;
 
-      // Check initial state
+      // MUST call init() before open() — otherwise the widget
+      // doesnʼt know which Netlify site to connect to.
+      widget.init();
+
+      // init fires once the widget is connected to Netlify
       widget.on('init', function(user) {
+        loginBtn.disabled = false;
         if (user) {
+          // Already authenticated — load CMS immediately
+          statusText.textContent = 'Welcome back! Loading CMS…';
+          loginBtn.style.display = 'none';
+          startCMS();
+        } else {
+          // Not logged in — show button
+          statusText.textContent = '';
+        }
+      });
+
+      // Manual login button → open Netlify Identity modal
+      loginBtn.addEventListener('click', function() {
+        widget.open();
+      });
+
+      // User completed login inside the modal
+      widget.on('login', function(user) {
+        if (user && !cmsStarted) {
+          loginBtn.style.display = 'none';
+          statusText.textContent = 'Login successful! Loading CMS…';
           startCMS();
         }
       });
 
-      // After login via our button
-      widget.on('login', function(user) {
-        if (user) startCMS();
+      // Error handling
+      widget.on('error', function(err) {
+        statusText.textContent = 'Authentication error. Please refresh.';
+        loginBtn.disabled = false;
+        console.error('Netlify Identity error:', err);
+      });
+
+      // If user logs out, reload to a clean state
+      widget.on('logout', function() {
+        window.location.reload();
       });
     })();
   </script>
