@@ -14,7 +14,6 @@
     (function() {
       var widget = window.netlifyIdentity;
       var hash = window.location.hash;
-      var cmsLoaded = false;
 
       var hasToken = !!(hash && (
         hash.indexOf('invite_token') !== -1 ||
@@ -22,37 +21,21 @@
         hash.indexOf('confirmation_token') !== -1
       ));
 
-      function loadCMS() {
-        if (cmsLoaded) return;
-        cmsLoaded = true;
+      // Handle invite/recovery: after password set, strip the hash
+      if (hasToken) {
+        widget.on('login', function() {
+          window.location.replace('/admin/');
+        });
+        // Let widget process the token (show Set Password form etc)
+        return;
+      }
+
+      // Normal flow: just load the CMS, it handles its own login UI
+      widget.on('init', function(user) {
+        // Load CMS whether logged in or not — Decap CMS handles auth UI itself
         var s = document.createElement('script');
         s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
         document.body.appendChild(s);
-      }
-
-      // If a login happens while CMS is already loaded, just reload to sync state
-      widget.on('login', function(user) {
-        if (user) {
-          if (hasToken || window.location.hash) {
-            window.location.replace('/admin/');
-          } else if (!cmsLoaded) {
-            loadCMS();
-          } else {
-            // CMS already loaded and user just logged in — refresh to pick up session
-            window.location.reload();
-          }
-        }
-      });
-
-      widget.on('init', function(user) {
-        if (hasToken) {
-          // Identity widget will show Set Password / Confirm form
-          // Do nothing — let the widget handle it
-          // When login completes, the 'login' handler above fires → strip hash → reload
-          return;
-        }
-        // Logged in or not — load CMS either way (it handles its own login UI)
-        loadCMS();
       });
     })();
   </script>
