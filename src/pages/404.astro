@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="404 — Page Not Found | Xravity" description="Sorry, this page doesn't exist.">
+  <Nav />
+  <section id="hero" style="min-height:60vh;">
+    <div class="hero-content">
+      <p class="hero-tag">404</p>
+      <h1 class="hero-name" style="font-size:clamp(2.5rem, 6vw, 5rem);">
+        Lost in Space
+      </h1>
+      <p class="hero-sub">
+        This page has drifted beyond the gravitational pull of this site.
+      </p>
+      <a href="/" class="hero-cta">&larr; Back to Home</a>
+      <p style="margin-top:2rem;font-size:0.85rem;color:var(--text-light);">
+        Looking for a blog post? <a href="/blog" style="color:var(--accent);">Browse all posts</a>
+      </p>
+    </div>
+  </section>
+  <Footer />
+</BaseLayout>

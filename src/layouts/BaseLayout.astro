@@ -26,6 +26,10 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
+
+  <!-- Font preconnect for faster loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <meta name="theme-color" content="#fafaf7" />
   <title>{title}</title>
 
@@ -46,6 +50,9 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
 
   <!-- Canonical -->
   <link rel="canonical" href={siteUrl + Astro.url.pathname} />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="Xravity Blog" href="/rss.xml" />
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>X</text></svg>" />
 </head>
@@ -143,12 +150,10 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
     (function animateCursor() {
       dx += (mx - dx) * 0.3;
       dy += (my - dy) * 0.3;
-      dot.style.left = dx + 'px';
-      dot.style.top = dy + 'px';
+      dot.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
       rx += (mx - rx) * 0.12;
       ry += (my - ry) * 0.12;
-      ring.style.left = (rx - 20) + 'px';
-      ring.style.top = (ry - 20) + 'px';
+      ring.style.transform = 'translate(' + (rx - 20) + 'px, ' + (ry - 20) + 'px)';
       requestAnimationFrame(animateCursor);
     })();
 
@@ -229,27 +234,35 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
     }
 
     const particles: Particle[] = [];
-    for (let i = 0; i < 120; i++) particles.push(new Particle());
+    for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+    let particlesPaused = false;
+    document.addEventListener('visibilitychange', () => {
+      particlesPaused = document.hidden;
+      if (!particlesPaused) resize(); // recalc dimensions on return
+    });
 
     (function animateParticles() {
-      ctx.clearRect(0, 0, w, h);
-      const c = particleColors();
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const pdx = particles[i].x - particles[j].x;
-          const pdy = particles[i].y - particles[j].y;
-          const pd = Math.sqrt(pdx * pdx + pdy * pdy);
-          if (pd < 140) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = 'rgba(' + c.rgb + ',' + (c.la * (1 - pd / 140)) + ')';
-            ctx.lineWidth = 0.9;
-            ctx.stroke();
+      if (!particlesPaused) {
+        ctx.clearRect(0, 0, w, h);
+        const c = particleColors();
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const pdx = particles[i].x - particles[j].x;
+            const pdy = particles[i].y - particles[j].y;
+            const pd = Math.sqrt(pdx * pdx + pdy * pdy);
+            if (pd < 140) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = 'rgba(' + c.rgb + ',' + (c.la * (1 - pd / 140)) + ')';
+              ctx.lineWidth = 0.9;
+              ctx.stroke();
+            }
           }
         }
+        particles.forEach(p => { p.update(); p.draw(c); });
       }
-      particles.forEach(p => { p.update(); p.draw(c); });
       requestAnimationFrame(animateParticles);
     })();
 
@@ -298,7 +311,7 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
             if (typeof v === 'string') map[k] = v;
           }
         }
-      } catch(e) {}
+      } catch(e) { console.warn('Translation load failed:', e); }
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = (el as HTMLElement).dataset.i18n;

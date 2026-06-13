@@ -1,0 +1,68 @@
+---
+// Reusable JSON-LD structured data for SEO rich results
+
+interface PersonProps { type: 'person' }
+
+interface ArticleProps {
+  type: 'article';
+  title: string;
+  date: string;
+  description: string;
+  url: string;
+  tags?: string[];
+  image?: string;
+}
+
+type Props = PersonProps | ArticleProps;
+
+const { type, ...rest } = Astro.props;
+const siteUrl = 'https://xravity.netlify.app';
+---
+
+{type === 'person' && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Xravity',
+    url: siteUrl,
+    description: 'Personal universe of design, code, and stories.',
+    author: {
+      '@type': 'Person',
+      name: 'Xravity',
+      url: siteUrl,
+      sameAs: [
+        'https://github.com/xravitycapital',
+        'https://twitter.com/xravitycapital',
+      ]
+    }
+  })} />
+)}
+
+{type === 'article' && (() => {
+  const a = rest as ArticleProps;
+  return (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: a.title,
+      datePublished: a.date,
+      description: a.description,
+      url: a.url,
+      ...(a.image && { image: a.image }),
+      ...(a.tags?.length && { keywords: a.tags.join(', ') }),
+      author: {
+        '@type': 'Person',
+        name: 'Xravity',
+        url: siteUrl,
+      },
+      publisher: {
+        '@type': 'Person',
+        name: 'Xravity',
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': a.url,
+      },
+    })} />
+  );
+})()}

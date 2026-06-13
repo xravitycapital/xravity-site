@@ -8,9 +8,11 @@ import BlogList from '../components/BlogList.astro';
 import Contact from '../components/Contact.astro';
 import CustomSections from '../components/CustomSections.astro';
 import Footer from '../components/Footer.astro';
+import StructuredData from '../components/StructuredData.astro';
 ---
 
 <BaseLayout>
+  <StructuredData type="person" />
   <Nav />
   <Hero />
   <About />

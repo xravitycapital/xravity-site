@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import GiscusComment from '../../components/GiscusComment.astro';
+import StructuredData from '../../components/StructuredData.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -27,6 +28,14 @@ function formatDate(ts: Date): string {
   title={`${post.data.title} — Xravity`}
   description={post.data.excerpt}
 >
+  <StructuredData
+    type="article"
+    title={post.data.title}
+    date={post.data.date.toISOString()}
+    description={post.data.excerpt}
+    url={new URL(`/blog/${post.slug}/`, Astro.site).toString()}
+    tags={post.data.tags}
+  />
   <Nav />
   <section class="blog-page-section">
     <div class="container">
