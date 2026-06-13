@@ -80,6 +80,16 @@ body {
   transition: background 0.4s, color 0.4s;
 }
 
+/* ─── Touch devices: restore native cursors, hide custom cursor ─── */
+@media (pointer: coarse) {
+  body, a, button, input, textarea, select, [role="button"],
+  .blog-card, .gallery-item, .contact-link, .skill-card, .archive-photo,
+  .embed-card, .tag, .share-btn, .section-block, .scroll-indicator {
+    cursor: auto !important;
+  }
+  #cursor-dot, #cursor-ring { display: none !important; }
+}
+
 /* ─── Chinese text optimizations ─── */
 :lang(zh-CN) body {
   letter-spacing: 0.02em;
@@ -426,7 +436,7 @@ footer {
 /* ─── Blog Post (Full View) ─── */
 .blog-full { max-width:720px; margin:0 auto; }
 .blog-full-header { margin-bottom:1.5rem; }
-.blog-full-header h2 {
+.blog-full-header h1, .blog-full-header h2 {
   font-family:var(--font-serif); font-size:1.8rem;
   font-weight:700; line-height:1.3;
 }

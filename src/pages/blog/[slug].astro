@@ -32,7 +32,7 @@ function formatDate(ts: Date): string {
     <div class="container">
       <article class="blog-full">
         <div class="blog-full-header">
-          <h2>{post.data.title}</h2>
+          <h1>{post.data.title}</h1>
           <div class="blog-full-meta">
             <span>{formatDate(post.data.date)}</span>
             {post.data.tags && post.data.tags.length > 0 && (
@@ -50,7 +50,7 @@ function formatDate(ts: Date): string {
         <div class="share-row">
           <span style="font-size:0.85rem;color:var(--text-muted);">Share:</span>
           <a
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.site?.toString() + 'blog/' + post.slug)}`}
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(new URL('/blog/' + post.slug, Astro.site).toString())}`}
             class="share-btn"
             target="_blank"
             rel="noopener"
@@ -70,8 +70,21 @@ function formatDate(ts: Date): string {
 
   <script>
     document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        (window as any).toast?.('Link copied!');
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        const t = (window as any).toast;
+        if (t) t('Link copied!');
+      }).catch(() => {
+        // Fallback for older browsers / insecure contexts
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const toastFn = (window as any).toast;
+        if (toastFn) toastFn('Link copied!');
       });
     });
   </script>

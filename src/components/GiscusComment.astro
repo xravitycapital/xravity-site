@@ -1,24 +1,42 @@
-<!-- Giscus Comments — uses GitHub Discussions as backend -->
+---
+// Set your real Giscus IDs here after setup:
+//   1. Enable GitHub Discussions in your repo settings
+//   2. Install https://github.com/apps/giscus
+//   3. Go to https://giscus.app to get your repo-id and category-id
+const giscusRepo = 'xravitycapital/xravity-site';
+const giscusRepoId = 'PLACEHOLDER';   // ← Replace with your real ID
+const giscusCategory = 'Comments';
+const giscusCategoryId = 'PLACEHOLDER'; // ← Replace with your real ID
+const giscusEnabled = !giscusRepoId.includes('PLACEHOLDER');
+---
+
 <div class="comments-section">
-  <script src="https://giscus.app/client.js"
-    data-repo="xravity/xravity-site"
-    data-repo-id="R_kgDOxxxxxx"
-    data-category="Comments"
-    data-category-id="DIC_kwDOxxxxxx"
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="preferred_color_scheme"
-    data-lang="en"
-    data-loading="lazy"
-    async>
-  </script>
+  {giscusEnabled ? (
+    <script
+      src="https://giscus.app/client.js"
+      data-repo={giscusRepo}
+      data-repo-id={giscusRepoId}
+      data-category={giscusCategory}
+      data-category-id={giscusCategoryId}
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="en"
+      data-loading="lazy"
+      async
+    >
+    </script>
+  ) : (
+    <p style="text-align:center;color:var(--text-muted);font-size:0.9rem;padding:1.5rem;">
+      💬 Comments coming soon. The site owner needs to <a href="https://giscus.app" style="color:var(--accent);">set up Giscus</a>.
+    </p>
+  )}
 </div>
 
 <style>
-  /* Giscus inherits font from the page */
   .comments-section {
     max-width: 720px;
     margin: 3rem auto 0;

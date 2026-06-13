@@ -5,13 +5,20 @@ interface Props {
   title?: string;
   description?: string;
   lang?: string;
+  image?: string;
+  type?: string;
 }
 
 const {
   title = 'Xravity — Personal Universe',
   description = 'Xravity — Personal Universe. Designer, Developer, Dreamer.',
-  lang = 'en'
+  lang = 'en',
+  image = '/images/og-default.jpg',
+  type = 'website'
 } = Astro.props;
+
+const siteUrl = Astro.site?.toString()?.replace(/\/$/, '') ?? 'https://xravity.netlify.app';
+const ogImage = image.startsWith('http') ? image : siteUrl + image;
 ---
 <!DOCTYPE html>
 <html lang={lang === 'zh' ? 'zh-CN' : 'en'} data-theme="light">
@@ -21,6 +28,25 @@ const {
   <meta name="description" content={description} />
   <meta name="theme-color" content="#fafaf7" />
   <title>{title}</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={siteUrl} />
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content="Xravity" />
+  <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <!-- Canonical -->
+  <link rel="canonical" href={siteUrl + Astro.url.pathname} />
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>X</text></svg>" />
 </head>
 <body>
