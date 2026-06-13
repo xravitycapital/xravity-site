@@ -9,6 +9,8 @@ import siteData from '../data/site.json';
     <p style="color:var(--text-muted);margin-bottom:1rem;" data-i18n="contact_sub">
       {siteData.contact.sub}
     </p>
+
+    <!-- Social Links -->
     <div class="contact-links">
       {siteData.contact.links.map(link => (
         <a href={link.url} class="contact-link" target="_blank" rel="noopener">
@@ -17,5 +19,100 @@ import siteData from '../data/site.json';
         </a>
       ))}
     </div>
+
+    <!-- Contact Form (Netlify Forms — free, no backend) -->
+    <form
+      name="contact"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      class="contact-form"
+    >
+      <!-- Hidden field for Netlify Forms -->
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hidden-field" style="display:none;">
+        <label>Don't fill this out: <input name="bot-field" /></label>
+      </p>
+
+      <div class="form-group">
+        <label for="cf-name">Name</label>
+        <input type="text" id="cf-name" name="name" placeholder="Your name" required />
+      </div>
+      <div class="form-group">
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" placeholder="your@email.com" required />
+      </div>
+      <div class="form-group">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-save">Send Message</button>
+      </div>
+
+      <p class="form-success" id="formSuccess" style="display:none;text-align:center;color:var(--accent);margin-top:1rem;font-weight:500;">
+        ✓ Message sent! I'll get back to you soon.
+      </p>
+    </form>
   </div>
 </section>
+
+<style>
+  .contact-form {
+    max-width: 480px;
+    margin: 3rem auto 0;
+    text-align: left;
+  }
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+  .form-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    color: var(--text);
+    background: var(--bg-card);
+    transition: border-color 0.3s;
+    cursor: auto;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  .form-actions {
+    margin-top: 1.5rem;
+  }
+  .form-actions .btn-save {
+    width: 100%;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  const form = document.querySelector('.contact-form');
+  form?.addEventListener('submit', () => {
+    setTimeout(() => {
+      const success = document.getElementById('formSuccess');
+      if (success) success.style.display = 'block';
+      (form as HTMLFormElement).reset();
+    }, 500);
+  });
+</script>

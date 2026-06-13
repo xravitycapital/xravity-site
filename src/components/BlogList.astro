@@ -1,13 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
+import { formatDate, readingTime } from '../utils/date';
 import siteData from '../data/site.json';
 
 const posts = await getCollection('blog');
 posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-
-function formatDate(ts: Date): string {
-  return ts.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-}
 ---
 
 <section id="blog">
@@ -27,15 +24,19 @@ function formatDate(ts: Date): string {
         ? <p style="text-align:center;color:var(--text-muted);padding:3rem;">No posts yet.</p>
         : posts.slice(0, 5).map(post => (
             <a href={`/blog/${post.slug}`} class="blog-card">
+              {post.data.cover && (
+                <div class="blog-card-cover">
+                  <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+                </div>
+              )}
               <div class="blog-date">{formatDate(post.data.date)}</div>
               <div class="blog-info">
                 <h3>{post.data.title}</h3>
                 <p>{post.data.excerpt}</p>
-                {post.data.tags && post.data.tags.length > 0 && (
-                  <div class="blog-meta">
-                    {post.data.tags.map(tag => <span class="tag">{tag}</span>)}
-                  </div>
-                )}
+                <div class="blog-meta">
+                  <span class="reading-time">{readingTime(post.body || '')} min read</span>
+                  {post.data.tags && post.data.tags.slice(0, 2).map(tag => <span class="tag">{tag}</span>)}
+                </div>
               </div>
               <div class="blog-arrow">&rarr;</div>
             </a>
@@ -44,3 +45,24 @@ function formatDate(ts: Date): string {
     </div>
   </div>
 </section>
+
+<style>
+  .blog-card-cover {
+    width: 100%;
+    max-width: 160px;
+    aspect-ratio: 16/9;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .blog-card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .reading-time {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    font-family: var(--font-mono);
+  }
+</style>

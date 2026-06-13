@@ -39,6 +39,8 @@ const photos = siteData.gallery.photos || [];
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev">&lsaquo;</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext">&rsaquo;</button>
   <img id="lightboxImg" src="" alt="Lightbox preview" />
   <div class="lightbox-caption" id="lightboxCaption" style="display:none;"></div>
 </div>
@@ -48,26 +50,48 @@ const photos = siteData.gallery.photos || [];
   const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
   const lightboxCaption = document.getElementById('lightboxCaption')!;
   const lightboxClose = document.getElementById('lightboxClose')!;
+  const lightboxPrev = document.getElementById('lightboxPrev')!;
+  const lightboxNext = document.getElementById('lightboxNext')!;
 
-  document.querySelectorAll('.gallery-item img').forEach(img => {
+  // Build photo list from gallery items
+  const photoItems = Array.from(document.querySelectorAll('.gallery-item img')).map(img => ({
+    src: (img as HTMLImageElement).src,
+    caption: (img.parentElement?.querySelector('.gallery-item-info span') as HTMLElement)?.textContent || ''
+  }));
+  let currentIdx = 0;
+
+  function showPhoto(idx: number) {
+    if (photoItems.length === 0) return;
+    currentIdx = ((idx % photoItems.length) + photoItems.length) % photoItems.length;
+    const photo = photoItems[currentIdx];
+    lightboxImg.src = photo.src;
+    if (photo.caption) {
+      lightboxCaption.textContent = photo.caption;
+      lightboxCaption.style.display = 'block';
+    } else {
+      lightboxCaption.style.display = 'none';
+    }
+    // Toggle arrows visibility
+    (lightboxPrev as HTMLElement).style.display = photoItems.length > 1 ? 'flex' : 'none';
+    (lightboxNext as HTMLElement).style.display = photoItems.length > 1 ? 'flex' : 'none';
+  }
+
+  document.querySelectorAll('.gallery-item img').forEach((img, idx) => {
     img.addEventListener('click', () => {
-      lightboxImg.src = (img as HTMLImageElement).src;
       lightbox.classList.add('active');
-      const info = (img.parentElement?.querySelector('.gallery-item-info span') as HTMLElement)?.textContent;
-      if (info) {
-        lightboxCaption.textContent = info;
-        lightboxCaption.style.display = 'block';
-      } else {
-        lightboxCaption.style.display = 'none';
-      }
+      showPhoto(idx);
     });
   });
 
-  lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
-  lightbox.addEventListener('click', e => {
-    if (e.target === lightbox) lightbox.classList.remove('active');
-  });
+  lightboxPrev.addEventListener('click', () => showPhoto(currentIdx - 1));
+  lightboxNext.addEventListener('click', () => showPhoto(currentIdx + 1));
+
+  function closeLightbox() { lightbox.classList.remove('active'); }
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') lightbox.classList.remove('active');
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft' && lightbox.classList.contains('active')) showPhoto(currentIdx - 1);
+    if (e.key === 'ArrowRight' && lightbox.classList.contains('active')) showPhoto(currentIdx + 1);
   });
 </script>

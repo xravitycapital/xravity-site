@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import GiscusComment from '../../components/GiscusComment.astro';
 import StructuredData from '../../components/StructuredData.astro';
 import { getCollection } from 'astro:content';
+import { formatDate, readingTime } from '../../utils/date';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -16,12 +17,8 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
-
-function formatDate(ts: Date): string {
-  return ts.toLocaleDateString('en-US', {
-    year: 'numeric', month: 'short', day: 'numeric'
-  });
-}
+const bodyText = post.body || '';
+const readMin = readingTime(bodyText);
 ---
 
 <BaseLayout
@@ -44,6 +41,8 @@ function formatDate(ts: Date): string {
           <h1>{post.data.title}</h1>
           <div class="blog-full-meta">
             <span>{formatDate(post.data.date)}</span>
+            <span>·</span>
+            <span>{readMin} min read</span>
             {post.data.tags && post.data.tags.length > 0 && (
               <span>
                 {post.data.tags.map(tag => <span class="tag">{tag}</span>)}
@@ -51,6 +50,16 @@ function formatDate(ts: Date): string {
             )}
           </div>
         </div>
+        {post.data.cover && (
+          <img
+            src={post.data.cover}
+            alt={post.data.title}
+            class="blog-cover-image"
+            loading="eager"
+            width="720"
+            height="400"
+          />
+        )}
         <div class="post-body">
           <Content />
         </div>
