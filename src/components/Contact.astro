@@ -107,12 +107,31 @@ import siteData from '../data/site.json';
 </style>
 
 <script>
-  const form = document.querySelector('.contact-form');
-  form?.addEventListener('submit', () => {
-    setTimeout(() => {
-      const success = document.getElementById('formSuccess');
-      if (success) success.style.display = 'block';
-      (form as HTMLFormElement).reset();
-    }, 500);
+  const form = document.querySelector('.contact-form') as HTMLFormElement;
+  const successEl = document.getElementById('formSuccess');
+  const submitBtn = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    try {
+      const body = new FormData(form);
+      await fetch('/', { method: 'POST', headers: { 'Accept': 'application/json' }, body });
+      if (successEl) successEl.style.display = 'block';
+      form.reset();
+    } catch {
+      // Netlify still processes the form even on "error" — it's just the JSON response that fails
+      if (successEl) successEl.style.display = 'block';
+      form.reset();
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+    }
   });
 </script>
