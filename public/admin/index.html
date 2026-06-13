@@ -14,40 +14,46 @@
     (function() {
       var widget = window.netlifyIdentity;
       var hash = window.location.hash;
+      var cmsLoaded = false;
+
       var hasToken = !!(hash && (
         hash.indexOf('invite_token') !== -1 ||
         hash.indexOf('recovery_token') !== -1 ||
         hash.indexOf('confirmation_token') !== -1
       ));
 
-      // After successful login, strip hash and reload to show CMS
-      widget.on('login', function() {
-        if (window.location.hash) {
-          window.location.replace('/admin/');
-        } else {
-          loadCMS();
-        }
-      });
-
-      widget.on('init', function(user) {
-        if (user && !hasToken) {
-          // Logged in, no stray token — show CMS
-          loadCMS();
-        } else if (hasToken) {
-          // Identity widget will show Set Password / Confirm form
-          // Do nothing — let the widget handle it
-          // The 'login' handler above will trigger loadCMS after success
-        } else {
-          // Not logged in, no invite token — show CMS (which has its own login UI)
-          loadCMS();
-        }
-      });
-
       function loadCMS() {
+        if (cmsLoaded) return;
+        cmsLoaded = true;
         var s = document.createElement('script');
         s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
         document.body.appendChild(s);
       }
+
+      // If a login happens while CMS is already loaded, just reload to sync state
+      widget.on('login', function(user) {
+        if (user) {
+          if (hasToken || window.location.hash) {
+            window.location.replace('/admin/');
+          } else if (!cmsLoaded) {
+            loadCMS();
+          } else {
+            // CMS already loaded and user just logged in — refresh to pick up session
+            window.location.reload();
+          }
+        }
+      });
+
+      widget.on('init', function(user) {
+        if (hasToken) {
+          // Identity widget will show Set Password / Confirm form
+          // Do nothing — let the widget handle it
+          // When login completes, the 'login' handler above fires → strip hash → reload
+          return;
+        }
+        // Logged in or not — load CMS either way (it handles its own login UI)
+        loadCMS();
+      });
     })();
   </script>
 </body>
