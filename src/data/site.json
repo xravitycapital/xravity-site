@@ -62,7 +62,12 @@
   "gallery": {
     "title": "Photo Gallery",
     "sub": "A collection of moments captured through my lens.",
-    "photos": []
+    "photos": [
+      {
+        "src": "/images/uploads/screenshot_2026-06-09_125948_727.png",
+        "caption": "Avatar"
+      }
+    ]
   },
   "contact": {
     "title": "Get in Touch",
