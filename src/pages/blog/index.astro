@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import { formatDate, readingTime } from '../../utils/date';
 
-const posts = await getCollection('blog');
+const posts = await getCollection('blog', ({ data }) => !data.draft);
 posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
@@ -18,7 +18,7 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
 
       <div class="blog-list">
         {posts.length === 0
-          ? <p style="text-align:center;color:var(--text-muted);padding:3rem;">No posts yet. Start writing with Decap CMS at /admin.</p>
+          ? <p style="text-align:center;color:var(--text-muted);padding:3rem;" data-i18n="blog_empty_admin">No posts yet. Start writing with Decap CMS at /admin.</p>
           : posts.map(post => (
               <a href={`/blog/${post.slug}`} class="blog-card">
                 {post.data.cover && (
@@ -31,7 +31,7 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
                   <h3>{post.data.title}</h3>
                   <p>{post.data.excerpt}</p>
                   <div class="blog-meta">
-                    <span class="reading-time">{readingTime(post.body || '')} min read</span>
+                    <span class="reading-time">{readingTime(post.body || '')} <span data-i18n="min_read">min read</span></span>
                     {post.data.tags && post.data.tags.slice(0, 2).map(tag => <span class="tag">{tag}</span>)}
                   </div>
                 </div>

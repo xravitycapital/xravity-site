@@ -21,7 +21,7 @@ const photos = siteData.gallery.photos || [];
       {photos.length === 0
         ? <div class="gallery-item" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.8rem;color:var(--text-light);font-family:var(--font-mono);font-size:0.8rem;">
             <span style="font-size:2.2rem;font-weight:300;">+</span>
-            <span>Photos coming soon</span>
+            <span data-i18n="photos_coming">Photos coming soon</span>
           </div>
         : photos.map(photo => (
             <div class="gallery-item">

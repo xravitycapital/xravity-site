@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  limit?: number;
+  showHeader?: boolean;
+}
+
+const { limit = 4, showHeader = true } = Astro.props;
+const resources = await getCollection('resources');
+resources.sort((a, b) => {
+  const featuredDiff = Number(b.data.featured) - Number(a.data.featured);
+  if (featuredDiff !== 0) return featuredDiff;
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
+const visibleResources = limit ? resources.slice(0, limit) : resources;
+---
+
+<section id="resources">
+  <div class="container">
+    {showHeader && (
+      <div class="section-header">
+        <div>
+          <p class="section-tag" data-i18n="resources_tag">02 · Resources</p>
+          <h2 class="section-title" style="margin-bottom:0;" data-i18n="resources_title">Useful Resources</h2>
+        </div>
+        <a href="/resources" class="btn-outline" data-i18n="resources_browse_all">Browse All</a>
+      </div>
+    )}
+
+    <p class="section-subtitle" data-i18n="resources_sub">
+      Tools, references, and creative finds worth saving.
+    </p>
+
+    <div class="resource-grid">
+      {visibleResources.length === 0
+        ? <p class="empty-state" data-i18n="resources_empty">No resources yet.</p>
+        : visibleResources.map(resource => (
+            <article class="resource-card">
+              <div class="resource-card-top">
+                <span class="resource-category">{resource.data.category}</span>
+                {resource.data.featured && <span class="resource-featured" data-i18n="resource_featured">Featured</span>}
+              </div>
+              <h3>{resource.data.title}</h3>
+              <p>{resource.data.description}</p>
+              <div class="blog-meta">
+                {resource.data.tags.slice(0, 3).map(tag => <span class="tag">{tag}</span>)}
+              </div>
+              <a href={resource.data.url} target="_blank" rel="noopener noreferrer" class="resource-link">
+                <span data-i18n="resource_visit">Visit</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </article>
+          ))
+      }
+    </div>
+  </div>
+</section>

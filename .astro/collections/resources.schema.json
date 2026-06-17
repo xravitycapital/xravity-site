@@ -1,7 +1,7 @@
 {
-  "$ref": "#/definitions/blog",
+  "$ref": "#/definitions/resources",
   "definitions": {
-    "blog": {
+    "resources": {
       "type": "object",
       "properties": {
         "title": {
@@ -23,7 +23,14 @@
             }
           ]
         },
-        "excerpt": {
+        "description": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "category": {
           "type": "string"
         },
         "tags": {
@@ -33,9 +40,6 @@
           },
           "default": []
         },
-        "category": {
-          "type": "string"
-        },
         "lang": {
           "type": "string",
           "enum": [
@@ -44,42 +48,9 @@
           ],
           "default": "en"
         },
-        "draft": {
-          "type": "boolean",
-          "default": false
-        },
-        "updatedDate": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            },
-            {
-              "type": "integer",
-              "format": "unix-time"
-            }
-          ]
-        },
-        "cover": {
-          "type": "string"
-        },
-        "coverAlt": {
-          "type": "string"
-        },
         "featured": {
           "type": "boolean",
           "default": false
-        },
-        "relatedResources": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
         },
         "$schema": {
           "type": "string"
@@ -88,7 +59,9 @@
       "required": [
         "title",
         "date",
-        "excerpt"
+        "description",
+        "url",
+        "category"
       ],
       "additionalProperties": false
     }

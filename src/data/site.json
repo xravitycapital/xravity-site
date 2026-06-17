@@ -1,62 +1,62 @@
 {
   "site": {
     "name": "Xravity",
-    "description": "Designer, Developer, Dreamer — A personal universe of design, code, and stories.",
+    "description": "A personal independent site sharing design notes, building logs, images, and useful resources.",
     "url": "https://xravity.netlify.app",
-    "footer": "© 2026 Xravity. Crafted with gravity and grace."
+    "footer": "\\u00a9 2026 Xravity. Crafted with gravity and grace."
   },
   "hero": {
-    "tag": "Designer · Developer · Dreamer",
+    "tag": "Design · Build · Share",
     "name": "ravity",
-    "sub": "Where creativity meets gravity. A personal universe of design, code, and stories.",
+    "sub": "A personal independent site for design notes, web building logs, images, and useful resources.",
     "cta": "Explore"
   },
   "about": {
-    "title": "Resume & Experience",
-    "p1": "Hi, I am <span class=\"highlight\">Xravity</span> — a creator passionate about design and technology. I believe good design should be clean and powerful, like <span class=\"highlight\">gravity</span> itself — naturally drawing the eye.",
-    "p2": "I specialize in brand design, front-end development, and digital art. My work spans visual design, interactive experiences, and code.",
-    "p3": "I have collaborated with startups and brands to build unique digital identities. In my free time, I enjoy photography, writing, and exploring new frontiers in tech."
+    "title": "About Xravity",
+    "p1": "Hi, I am <span class=\"highlight\">Xravity</span> — a creator documenting design, technology, and independent publishing.",
+    "p2": "This site collects practical notes, visual references, useful tools, and project logs from my creative process.",
+    "p3": "The long-term goal is to turn it into a small but useful content library."
   },
   "timeline": [
     {
-      "year": "2024 — Present",
-      "title": "First Project",
-      "org": "Startup Inc.",
-      "desc": "Led design and frontend development."
+      "year": "Now",
+      "title": "Building Xravity",
+      "org": "Independent site",
+      "desc": "Writing, collecting resources, and shaping the site into a focused content hub."
     },
     {
-      "year": "2022 — 2024",
-      "title": "Freelance Designer",
-      "org": "Self-employed",
-      "desc": "Brand identity and UI/UX for various clients."
+      "year": "Next",
+      "title": "Grow Content Pillars",
+      "org": "Blog, gallery, resources",
+      "desc": "Organize posts around design, site building, visual inspiration, and tools."
     },
     {
-      "year": "2021 — 2022",
-      "title": "Design Intern",
-      "org": "Creative Agency",
-      "desc": "Assisted with visual design and prototyping."
+      "year": "Later",
+      "title": "Prepare Monetization",
+      "org": "Ads and partnerships",
+      "desc": "Add policy pages, improve SEO, and prepare tasteful ad placements."
     }
   ],
   "skills": [
     {
-      "icon": "🎨",
-      "name": "Brand Design",
-      "level": "Visual Identity & Strategy"
+      "icon": "D",
+      "name": "Design Notes",
+      "level": "UI, branding, typography, visual taste"
     },
     {
-      "icon": "💻",
-      "name": "Frontend Dev",
-      "level": "React · Vue · TypeScript"
+      "icon": "B",
+      "name": "Building Logs",
+      "level": "Astro, CMS, deployment, independent sites"
     },
     {
-      "icon": "🖼",
-      "name": "UI/UX Design",
-      "level": "Figma · Prototyping"
+      "icon": "R",
+      "name": "Resource Curation",
+      "level": "Tools, references, templates, inspiration"
     },
     {
-      "icon": "📸",
-      "name": "Photography",
-      "level": "Portrait & Landscape"
+      "icon": "P",
+      "name": "Photo Records",
+      "level": "Daily images, travel, creative moments"
     }
   ],
   "gallery": {
@@ -76,17 +76,17 @@
       {
         "platform": "Email",
         "url": "mailto:hello@xravity.com",
-        "icon": "✉"
+        "icon": "@"
       },
       {
         "platform": "GitHub",
         "url": "https://github.com/xravitycapital",
-        "icon": "⟡"
+        "icon": "GH"
       },
       {
         "platform": "Twitter",
         "url": "https://twitter.com/xravitycapital",
-        "icon": "✎"
+        "icon": "X"
       }
     ]
   },

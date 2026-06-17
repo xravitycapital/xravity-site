@@ -15,12 +15,14 @@ import siteData from '../data/site.json';
       </div>
       <div>
         <div class="timeline">
-          {siteData.timeline.map(item => (
+          {siteData.timeline.map((item, index) => (
             <div class="timeline-item">
               <div class="timeline-content">
-                <div class="timeline-year">{item.year}</div>
-                <div class="timeline-title">{item.title}</div>
-                <div class="timeline-desc">{item.desc} — <em>{item.org}</em></div>
+                <div class="timeline-year" data-i18n={`timeline_${index}_year`}>{item.year}</div>
+                <div class="timeline-title" data-i18n={`timeline_${index}_title`}>{item.title}</div>
+                <div class="timeline-desc">
+                  <span data-i18n={`timeline_${index}_desc`}>{item.desc}</span> — <em data-i18n={`timeline_${index}_org`}>{item.org}</em>
+                </div>
               </div>
             </div>
           ))}
@@ -32,11 +34,11 @@ import siteData from '../data/site.json';
     <h3 class="section-title" style="font-size:1.8rem;margin-bottom:2rem;" data-i18n="skills_title">Skills</h3>
 
     <div class="skills-grid">
-      {siteData.skills.map(skill => (
+      {siteData.skills.map((skill, index) => (
         <div class="skill-card">
           <div class="skill-icon">{skill.icon}</div>
-          <div class="skill-name">{skill.name}</div>
-          <div class="skill-level">{skill.level}</div>
+          <div class="skill-name" data-i18n={`skill_${index}_name`}>{skill.name}</div>
+          <div class="skill-level" data-i18n={`skill_${index}_level`}>{skill.level}</div>
         </div>
       ))}
     </div>

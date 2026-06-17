@@ -9,15 +9,15 @@ import Footer from '../components/Footer.astro';
   <section id="hero" style="min-height:60vh;">
     <div class="hero-content">
       <p class="hero-tag">404</p>
-      <h1 class="hero-name" style="font-size:clamp(2.5rem, 6vw, 5rem);">
+      <h1 class="hero-name" style="font-size:clamp(2.5rem, 6vw, 5rem);" data-i18n="not_found_title">
         Lost in Space
       </h1>
-      <p class="hero-sub">
+      <p class="hero-sub" data-i18n="not_found_sub">
         This page has drifted beyond the gravitational pull of this site.
       </p>
-      <a href="/" class="hero-cta">&larr; Back to Home</a>
+      <a href="/" class="hero-cta"><span aria-hidden="true">&larr;</span> <span data-i18n="back_home">Back to Home</span></a>
       <p style="margin-top:2rem;font-size:0.85rem;color:var(--text-light);">
-        Looking for a blog post? <a href="/blog" style="color:var(--accent);">Browse all posts</a>
+        <span data-i18n="looking_blog">Looking for a blog post?</span> <a href="/blog" style="color:var(--accent);" data-i18n="browse_posts">Browse all posts</a>
       </p>
     </div>
   </section>

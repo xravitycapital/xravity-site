@@ -8,7 +8,7 @@ import { getCollection } from 'astro:content';
 import { formatDate, readingTime } from '../../utils/date';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map(post => ({
     params: { slug: post.slug },
     props: { post },
@@ -42,7 +42,7 @@ const readMin = readingTime(bodyText);
           <div class="blog-full-meta">
             <span>{formatDate(post.data.date)}</span>
             <span>·</span>
-            <span>{readMin} min read</span>
+            <span>{readMin} <span data-i18n="min_read">min read</span></span>
             {post.data.tags && post.data.tags.length > 0 && (
               <span>
                 {post.data.tags.map(tag => <span class="tag">{tag}</span>)}
@@ -66,7 +66,7 @@ const readMin = readingTime(bodyText);
 
         <!-- Share -->
         <div class="share-row">
-          <span style="font-size:0.85rem;color:var(--text-muted);">Share:</span>
+          <span style="font-size:0.85rem;color:var(--text-muted);" data-i18n="share">Share:</span>
           <a
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(new URL('/blog/' + post.slug, Astro.site).toString())}`}
             class="share-btn"
@@ -91,7 +91,7 @@ const readMin = readingTime(bodyText);
       const url = window.location.href;
       navigator.clipboard.writeText(url).then(() => {
         const t = (window as any).toast;
-        if (t) t('Link copied!');
+        if (t) t((window as any).xravityT?.('link_copied', 'Link copied!') || 'Link copied!');
       }).catch(() => {
         // Fallback for older browsers / insecure contexts
         const ta = document.createElement('textarea');
@@ -102,7 +102,7 @@ const readMin = readingTime(bodyText);
         document.execCommand('copy');
         document.body.removeChild(ta);
         const toastFn = (window as any).toast;
-        if (toastFn) toastFn('Link copied!');
+        if (toastFn) toastFn((window as any).xravityT?.('link_copied', 'Link copied!') || 'Link copied!');
       });
     });
   </script>

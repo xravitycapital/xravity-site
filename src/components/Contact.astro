@@ -31,27 +31,27 @@ import siteData from '../data/site.json';
       <!-- Hidden field for Netlify Forms -->
       <input type="hidden" name="form-name" value="contact" />
       <p class="hidden-field" style="display:none;">
-        <label>Don't fill this out: <input name="bot-field" /></label>
+        <label><span data-i18n="contact_bot">Don't fill this out:</span> <input name="bot-field" /></label>
       </p>
 
       <div class="form-group">
-        <label for="cf-name">Name</label>
-        <input type="text" id="cf-name" name="name" placeholder="Your name" required />
+        <label for="cf-name" data-i18n="contact_name">Name</label>
+        <input type="text" id="cf-name" name="name" placeholder="Your name" data-i18n-placeholder="contact_name_placeholder" required />
       </div>
       <div class="form-group">
-        <label for="cf-email">Email</label>
-        <input type="email" id="cf-email" name="email" placeholder="your@email.com" required />
+        <label for="cf-email" data-i18n="contact_email">Email</label>
+        <input type="email" id="cf-email" name="email" placeholder="your@email.com" data-i18n-placeholder="contact_email_placeholder" required />
       </div>
       <div class="form-group">
-        <label for="cf-message">Message</label>
-        <textarea id="cf-message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+        <label for="cf-message" data-i18n="contact_message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" placeholder="What's on your mind?" data-i18n-placeholder="contact_message_placeholder" required></textarea>
       </div>
       <div class="form-actions">
-        <button type="submit" class="btn-save">Send Message</button>
+        <button type="submit" class="btn-save" data-i18n="contact_send">Send Message</button>
       </div>
 
       <p class="form-success" id="formSuccess" style="display:none;text-align:center;color:var(--accent);margin-top:1rem;font-weight:500;">
-        ✓ Message sent! I'll get back to you soon.
+        <span aria-hidden="true">✓</span> <span data-i18n="contact_success">Message sent! I'll get back to you soon.</span>
       </p>
     </form>
   </div>
@@ -111,11 +111,15 @@ import siteData from '../data/site.json';
   const successEl = document.getElementById('formSuccess');
   const submitBtn = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
 
+  function t(key: string, fallback: string) {
+    return (window as any).xravityT?.(key, fallback) || fallback;
+  }
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
+      submitBtn.textContent = t('contact_sending', 'Sending...');
     }
 
     try {
@@ -131,7 +135,7 @@ import siteData from '../data/site.json';
 
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Send Message';
+      submitBtn.textContent = t('contact_send', 'Send Message');
     }
   });
 </script>

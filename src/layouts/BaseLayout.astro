@@ -75,10 +75,10 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
   <div id="progress-bar"></div>
 
   <!-- Back to Top -->
-  <button id="back-to-top" title="Back to top">&#8593;</button>
+  <button id="back-to-top" title="Back to top" data-i18n-title="back_to_top">&#8593;</button>
 
   <!-- Theme Toggle -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+  <button class="theme-toggle" id="themeToggle" title="Toggle theme" data-i18n-title="toggle_theme">
     <span>&#9788;</span>
   </button>
 
@@ -96,6 +96,7 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
 
   <script>
     // ─── Theme ───
+    let i18nMap: Record<string, string> = {};
     const themeToggle = document.getElementById('themeToggle')!;
     const savedTheme = localStorage.getItem('xravity_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -283,18 +284,23 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
       };
       updateLangBtn();
 
-      langBtn.addEventListener('click', () => {
+      langBtn.addEventListener('click', async () => {
         curLang = curLang === 'en' ? 'zh' : 'en';
         localStorage.setItem('xravity_lang', curLang);
         document.documentElement.lang = curLang === 'zh' ? 'zh-CN' : 'en';
         updateLangBtn();
-        applyTranslations(curLang);
-        toast(curLang === 'zh' ? '已切换到中文' : 'Switched to English');
+        await applyTranslations(curLang);
+        toast(curLang === 'zh' ? tr('lang_switched_zh') : tr('lang_switched_en'));
       });
     }
 
     // ─── Bilingual ───
-    async function applyTranslations(lang: string) {
+    function tr(key: string, fallback = '') {
+      return i18nMap[key] || fallback || key;
+    }
+    (window as any).xravityT = tr;
+
+    async function loadTranslations(lang: string) {
       const map: Record<string, string> = {};
       try {
         const res = await fetch('/data/translations.json');
@@ -310,6 +316,12 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
           }
         }
       } catch(e) { console.warn('Translation load failed:', e); }
+      i18nMap = map;
+      return map;
+    }
+
+    async function applyTranslations(lang: string) {
+      const map = await loadTranslations(lang);
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = (el as HTMLElement).dataset.i18n;
@@ -324,6 +336,23 @@ const ogImage = image.startsWith('http') ? image : siteUrl + image;
           el.innerHTML = map[key];
         }
       });
+
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = (el as HTMLElement).dataset.i18nTitle;
+        if (key && map[key]) el.setAttribute('title', map[key]);
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = (el as HTMLElement).dataset.i18nPlaceholder;
+        if (key && map[key]) el.setAttribute('placeholder', map[key]);
+      });
+
+      document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+        const key = (el as HTMLElement).dataset.i18nAria;
+        if (key && map[key]) el.setAttribute('aria-label', map[key]);
+      });
+
+      document.dispatchEvent(new CustomEvent('xravity:i18n', { detail: { lang, map } }));
     }
 
     // Init language

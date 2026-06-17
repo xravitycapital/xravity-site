@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import ResourcesList from '../../components/ResourcesList.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout title="Resources — Xravity" description="Useful tools, references, and creative resources collected by Xravity.">
+  <Nav />
+  <ResourcesList limit={0} showHeader={true} />
+  <Footer />
+</BaseLayout>

@@ -13,10 +13,9 @@ logo_url: "https://xravity.netlify.app/favicon.svg"
 
 # ─── Collections ───
 collections:
-  # ── Blog Posts ──
   - name: "blog"
-    label: "Blog Posts"
-    label_singular: "Blog Post"
+    label: "文章 / Blog Posts"
+    label_singular: "文章 / Blog Post"
     folder: "src/content/blog"
     create: true
     slug: "{{slug}}"
@@ -24,12 +23,37 @@ collections:
     editor:
       preview: true
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
-      - { label: "Excerpt", name: "excerpt", widget: "text", hint: "Short summary shown on the blog list page." }
-      - { label: "Tags", name: "tags", widget: "list", default: [] }
-      - { label: "Cover Image", name: "cover", widget: "image", required: false }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - { label: "标题 / Title", name: "title", widget: "string" }
+      - { label: "发布日期 / Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "摘要 / Excerpt", name: "excerpt", widget: "text", hint: "显示在文章列表里的短摘要。" }
+      - { label: "分类 / Category", name: "category", widget: "string", required: false }
+      - { label: "语言 / Language", name: "lang", widget: "select", options: ["en", "zh"], default: "zh" }
+      - { label: "草稿 / Draft", name: "draft", widget: "boolean", default: false }
+      - { label: "精选 / Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "更新日期 / Updated Date", name: "updatedDate", widget: "datetime", format: "YYYY-MM-DD", required: false }
+      - { label: "标签 / Tags", name: "tags", widget: "list", default: [] }
+      - { label: "封面图 / Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "封面描述 / Cover Alt", name: "coverAlt", widget: "string", required: false }
+      - { label: "关联资源 / Related Resources", name: "relatedResources", widget: "list", default: [], required: false }
+      - { label: "正文 / Body", name: "body", widget: "markdown" }
+
+  - name: "resources"
+    label: "资源 / Resources"
+    label_singular: "资源 / Resource"
+    folder: "src/content/resources"
+    create: true
+    slug: "{{slug}}"
+    editor:
+      preview: false
+    fields:
+      - { label: "标题 / Title", name: "title", widget: "string" }
+      - { label: "收录日期 / Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "描述 / Description", name: "description", widget: "text" }
+      - { label: "链接 / URL", name: "url", widget: "string" }
+      - { label: "分类 / Category", name: "category", widget: "string" }
+      - { label: "标签 / Tags", name: "tags", widget: "list", default: [] }
+      - { label: "语言 / Language", name: "lang", widget: "select", options: ["en", "zh"], default: "zh" }
+      - { label: "精选 / Featured", name: "featured", widget: "boolean", default: false }
 
   # ── Site Settings (edits src/data/site.json) ──
   - name: "settings"
