@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy — Xravity"
+  description="Privacy Policy for Xravity, an independent site sharing design notes, building logs, images, and resources."
+>
+  <Nav />
+  <section class="legal-page-section">
+    <div class="legal-container">
+      <p class="section-tag">Privacy</p>
+      <h1 class="section-title">Privacy Policy</h1>
+      <p class="legal-updated">Last updated: June 19, 2026</p>
+
+      <div class="legal-body">
+        <p>
+          Xravity is a personal independent site for publishing articles, images, and useful resources.
+          This page explains what information may be collected when you visit this site.
+        </p>
+
+        <h2>Analytics</h2>
+        <p>
+          This site may use privacy-conscious traffic measurement tools or Google Analytics to understand
+          page views, traffic sources, device types, and general engagement. Analytics data helps improve
+          the site structure, content direction, and reading experience.
+        </p>
+
+        <h2>Cookies</h2>
+        <p>
+          If Google Analytics or similar tools are enabled, they may use cookies or comparable technologies
+          to measure visits. You can block or delete cookies through your browser settings.
+        </p>
+
+        <h2>Contact Form</h2>
+        <p>
+          If you submit the contact form, the information you enter, such as your name, email address, and
+          message, is used only to respond to your request.
+        </p>
+
+        <h2>External Links</h2>
+        <p>
+          Some resources link to external websites. Xravity is not responsible for the privacy practices or
+          content of those third-party sites.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          For privacy questions, contact <a href="mailto:hello@xravity.com">hello@xravity.com</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <Footer />
+</BaseLayout>

@@ -7,9 +7,9 @@ publish_mode: editorial_workflow
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
-site_url: "https://xravity.netlify.app"
-display_url: "https://xravity.netlify.app"
-logo_url: "https://xravity.netlify.app/favicon.svg"
+site_url: "https://xravity.xyz"
+display_url: "https://xravity.xyz"
+logo_url: "https://xravity.xyz/favicon.svg"
 
 # ─── Collections ───
 collections:

@@ -473,6 +473,56 @@ footer {
   font-size:0.8rem; border-top:1px solid var(--border);
   position:relative; z-index:1; background:var(--bg);
 }
+.footer-links {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:1.2rem;
+  margin-bottom:0.8rem;
+}
+.footer-links a {
+  color:var(--text-muted);
+  text-decoration:none;
+  font-size:0.78rem;
+  font-weight:500;
+}
+.footer-links a:hover {
+  color:var(--accent);
+}
+
+/* Legal pages */
+.legal-page-section {
+  padding-top:10rem;
+  min-height:100vh;
+}
+.legal-container {
+  max-width:760px;
+  margin:0 auto;
+}
+.legal-updated {
+  margin-top:-2.5rem;
+  margin-bottom:2.5rem;
+  color:var(--text-light);
+  font-family:var(--font-mono);
+  font-size:0.78rem;
+}
+.legal-body {
+  color:var(--text-muted);
+  font-size:1rem;
+  line-height:1.9;
+}
+.legal-body p {
+  margin-bottom:1.3rem;
+}
+.legal-body h2 {
+  color:var(--text);
+  font-family:var(--font-serif);
+  font-size:1.35rem;
+  margin:2.2rem 0 0.7rem;
+}
+.legal-body a {
+  color:var(--accent);
+}
 
 /* ─── Lightbox ─── */
 .lightbox {

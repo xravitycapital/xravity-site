@@ -2,6 +2,13 @@
   command = "npm run build"
   publish = "dist"
 
+# Canonical domain redirect
+[[redirects]]
+  from = "https://xravity.netlify.app/*"
+  to = "https://xravity.xyz/:splat"
+  status = 301
+  force = true
+
 # Security headers for all pages
 [[headers]]
   for = "/*"
