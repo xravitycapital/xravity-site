@@ -48,7 +48,7 @@ const siteUrl = 'https://xravity.xyz';
       datePublished: a.date,
       description: a.description,
       url: a.url,
-      ...(a.image && { image: a.image }),
+      ...(a.image && { image: new URL(a.image, siteUrl).toString() }),
       ...(a.tags?.length && { keywords: a.tags.join(', ') }),
       author: {
         '@type': 'Person',

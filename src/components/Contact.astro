@@ -50,9 +50,12 @@ import siteData from '../data/site.json';
         <button type="submit" class="btn-save" data-i18n="contact_send">Send Message</button>
       </div>
 
-      <p class="form-success" id="formSuccess" style="display:none;text-align:center;color:var(--accent);margin-top:1rem;font-weight:500;">
-        <span aria-hidden="true">✓</span> <span data-i18n="contact_success">Message sent! I'll get back to you soon.</span>
-      </p>
+    <p class="form-success" id="formSuccess" role="status" aria-live="polite" style="display:none;text-align:center;color:var(--accent);margin-top:1rem;font-weight:500;">
+      <span aria-hidden="true">✓</span> <span data-i18n="contact_success">Message sent! I'll get back to you soon.</span>
+    </p>
+    <p class="form-error" id="formError" role="alert" aria-live="assertive" style="display:none;text-align:center;color:var(--danger);margin-top:1rem;font-weight:500;">
+      <span aria-hidden="true">!</span> <span data-i18n="contact_error">Something went wrong. Please try again.</span>
+    </p>
     </form>
   </div>
 </section>
@@ -109,6 +112,7 @@ import siteData from '../data/site.json';
 <script>
   const form = document.querySelector('.contact-form') as HTMLFormElement;
   const successEl = document.getElementById('formSuccess');
+  const errorEl = document.getElementById('formError');
   const submitBtn = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
 
   function t(key: string, fallback: string) {
@@ -121,16 +125,17 @@ import siteData from '../data/site.json';
       submitBtn.disabled = true;
       submitBtn.textContent = t('contact_sending', 'Sending...');
     }
+    if (successEl) successEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
 
     try {
       const body = new FormData(form);
-      await fetch('/', { method: 'POST', headers: { 'Accept': 'application/json' }, body });
+      const response = await fetch('/', { method: 'POST', headers: { 'Accept': 'application/json' }, body });
+      if (!response.ok) throw new Error(`Contact form request failed: ${response.status}`);
       if (successEl) successEl.style.display = 'block';
       form.reset();
     } catch {
-      // Netlify still processes the form even on "error" — it's just the JSON response that fails
-      if (successEl) successEl.style.display = 'block';
-      form.reset();
+      if (errorEl) errorEl.style.display = 'block';
     }
 
     if (submitBtn) {

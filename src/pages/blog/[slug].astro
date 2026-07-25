@@ -32,6 +32,7 @@ const readMin = readingTime(bodyText);
     description={post.data.excerpt}
     url={new URL(`/blog/${post.slug}/`, Astro.site).toString()}
     tags={post.data.tags}
+    image={post.data.cover}
   />
   <Nav />
   <section class="blog-page-section">

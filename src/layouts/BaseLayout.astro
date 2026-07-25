@@ -19,7 +19,8 @@ const {
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString()?.replace(/\/$/, '') ?? 'https://xravity.xyz';
-const ogImage = image.startsWith('http') ? image : siteUrl + image;
+const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImage = new URL(image, siteUrl).toString();
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 ---
 <!DOCTYPE html>
@@ -40,7 +41,7 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={ogImage} />
-  <meta property="og:url" content={siteUrl} />
+  <meta property="og:url" content={pageUrl} />
   <meta property="og:type" content={type} />
   <meta property="og:site_name" content="Xravity" />
   <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
@@ -52,7 +53,7 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <meta name="twitter:image" content={ogImage} />
 
   <!-- Canonical -->
-  <link rel="canonical" href={siteUrl + Astro.url.pathname} />
+  <link rel="canonical" href={pageUrl} />
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="Xravity Blog" href="/rss.xml" />
@@ -361,10 +362,12 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
     // Init language
     document.addEventListener('DOMContentLoaded', () => {
+      document.documentElement.lang = curLang === 'zh' ? 'zh-CN' : 'en';
       applyTranslations(curLang);
     });
     // apply on load if DOM already ready
     if (document.readyState !== 'loading') {
+      document.documentElement.lang = curLang === 'zh' ? 'zh-CN' : 'en';
       applyTranslations(curLang);
     }
   </script>

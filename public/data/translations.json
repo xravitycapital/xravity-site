@@ -5,6 +5,8 @@
   "nav_blog": "Blog",
   "nav_resources": "Resources",
   "nav_contact": "Contact",
+  "nav_privacy": "Privacy",
+  "nav_rss": "RSS",
   "nav_custom": "Modules",
 
   "hero_tag": "Designer · Developer · Dreamer",
@@ -74,6 +76,7 @@
   "contact_send": "Send Message",
   "contact_sending": "Sending...",
   "contact_success": "Message sent! I'll get back to you soon.",
+  "contact_error": "Something went wrong. Please try again.",
   "contact_bot": "Don't fill this out:",
 
   "custom_tag": "Custom Modules",
@@ -103,6 +106,8 @@
     "nav_blog": "文章",
     "nav_resources": "资源",
     "nav_contact": "联系",
+    "nav_privacy": "隐私",
+    "nav_rss": "RSS",
     "nav_custom": "模块",
 
     "hero_tag": "设计 · 开发 · 记录",
@@ -171,6 +176,7 @@
     "contact_send": "发送留言",
     "contact_sending": "发送中...",
     "contact_success": "留言已发送，我会尽快回复你。",
+    "contact_error": "发送失败，请稍后重试。",
     "contact_bot": "请不要填写这里：",
 
     "custom_tag": "自定义模块",
