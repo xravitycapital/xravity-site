@@ -25,6 +25,7 @@ const requiredKeys = [
 const translations = JSON.parse(await readFile(translationPath, 'utf8'));
 const adminConfig = await readFile(adminConfigPath, 'utf8');
 const netlifyConfig = await readFile(netlifyConfigPath, 'utf8');
+const adminPage = await readFile(new URL('src/pages/admin/index.astro', root), 'utf8');
 
 for (const locale of ['en', 'zh']) {
   const map = locale === 'en' ? translations : translations.zh;
@@ -71,6 +72,10 @@ if (/publish_mode:\s*editorial_workflow/.test(adminConfig)) {
 
 if (!/from\s*=\s*"\/admin\/"[\s\S]*?to\s*=\s*"\/admin\/index\.html"/.test(netlifyConfig)) {
   throw new Error('Admin config check failed: /admin/ redirect');
+}
+
+if (!adminPage.includes('id="nc-root"')) {
+  throw new Error('Admin config check failed: Decap mount point #nc-root');
 }
 
 console.log(`Content checks passed: ${requiredKeys.length} UI keys × 2 locales; Admin config checks passed.`);

@@ -50,6 +50,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+    #nc-root { min-height: 100vh; }
   </style>
 </head>
 <body>
@@ -61,6 +62,7 @@
       <button id="retryBtn" type="button">Retry</button>
     </div>
   </main>
+  <div id="nc-root" aria-live="polite"></div>
 
   <script is:inline>
     (function () {
