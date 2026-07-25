@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Content Manager — Xravity</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; background: #0d0d14; font-family: system-ui, sans-serif; }
+    #login-prompt {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #e8e8f0;
+      gap: 1.5rem;
+      padding: 2rem;
+      text-align: center;
+    }
+    #login-prompt h1 { font-size: 1.4rem; font-weight: 500; margin: 0; }
+    #login-prompt p { color: #aaaabd; font-size: 0.9rem; line-height: 1.6; margin: 0; max-width: 32rem; }
+    #status-text[data-tone="error"] { color: #f08b81; }
+    #status-text[data-tone="success"] { color: #d4a843; }
+    #login-prompt button {
+      padding: 0.85rem 2.5rem;
+      font-size: 1rem;
+      border: 1.5px solid #d4a843;
+      background: transparent;
+      color: #d4a843;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    #login-prompt button:hover:not(:disabled) { background: #d4a843; color: #0d0d14; }
+    #login-prompt button:focus-visible { outline: 3px solid #f0d58a; outline-offset: 4px; }
+    #login-prompt button:disabled { opacity: 0.4; cursor: not-allowed; }
+    #retryBtn { display: none; }
+    .spinner {
+      display: inline-block;
+      width: 22px; height: 22px;
+      border: 2px solid #333;
+      border-top-color: #d4a843;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+  </style>
+</head>
+<body>
+  <main id="login-prompt" aria-labelledby="admin-title">
+    <h1 id="admin-title">Content Manager</h1>
+    <p id="status-text" role="status" aria-live="polite">Checking authentication…</p>
+    <div>
+      <button id="loginBtn" type="button" disabled>Login with Netlify Identity</button>
+      <button id="retryBtn" type="button">Retry</button>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var prompt = document.getElementById('login-prompt');
+      var loginBtn = document.getElementById('loginBtn');
+      var retryBtn = document.getElementById('retryBtn');
+      var statusText = document.getElementById('status-text');
+      var cmsStarted = false;
+      var authTimer = null;
+      var identityScript = null;
+
+      function setStatus(message, tone) {
+        if (!statusText) return;
+        statusText.textContent = message;
+        statusText.dataset.tone = tone || '';
+      }
+
+      function showRetry() {
+        if (retryBtn) retryBtn.style.display = 'inline-block';
+        if (loginBtn) loginBtn.style.display = 'none';
+      }
+
+      function clearAuthTimer() {
+        if (authTimer) window.clearTimeout(authTimer);
+        authTimer = null;
+      }
+
+      function startCMS() {
+        if (cmsStarted) return;
+        cmsStarted = true;
+        clearAuthTimer();
+        if (prompt) prompt.style.display = 'none';
+
+        var cmsScript = document.createElement('script');
+        cmsScript.src = 'https://unpkg.com/decap-cms@^3.12.0/dist/decap-cms.js';
+        cmsScript.async = true;
+        cmsScript.onload = function () {
+          var previewScript = document.createElement('script');
+          previewScript.src = '/admin/preview.js';
+          previewScript.async = true;
+          document.body.appendChild(previewScript);
+        };
+        cmsScript.onerror = function () {
+          cmsStarted = false;
+          if (prompt) prompt.style.display = 'flex';
+          setStatus('The editor could not load. Check your connection and retry.', 'error');
+          showRetry();
+        };
+        document.body.appendChild(cmsScript);
+      }
+
+      function initializeIdentity() {
+        var widget = window.netlifyIdentity;
+        if (!widget) {
+          setStatus('Authentication is unavailable. Check your connection and retry.', 'error');
+          showRetry();
+          return;
+        }
+
+        var hash = window.location.hash;
+        var hasToken = hash && (
+          hash.indexOf('invite_token') !== -1 ||
+          hash.indexOf('recovery_token') !== -1 ||
+          hash.indexOf('confirmation_token') !== -1
+        );
+
+        widget.on('init', function (user) {
+          clearAuthTimer();
+          if (hasToken) {
+            setStatus('Finish setting your password in the Identity window.', 'success');
+            return;
+          }
+          if (user) {
+            setStatus('Welcome back. Loading the editor…', 'success');
+            if (loginBtn) loginBtn.style.display = 'none';
+            startCMS();
+          } else {
+            setStatus('Sign in to edit and publish your site.', '');
+            if (loginBtn) {
+              loginBtn.disabled = false;
+              loginBtn.style.display = 'inline-block';
+            }
+          }
+        });
+
+        widget.on('login', function (user) {
+          if (user && !cmsStarted) {
+            setStatus('Login successful. Loading the editor…', 'success');
+            if (loginBtn) loginBtn.style.display = 'none';
+            startCMS();
+          }
+        });
+
+        widget.on('error', function () {
+          clearAuthTimer();
+          setStatus('Authentication failed. Please retry or check Netlify Identity.', 'error');
+          if (loginBtn) loginBtn.disabled = false;
+          showRetry();
+        });
+
+        widget.on('logout', function () { window.location.reload(); });
+        widget.init();
+
+        authTimer = window.setTimeout(function () {
+          setStatus('Authentication is taking too long. Check your connection and retry.', 'error');
+          if (loginBtn) loginBtn.disabled = false;
+          showRetry();
+        }, 10000);
+
+        if (hasToken) {
+          if (loginBtn) loginBtn.style.display = 'none';
+          widget.open();
+        }
+      }
+
+      function loadIdentity() {
+        cmsStarted = false;
+        clearAuthTimer();
+        if (retryBtn) retryBtn.style.display = 'none';
+        if (loginBtn) {
+          loginBtn.style.display = 'inline-block';
+          loginBtn.disabled = true;
+        }
+        setStatus('Checking authentication…', '');
+
+        if (identityScript) identityScript.remove();
+        identityScript = document.createElement('script');
+        identityScript.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+        identityScript.async = true;
+        identityScript.onload = initializeIdentity;
+        identityScript.onerror = function () {
+          setStatus('Authentication could not load. Check your connection and retry.', 'error');
+          showRetry();
+        };
+        document.head.appendChild(identityScript);
+      }
+
+      if (loginBtn) loginBtn.addEventListener('click', function () {
+        if (window.netlifyIdentity) window.netlifyIdentity.open();
+      });
+      if (retryBtn) retryBtn.addEventListener('click', loadIdentity);
+
+      loadIdentity();
+    })();
+  </script>
+</body>
+</html>

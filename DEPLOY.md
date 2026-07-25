@@ -5,8 +5,17 @@ Current production domain: `https://xravity.xyz`
 ## Publishing Flow
 
 ```text
-Decap CMS / local edits -> GitHub main -> Netlify build -> https://xravity.xyz
+Decap CMS (authenticated) -> GitHub main -> Netlify build -> https://xravity.xyz
 ```
+
+## Admin Publishing
+
+Open `https://xravity.xyz/admin/` and sign in with Netlify Identity. Saving an entry commits directly to `main`; Netlify then builds the site automatically.
+
+- Keep `Draft` enabled when an entry should remain out of the public site.
+- Turn `Draft` off and save when the entry is ready to publish.
+- A failed login or editor load now shows a retry action instead of leaving the page spinning.
+- The editor still requires Identity authentication; the public site never accepts CMS writes directly.
 
 ## Local Development
 

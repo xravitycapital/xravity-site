@@ -1,8 +1,7 @@
 backend:
   name: git-gateway
   branch: main
-
-publish_mode: editorial_workflow
+  # Authenticated saves commit directly to main. Netlify Identity still gates access.
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
@@ -16,48 +15,160 @@ collections:
   - name: "blog"
     label: "文章 / Blog Posts"
     label_singular: "文章 / Blog Post"
+    description: "发布后会直接进入 main；打开 Draft 可先保存但不在网站公开。"
     folder: "src/content/blog"
     create: true
     slug: "{{slug}}"
+    summary: "{{title}} — {{date}}"
+    sortable_fields: ["date", "title", "draft", "featured"]
+    view_filters:
+      - label: "草稿 / Drafts"
+        field: "draft"
+        pattern: true
+      - label: "精选 / Featured"
+        field: "featured"
+        pattern: true
+      - label: "中文 / Chinese"
+        field: "lang"
+        pattern: "zh"
+    view_groups:
+      - label: "语言 / Language"
+        field: "lang"
     preview_path: "blog/{{slug}}"
     editor:
       preview: true
     fields:
-      - { label: "标题 / Title", name: "title", widget: "string" }
-      - { label: "发布日期 / Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
-      - { label: "摘要 / Excerpt", name: "excerpt", widget: "text", hint: "显示在文章列表里的短摘要。" }
-      - { label: "分类 / Category", name: "category", widget: "string", required: false }
-      - { label: "语言 / Language", name: "lang", widget: "select", options: ["en", "zh"], default: "zh" }
-      - { label: "草稿 / Draft", name: "draft", widget: "boolean", default: false }
+      - label: "标题 / Title"
+        name: "title"
+        widget: "string"
+        pattern: [".{2,}", "标题至少需要 2 个字符。"]
+      - label: "发布日期 / Publish Date"
+        name: "date"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        picker_utc: true
+        default: "{{now}}"
+        hint: "只选择日期，不需要填写时间。"
+      - label: "摘要 / Excerpt"
+        name: "excerpt"
+        widget: "text"
+        pattern: ["\\S+", "请填写文章摘要。"]
+        hint: "显示在文章列表、搜索结果和 RSS 中。"
+      - label: "分类 / Category"
+        name: "category"
+        widget: "string"
+        required: false
+        hint: "例如 Design、Notes；同一分类请保持拼写一致。"
+      - label: "语言 / Language"
+        name: "lang"
+        widget: "select"
+        options: ["en", "zh"]
+        default: "en"
+        hint: "只影响辅助功能和页面语言标记，不会自动翻译正文。"
+      - label: "草稿 / Draft"
+        name: "draft"
+        widget: "boolean"
+        default: false
+        hint: "打开后会提交到 Git，但不会显示在公开网站。"
       - { label: "精选 / Featured", name: "featured", widget: "boolean", default: false }
-      - { label: "更新日期 / Updated Date", name: "updatedDate", widget: "datetime", format: "YYYY-MM-DD", required: false }
-      - { label: "标签 / Tags", name: "tags", widget: "list", default: [] }
-      - { label: "封面图 / Cover Image", name: "cover", widget: "image", required: false }
-      - { label: "封面描述 / Cover Alt", name: "coverAlt", widget: "string", required: false }
-      - { label: "关联资源 / Related Resources", name: "relatedResources", widget: "list", default: [], required: false }
-      - { label: "正文 / Body", name: "body", widget: "markdown" }
+      - label: "更新日期 / Updated Date"
+        name: "updatedDate"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        picker_utc: true
+        required: false
+      - label: "标签 / Tags"
+        name: "tags"
+        widget: "list"
+        default: []
+        hint: "每项一个标签；建议不要在标签前加 #，同一类标签请保持拼写一致。"
+      - label: "封面图 / Cover Image"
+        name: "cover"
+        widget: "image"
+        required: false
+        media_library:
+          config:
+            max_file_size: 2097152
+        hint: "建议使用横向图片，上传后会自动放入 public/images/uploads。"
+      - label: "封面描述 / Cover Alt"
+        name: "coverAlt"
+        widget: "string"
+        required: false
+        hint: "如果有封面图，请写一句描述，方便无障碍阅读。"
+      - label: "关联资源 / Related Resources"
+        name: "relatedResources"
+        widget: "relation"
+        collection: "resources"
+        multiple: true
+        value_field: "{{slug}}"
+        search_fields: ["title", "category", "tags"]
+        display_fields: ["title", "category"]
+        default: []
+        required: false
+      - label: "正文 / Body"
+        name: "body"
+        widget: "richtext"
+        modes: ["rich_text", "raw"]
+        buttons: ["bold", "italic", "strikethrough", "code", "link", "heading-two", "heading-three", "quote", "bulleted-list", "numbered-list"]
+        editor_components: ["image", "code-block"]
+        hint: "正文支持标题、列表、引用、代码和图片。"
 
   - name: "resources"
     label: "资源 / Resources"
     label_singular: "资源 / Resource"
+    description: "保存工具、网站和参考资料；发布后会直接进入 main。"
     folder: "src/content/resources"
     create: true
     slug: "{{slug}}"
+    summary: "{{title}} — {{category}}"
+    sortable_fields: ["date", "title", "category", "featured"]
+    view_filters:
+      - label: "精选 / Featured"
+        field: "featured"
+        pattern: true
+      - label: "中文 / Chinese"
+        field: "lang"
+        pattern: "zh"
+    view_groups:
+      - label: "分类 / Category"
+        field: "category"
     editor:
       preview: false
     fields:
-      - { label: "标题 / Title", name: "title", widget: "string" }
-      - { label: "收录日期 / Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
-      - { label: "描述 / Description", name: "description", widget: "text" }
-      - { label: "链接 / URL", name: "url", widget: "string" }
-      - { label: "分类 / Category", name: "category", widget: "string" }
+      - label: "标题 / Title"
+        name: "title"
+        widget: "string"
+        pattern: [".{2,}", "标题至少需要 2 个字符。"]
+      - label: "收录日期 / Date"
+        name: "date"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        picker_utc: true
+        default: "{{now}}"
+      - label: "描述 / Description"
+        name: "description"
+        widget: "text"
+        pattern: ["\\S+", "请填写资源描述。"]
+      - label: "链接 / URL"
+        name: "url"
+        widget: "string"
+        pattern: ["^https?://.+", "请输入完整的 http:// 或 https:// 链接。"]
+      - label: "分类 / Category"
+        name: "category"
+        widget: "string"
+        hint: "例如 Build、CMS、Design。"
       - { label: "标签 / Tags", name: "tags", widget: "list", default: [] }
-      - { label: "语言 / Language", name: "lang", widget: "select", options: ["en", "zh"], default: "zh" }
+      - label: "语言 / Language"
+        name: "lang"
+        widget: "select"
+        options: ["en", "zh"]
+        default: "en"
       - { label: "精选 / Featured", name: "featured", widget: "boolean", default: false }
 
   # ── Site Settings (edits src/data/site.json) ──
   - name: "settings"
-    label: "Site Settings"
+    label: "站点设置 / Site Settings"
+    description: "首页文字、图片和联系方式。展开需要修改的区域即可。"
     delete: false
     editor:
       preview: false
@@ -69,6 +180,8 @@ collections:
           - label: "Site"
             name: "site"
             widget: "object"
+            collapsed: true
+            summary: "{{fields.name}}"
             fields:
               - { label: "Site Name", name: "name", widget: "string" }
               - { label: "Description", name: "description", widget: "text" }
@@ -77,6 +190,8 @@ collections:
           - label: "Hero"
             name: "hero"
             widget: "object"
+            collapsed: true
+            summary: "{{fields.tag}} — {{fields.name}}"
             fields:
               - { label: "Tag Line", name: "tag", widget: "string" }
               - { label: "Name (after X)", name: "name", widget: "string" }
@@ -85,6 +200,8 @@ collections:
           - label: "About"
             name: "about"
             widget: "object"
+            collapsed: true
+            summary: "{{fields.title}}"
             fields:
               - { label: "Section Title", name: "title", widget: "string" }
               - { label: "Paragraph 1 (HTML)", name: "p1", widget: "text" }
@@ -93,6 +210,8 @@ collections:
           - label: "Timeline"
             name: "timeline"
             widget: "list"
+            collapsed: true
+            summary: "{{fields.year}} — {{fields.title}}"
             fields:
               - { label: "Period", name: "year", widget: "string" }
               - { label: "Title", name: "title", widget: "string" }
@@ -101,6 +220,8 @@ collections:
           - label: "Skills"
             name: "skills"
             widget: "list"
+            collapsed: true
+            summary: "{{fields.name}}"
             fields:
               - { label: "Icon (emoji)", name: "icon", widget: "string" }
               - { label: "Skill Name", name: "name", widget: "string" }
@@ -108,6 +229,8 @@ collections:
           - label: "Gallery"
             name: "gallery"
             widget: "object"
+            collapsed: true
+            summary: "{{fields.title}}"
             fields:
               - { label: "Section Title", name: "title", widget: "string" }
               - { label: "Subtitle", name: "sub", widget: "text" }
@@ -115,11 +238,18 @@ collections:
                 name: "photos"
                 widget: "list"
                 fields:
-                  - { label: "Image", name: "src", widget: "image" }
+                  - label: "Image"
+                    name: "src"
+                    widget: "image"
+                    media_library:
+                      config:
+                        max_file_size: 2097152
                   - { label: "Caption", name: "caption", widget: "string" }
           - label: "Contact"
             name: "contact"
             widget: "object"
+            collapsed: true
+            summary: "{{fields.title}}"
             fields:
               - { label: "Section Title", name: "title", widget: "string" }
               - { label: "Subtitle", name: "sub", widget: "text" }
@@ -133,6 +263,8 @@ collections:
           - label: "Custom Sections"
             name: "customSections"
             widget: "list"
+            collapsed: true
+            summary: "{{fields.title}}"
             fields:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Content (HTML)", name: "content", widget: "text" }
