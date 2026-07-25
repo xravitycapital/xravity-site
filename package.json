@@ -6,7 +6,12 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check:content": "node scripts/validate-content.mjs",
+    "check": "npm run build && npm run check:content"
+  },
+  "engines": {
+    "node": ">=18.17.0"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",

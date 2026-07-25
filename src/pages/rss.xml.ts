@@ -14,8 +14,11 @@ export async function GET() {
       title: post.data.title,
       pubDate: post.data.date,
       description: post.data.excerpt,
-      link: `/blog/${post.slug}/`,
+      link: new URL(`/blog/${post.slug}/`, siteData.site.url).toString(),
+      categories: [post.data.category, ...(post.data.tags ?? [])].filter(Boolean),
     })),
-    customData: `<language>en-us</language>`,
+    // Content can be authored in either language, so avoid labeling the whole
+    // feed as one language. Readers still receive each title and excerpt intact.
+    customData: '<ttl>60</ttl>',
   });
 }

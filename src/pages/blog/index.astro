@@ -7,6 +7,12 @@ import { formatDate, readingTime } from '../../utils/date';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const filterOptionMap = new Map<string, string>();
+for (const value of posts.flatMap(post => [post.data.category, ...post.data.tags].filter(Boolean) as string[])) {
+  if (!filterOptionMap.has(value.toLowerCase())) filterOptionMap.set(value.toLowerCase(), value);
+}
+const filterOptions = [...filterOptionMap.values()].sort((a, b) => a.localeCompare(b));
 ---
 
 <BaseLayout title="Blog — Xravity" description="Xravity Blog — Design, Code, and Stories.">
@@ -16,31 +22,106 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
       <p class="section-tag" data-i18n="blog_tag">03 · Blog</p>
       <h1 class="section-title" data-i18n="blog_title">Blog</h1>
 
-      <div class="blog-list">
-        {posts.length === 0
-          ? <p style="text-align:center;color:var(--text-muted);padding:3rem;" data-i18n="blog_empty_admin">No posts yet. Start writing with Decap CMS at /admin.</p>
-          : posts.map(post => (
-              <a href={`/blog/${post.slug}`} class="blog-card">
-                {post.data.cover && (
-                  <div class="blog-card-cover">
-                    <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+      {posts.length === 0 ? (
+        <p class="blog-empty" data-i18n="blog_empty_admin">No posts yet. Start writing with Decap CMS at /admin.</p>
+      ) : (
+        <>
+          <div class="blog-tools" aria-label="Blog discovery tools" data-i18n-aria="blog_tools_label">
+            <label class="blog-search">
+              <span data-i18n="blog_search_label">Search posts</span>
+              <input
+                id="blogSearch"
+                type="search"
+                placeholder="Search by title, excerpt, or tag"
+                data-i18n-placeholder="blog_search_placeholder"
+                autocomplete="off"
+              />
+            </label>
+            <div class="blog-filters" role="group" aria-label="Filter blog posts" data-i18n-aria="blog_filter_group_label">
+              <span class="blog-filter-label" data-i18n="blog_filter_label">Filter by</span>
+              <button type="button" class="blog-filter is-active" data-filter="all" data-i18n="blog_filter_all">All</button>
+              {filterOptions.map(filter => (
+                <button type="button" class="blog-filter" data-filter={filter.toLowerCase()}>{filter}</button>
+              ))}
+            </div>
+          </div>
+          <p class="blog-no-results" id="blogNoResults" data-i18n="blog_no_results" hidden>No posts match your search.</p>
+
+          <div class="blog-list" id="blogList">
+            {posts.map(post => {
+              const tags = post.data.tags ?? [];
+              const category = post.data.category ?? '';
+              const language = post.data.lang === 'zh' ? 'zh-CN' : 'en';
+              const searchText = [post.data.title, post.data.excerpt, category, ...tags].join(' ').toLowerCase();
+              return (
+                <a
+                  href={`/blog/${post.slug}`}
+                  class="blog-card"
+                  data-blog-card
+                  data-search={searchText}
+                  data-category={category.toLowerCase()}
+                  data-tags={tags.join('|').toLowerCase()}
+                  lang={language}
+                >
+                  {post.data.cover && (
+                    <div class="blog-card-cover">
+                      <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} loading="lazy" />
+                    </div>
+                  )}
+                  <div class="blog-date">{formatDate(post.data.date)}</div>
+                  <div class="blog-info">
+                    <h2>{post.data.title}</h2>
+                    <p>{post.data.excerpt}</p>
+                    <div class="blog-meta">
+                      <span class="reading-time">{readingTime(post.body || '')} <span data-i18n="min_read">min read</span></span>
+                      {tags.slice(0, 2).map(tag => <span class="tag">{tag}</span>)}
+                    </div>
                   </div>
-                )}
-                <div class="blog-date">{formatDate(post.data.date)}</div>
-                <div class="blog-info">
-                  <h3>{post.data.title}</h3>
-                  <p>{post.data.excerpt}</p>
-                  <div class="blog-meta">
-                    <span class="reading-time">{readingTime(post.body || '')} <span data-i18n="min_read">min read</span></span>
-                    {post.data.tags && post.data.tags.slice(0, 2).map(tag => <span class="tag">{tag}</span>)}
-                  </div>
-                </div>
-                <div class="blog-arrow">&rarr;</div>
-              </a>
-            ))
-        }
-      </div>
+                  <span class="blog-arrow" aria-hidden="true">&rarr;</span>
+                </a>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   </section>
   <Footer />
 </BaseLayout>
+
+<script>
+  const searchInput = document.getElementById('blogSearch') as HTMLInputElement | null;
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-blog-card]'));
+  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-filter'));
+  const noResults = document.getElementById('blogNoResults');
+  let activeFilter = 'all';
+
+  function renderBlogResults() {
+    const query = searchInput?.value.trim().toLowerCase() || '';
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const searchable = card.dataset.search || '';
+      const category = card.dataset.category || '';
+      const tags = card.dataset.tags || '';
+      const filterMatches = activeFilter === 'all' || category === activeFilter || tags.split('|').includes(activeFilter);
+      const searchMatches = !query || searchable.includes(query);
+      const visible = filterMatches && searchMatches;
+      card.hidden = !visible;
+      if (visible) visibleCount += 1;
+    });
+
+    if (noResults) noResults.hidden = visibleCount !== 0;
+  }
+
+  searchInput?.addEventListener('input', renderBlogResults);
+  filters.forEach(filter => {
+    filter.addEventListener('click', () => {
+      activeFilter = filter.dataset.filter || 'all';
+      filters.forEach(item => item.classList.toggle('is-active', item === filter));
+      renderBlogResults();
+    });
+  });
+
+  renderBlogResults();
+</script>

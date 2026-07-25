@@ -19,6 +19,20 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 const bodyText = post.body || '';
 const readMin = readingTime(bodyText);
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const postTags = new Set(post.data.tags ?? []);
+const relatedPosts = allPosts
+  .filter(candidate => candidate.id !== post.id)
+  .map(candidate => {
+    const sharedTags = (candidate.data.tags ?? []).filter(tag => postTags.has(tag)).length;
+    const sharedCategory = post.data.category && candidate.data.category === post.data.category ? 2 : 0;
+    return { post: candidate, score: sharedTags + sharedCategory };
+  })
+  .filter(item => item.score > 0)
+  .sort((a, b) => b.score - a.score || new Date(b.post.data.date).getTime() - new Date(a.post.data.date).getTime())
+  .slice(0, 3)
+  .map(item => item.post);
+const contentLanguage = post.data.lang === 'zh' ? 'zh-CN' : 'en';
 ---
 
 <BaseLayout
@@ -37,7 +51,7 @@ const readMin = readingTime(bodyText);
   <Nav />
   <section class="blog-page-section">
     <div class="container">
-      <article class="blog-full">
+      <article class="blog-full" lang={contentLanguage}>
         <div class="blog-full-header">
           <h1>{post.data.title}</h1>
           <div class="blog-full-meta">
@@ -73,13 +87,40 @@ const readMin = readingTime(bodyText);
             class="share-btn"
             target="_blank"
             rel="noopener"
+            aria-label="Share on X"
+            data-i18n-aria="share_on_x"
           >𝕏</a>
           <button
             class="share-btn"
             id="copyLinkBtn"
+            type="button"
+            aria-label="Copy link"
+            title="Copy link"
+            data-i18n-aria="copy_link"
+            data-i18n-title="copy_link"
           >🔗</button>
         </div>
       </article>
+
+      {relatedPosts.length > 0 && (
+        <aside class="related-posts" aria-labelledby="relatedPostsTitle">
+          <h2 id="relatedPostsTitle" data-i18n="related_posts">You may also like</h2>
+          <div class="related-grid">
+            {relatedPosts.map(related => (
+              <a
+                class="related-card"
+                href={`/blog/${related.slug}`}
+                lang={related.data.lang === 'zh' ? 'zh-CN' : 'en'}
+              >
+                <span class="related-card-date">{formatDate(related.data.date)}</span>
+                <h3>{related.data.title}</h3>
+                <p>{related.data.excerpt}</p>
+                <span class="related-card-link" data-i18n="read_article">Read article</span>
+              </a>
+            ))}
+          </div>
+        </aside>
+      )}
 
       <!-- Giscus Comments -->
       <GiscusComment />

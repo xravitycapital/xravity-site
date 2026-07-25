@@ -17,14 +17,29 @@ import siteData from '../data/site.json';
       {siteData.hero.cta}
     </a>
   </div>
-  <div class="scroll-indicator" id="scrollIndicator">
+  <div
+    class="scroll-indicator"
+    id="scrollIndicator"
+    role="button"
+    tabindex="0"
+    aria-label="Scroll to About"
+    data-i18n-aria="scroll_to_about"
+  >
     <span class="line"></span>
     <small data-i18n="scroll">Scroll</small>
   </div>
 </section>
 
 <script>
-  document.getElementById('scrollIndicator')?.addEventListener('click', () => {
+  const scrollIndicator = document.getElementById('scrollIndicator');
+  const scrollToAbout = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+  };
+  scrollIndicator?.addEventListener('click', scrollToAbout);
+  scrollIndicator?.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      scrollToAbout();
+    }
   });
 </script>

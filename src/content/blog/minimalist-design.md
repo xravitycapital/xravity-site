@@ -2,6 +2,8 @@
 title: "Getting Started with Minimalist Design"
 date: 2026-05-15
 excerpt: "Less is more. A dive into minimalist design principles and why simplicity wins."
+category: Design
+lang: en
 tags: ["design", "minimalism"]
 ---
 

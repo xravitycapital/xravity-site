@@ -2,6 +2,8 @@
 title: "Welcome to My Blog"
 date: 2026-06-01
 excerpt: "This is the first post on my personal site. Click to read more."
+category: Notes
+lang: en
 tags: ["welcome", "personal"]
 ---
 

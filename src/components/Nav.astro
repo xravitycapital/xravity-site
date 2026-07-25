@@ -2,7 +2,17 @@
   <a href="/#hero" class="nav-logo">Xravity</a>
 
   <!-- Hamburger toggle (mobile only) -->
-  <button class="nav-hamburger" id="navHamburger" aria-label="Menu" title="Menu">
+  <button
+    class="nav-hamburger"
+    id="navHamburger"
+    aria-label="Open menu"
+    title="Open menu"
+    data-i18n-aria="menu_open"
+    data-i18n-title="menu_open"
+    aria-expanded="false"
+    aria-controls="navLinks"
+    type="button"
+  >
     <span></span><span></span><span></span>
   </button>
 
@@ -33,6 +43,11 @@
     const open = navLinks.classList.toggle('open');
     hamburger.classList.toggle('open', open);
     hamburger.setAttribute('aria-expanded', String(open));
+    const labelKey = open ? 'menu_close' : 'menu_open';
+    const labelFallback = open ? 'Close menu' : 'Open menu';
+    const label = (window as any).xravityT?.(labelKey, labelFallback) || labelFallback;
+    hamburger.setAttribute('aria-label', label);
+    hamburger.setAttribute('title', label);
   });
 
   // Close nav when a link is clicked (mobile)
@@ -41,6 +56,9 @@
       navLinks.classList.remove('open');
       hamburger.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
+      const label = (window as any).xravityT?.('menu_open', 'Open menu') || 'Open menu';
+      hamburger.setAttribute('aria-label', label);
+      hamburger.setAttribute('title', label);
     });
   });
 </script>

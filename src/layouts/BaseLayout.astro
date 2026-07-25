@@ -80,10 +80,10 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <div id="progress-bar"></div>
 
   <!-- Back to Top -->
-  <button id="back-to-top" title="Back to top" data-i18n-title="back_to_top">&#8593;</button>
+  <button id="back-to-top" title="Back to top" aria-label="Back to top" data-i18n-title="back_to_top" data-i18n-aria="back_to_top" type="button">&#8593;</button>
 
   <!-- Theme Toggle -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle theme" data-i18n-title="toggle_theme">
+  <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme" data-i18n-title="toggle_theme" data-i18n-aria="toggle_theme" type="button">
     <span>&#9788;</span>
   </button>
 
@@ -136,30 +136,32 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     });
     backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // ─── Custom Cursor ───
     const dot = document.getElementById('cursor-dot')!;
     const ring = document.getElementById('cursor-ring')!;
     let mx = 0, my = 0, dx = 0, dy = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (finePointer && !reducedMotion) {
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
-    function bindHover() {
       document.querySelectorAll('a,button,.blog-card,.gallery-item,.contact-link,.skill-card,.section-block')
         .forEach(el => {
           el.addEventListener('mouseenter', () => ring.classList.add('hover'));
           el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
         });
-    }
-    bindHover();
 
-    (function animateCursor() {
-      dx += (mx - dx) * 0.3;
-      dy += (my - dy) * 0.3;
-      dot.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.transform = 'translate(' + (rx - 20) + 'px, ' + (ry - 20) + 'px)';
-      requestAnimationFrame(animateCursor);
-    })();
+      (function animateCursor() {
+        dx += (mx - dx) * 0.3;
+        dy += (my - dy) * 0.3;
+        dot.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.transform = 'translate(' + (rx - 20) + 'px, ' + (ry - 20) + 'px)';
+        requestAnimationFrame(animateCursor);
+      })();
+    }
 
     // ─── Particles ───
     const canvas = document.getElementById('particles') as HTMLCanvasElement;
@@ -240,35 +242,39 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     const particles: Particle[] = [];
     for (let i = 0; i < 60; i++) particles.push(new Particle());
 
-    let particlesPaused = false;
+    let particlesPaused = document.hidden || reducedMotion;
     document.addEventListener('visibilitychange', () => {
-      particlesPaused = document.hidden;
+      particlesPaused = document.hidden || reducedMotion;
       if (!particlesPaused) resize(); // recalc dimensions on return
     });
 
-    (function animateParticles() {
-      if (!particlesPaused) {
-        ctx.clearRect(0, 0, w, h);
-        const c = particleColors();
-        for (let i = 0; i < particles.length; i++) {
-          for (let j = i + 1; j < particles.length; j++) {
-            const pdx = particles[i].x - particles[j].x;
-            const pdy = particles[i].y - particles[j].y;
-            const pd = Math.sqrt(pdx * pdx + pdy * pdy);
-            if (pd < 140) {
-              ctx.beginPath();
-              ctx.moveTo(particles[i].x, particles[i].y);
-              ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = 'rgba(' + c.rgb + ',' + (c.la * (1 - pd / 140)) + ')';
-              ctx.lineWidth = 0.9;
-              ctx.stroke();
+    if (!reducedMotion) {
+      (function animateParticles() {
+        if (!particlesPaused) {
+          ctx.clearRect(0, 0, w, h);
+          const c = particleColors();
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              const pdx = particles[i].x - particles[j].x;
+              const pdy = particles[i].y - particles[j].y;
+              const pd = Math.sqrt(pdx * pdx + pdy * pdy);
+              if (pd < 140) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = 'rgba(' + c.rgb + ',' + (c.la * (1 - pd / 140)) + ')';
+                ctx.lineWidth = 0.9;
+                ctx.stroke();
+              }
             }
           }
+          particles.forEach(p => { p.update(); p.draw(c); });
         }
-        particles.forEach(p => { p.update(); p.draw(c); });
-      }
-      requestAnimationFrame(animateParticles);
-    })();
+        requestAnimationFrame(animateParticles);
+      })();
+    } else {
+      ctx.clearRect(0, 0, w, h);
+    }
 
     // ─── Toast helper ───
     function toast(msg: string) {
