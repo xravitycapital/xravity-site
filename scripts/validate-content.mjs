@@ -5,6 +5,7 @@ const root = new URL('../', import.meta.url);
 const translationPath = new URL('public/data/translations.json', root);
 const adminConfigPath = new URL('public/admin/config.yml', root);
 const netlifyConfigPath = new URL('netlify.toml', root);
+const deployGuidePath = new URL('DEPLOY.md', root);
 
 const requiredKeys = [
   'blog_search_label',
@@ -26,6 +27,7 @@ const translations = JSON.parse(await readFile(translationPath, 'utf8'));
 const adminConfig = await readFile(adminConfigPath, 'utf8');
 const netlifyConfig = await readFile(netlifyConfigPath, 'utf8');
 const adminPage = await readFile(new URL('src/pages/admin/index.astro', root), 'utf8');
+const deployGuide = await readFile(deployGuidePath, 'utf8');
 
 for (const locale of ['en', 'zh']) {
   const map = locale === 'en' ? translations : translations.zh;
@@ -49,6 +51,7 @@ for (const requiredFile of [
   'public/admin/preview.js',
   'public/admin/preview.css',
   'public/admin/robots.txt',
+  'DEPLOY.md',
 ]) {
   await access(new URL(requiredFile, root));
 }
@@ -59,6 +62,7 @@ const adminConfigChecks = [
   ['resource relation widget', /widget:\s*"relation"/],
   ['rich text widget', /widget:\s*"richtext"/],
   ['date-only picker', /date_format:\s*"YYYY-MM-DD"/],
+  ['commit message templates', /commit_messages:[\s\S]*uploadMedia:/],
 ];
 
 for (const [label, check] of adminConfigChecks) {
@@ -72,6 +76,16 @@ if (/publish_mode:\s*editorial_workflow/.test(adminConfig)) {
 
 if (!/from\s*=\s*"\/admin\/"[\s\S]*?to\s*=\s*"\/admin\/index\.html"/.test(netlifyConfig)) {
   throw new Error('Admin config check failed: /admin/ redirect');
+}
+
+if (!/for\s*=\s*"\/admin\/\*"[\s\S]*?Cache-Control\s*=\s*"no-store"[\s\S]*?X-Robots-Tag\s*=\s*"noindex/.test(netlifyConfig)) {
+  throw new Error('Admin config check failed: no-store/noindex headers');
+}
+
+for (const requiredGuideText of ['Invite only', 'two-factor authentication', 'Future GitHub Backend Migration']) {
+  if (!deployGuide.includes(requiredGuideText)) {
+    throw new Error(`Admin config check failed: DEPLOY.md is missing "${requiredGuideText}"`);
+  }
 }
 
 if (!adminPage.includes('id="nc-root"')) {

@@ -1,6 +1,12 @@
 backend:
   name: git-gateway
   branch: main
+  commit_messages:
+    create: "content: create {{collection}} {{slug}}"
+    update: "content: update {{collection}} {{slug}}"
+    delete: "content: delete {{collection}} {{slug}}"
+    uploadMedia: "media: upload {{path}}"
+    deleteMedia: "media: delete {{path}}"
   # Authenticated saves commit directly to main. Netlify Identity still gates access.
 
 media_folder: "public/images/uploads"
@@ -184,8 +190,14 @@ collections:
             summary: "{{fields.name}}"
             fields:
               - { label: "Site Name", name: "name", widget: "string" }
-              - { label: "Description", name: "description", widget: "text" }
-              - { label: "URL", name: "url", widget: "string" }
+              - label: "Description"
+                name: "description"
+                widget: "text"
+                pattern: ["\\S+", "站点描述不能为空。"]
+              - label: "URL"
+                name: "url"
+                widget: "string"
+                pattern: ["^https?://.+", "请输入完整的 http:// 或 https:// 网址。"]
               - { label: "Footer Text", name: "footer", widget: "string" }
           - label: "Hero"
             name: "hero"
@@ -204,7 +216,10 @@ collections:
             summary: "{{fields.title}}"
             fields:
               - { label: "Section Title", name: "title", widget: "string" }
-              - { label: "Paragraph 1 (HTML)", name: "p1", widget: "text" }
+              - label: "Paragraph 1 (HTML)"
+                name: "p1"
+                widget: "text"
+                hint: "这里允许少量 HTML；只使用你自己信任的内容。"
               - { label: "Paragraph 2", name: "p2", widget: "text" }
               - { label: "Paragraph 3", name: "p3", widget: "text" }
           - label: "Timeline"
@@ -258,7 +273,10 @@ collections:
                 widget: "list"
                 fields:
                   - { label: "Platform Name", name: "platform", widget: "string" }
-                  - { label: "URL", name: "url", widget: "string" }
+                  - label: "URL"
+                    name: "url"
+                    widget: "string"
+                    pattern: ["^(https?://|mailto:).+", "请输入 http(s) 或 mailto 链接。"]
                   - { label: "Icon (emoji)", name: "icon", widget: "string" }
           - label: "Custom Sections"
             name: "customSections"
@@ -267,4 +285,7 @@ collections:
             summary: "{{fields.title}}"
             fields:
               - { label: "Title", name: "title", widget: "string" }
-              - { label: "Content (HTML)", name: "content", widget: "text" }
+              - label: "Content (HTML)"
+                name: "content"
+                widget: "text"
+                hint: "仅填写可信 HTML；内容会直接显示在首页。"

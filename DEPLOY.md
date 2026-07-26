@@ -17,6 +17,30 @@ Open `https://xravity.xyz/admin/` and sign in with Netlify Identity. Saving an e
 - A failed login or editor load now shows a retry action instead of leaving the page spinning.
 - The editor still requires Identity authentication; the public site never accepts CMS writes directly.
 
+## Admin Security Checklist
+
+Keep these settings in Netlify Project configuration:
+
+1. Identity → Registration → choose **Invite only**. This prevents random visitors from creating CMS accounts.
+2. Identity → Users → use **Send reset password email** for account recovery.
+3. Netlify User settings → Security → enable **two-factor authentication**.
+4. Review Identity users periodically and delete accounts that should no longer publish.
+
+Because Admin publishes directly to `main`, an accidental publish should be reverted from the GitHub commit history, then Netlify will rebuild the previous content. The commit messages are prefixed with `content:` or `media:` so these changes are easy to find.
+
+## Future GitHub Backend Migration
+
+The current repository intentionally keeps `git-gateway` so the existing Netlify Identity login continues to work. Git Gateway is deprecated by Netlify, so migrate it when you are ready to configure OAuth in Netlify.
+
+The migration requires:
+
+- enabling GitHub authentication/OAuth for the Netlify site;
+- changing `public/admin/config.yml` to the GitHub backend with `repo: xravitycapital/xravity-site`;
+- confirming that every CMS user has GitHub push access to the repository;
+- testing login, media upload, direct publish, and rollback before removing Git Gateway.
+
+Do not put a GitHub OAuth client secret or personal access token in this repository.
+
 ## Local Development
 
 Run from the project folder:
