@@ -106,17 +106,27 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
     // ─── Theme ───
     let i18nMap: Record<string, string> = {};
     const themeToggle = document.getElementById('themeToggle')!;
-    const savedTheme = localStorage.getItem('xravity_theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggle.querySelector('span')!.innerHTML = savedTheme === 'dark' ? '&#9790;' : '&#9788;';
+    function applyTheme(theme: string) {
+      const dark = theme === 'dark';
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      themeToggle.querySelector('span')!.textContent = dark ? '☾' : '☼';
+    }
+    function restoreTheme() {
+      try { applyTheme(localStorage.getItem('xravity_theme') || 'light'); }
+      catch { applyTheme(document.documentElement.dataset.theme || 'light'); }
+    }
+    restoreTheme();
 
     themeToggle.addEventListener('click', () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       const next = isDark ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      themeToggle.querySelector('span')!.innerHTML = next === 'dark' ? '&#9790;' : '&#9788;';
-      localStorage.setItem('xravity_theme', next);
+      applyTheme(next);
+      try { localStorage.setItem('xravity_theme', next); } catch {}
     });
+    window.addEventListener('storage', event => {
+      if (event.key === 'xravity_theme' || event.key === null) restoreTheme();
+    });
+    window.addEventListener('pageshow', restoreTheme);
 
     // ─── Progress Bar & Back to Top ───
     const progressBar = document.getElementById('progress-bar')!;

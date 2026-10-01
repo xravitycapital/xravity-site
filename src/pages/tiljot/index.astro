@@ -6,13 +6,22 @@ const logo = '/images/tiljot/tiljot-logo.png';
 ---
 
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="zh-Hans" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#11182d" />
+    <script is:inline>
+      // Read the shared preference before first paint, without requiring storage access.
+      (() => {
+        let theme = 'light';
+        try { if (localStorage.getItem('xravity_theme') === 'dark') theme = 'dark'; } catch {}
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#0d0d14' : '#fafaf7';
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
@@ -29,7 +38,7 @@ const logo = '/images/tiljot/tiljot-logo.png';
     <meta name="twitter:image" content={`https://xravity.xyz${logo}`} />
   </head>
   <body>
-    <header><a class="site-wordmark" href="/">Xravity</a><nav aria-label="产品导航"><a href="/#products">返回产品目录</a><span>TilJot / 产品</span></nav></header>
+    <header><a class="site-wordmark" href="/">Xravity</a><nav aria-label="产品导航"><a href="/#products">返回产品目录</a><span>TilJot / 产品</span><button id="tiljotThemeToggle" type="button" aria-label="切换为深色主题"><span aria-hidden="true">☾</span><span class="theme-label">深色</span></button></nav></header>
     <main>
       <section class="hero" aria-labelledby="product-title">
         <img class="logo" src={logo} width="600" height="600" alt="TilJot 蓝紫色声波与终端标志" fetchpriority="high" />
@@ -55,18 +64,50 @@ const logo = '/images/tiljot/tiljot-logo.png';
   </body>
 </html>
 
+<script>
+  const toggle = document.getElementById('tiljotThemeToggle')!;
+  const icon = toggle.querySelector('[aria-hidden]')!;
+  const label = toggle.querySelector('.theme-label')!;
+  function applyTheme(theme: string) {
+    const dark = theme === 'dark';
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    toggle.setAttribute('aria-label', dark ? '切换为浅色主题' : '切换为深色主题');
+    icon.textContent = dark ? '☼' : '☾';
+    label.textContent = dark ? '浅色' : '深色';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#0d0d14' : '#fafaf7');
+  }
+  function restoreTheme() {
+    try { applyTheme(localStorage.getItem('xravity_theme') || 'light'); }
+    catch { applyTheme(document.documentElement.dataset.theme || 'light'); }
+  }
+  restoreTheme();
+  toggle.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('xravity_theme', next); } catch {}
+  });
+  window.addEventListener('storage', event => {
+    if (event.key === 'xravity_theme' || event.key === null) restoreTheme();
+  });
+  window.addEventListener('pageshow', restoreTheme);
+</script>
+
 <style>
+  :global(html) { --tj-bg: #fafaf7; --tj-text: #1a1a24; --tj-muted: #525e75; --tj-nav: #686879; --tj-card: #fff; --tj-border: rgba(0,0,0,.12); --tj-link: #3352ad; --tj-label: #586da2; --tj-wordmark: linear-gradient(135deg, #b8860b, #8b5e3c 40%, #4a6b6b); color-scheme: light; }
+  :global(html[data-theme="dark"]) { --tj-bg: #0d0d14; --tj-text: #e8e8f0; --tj-muted: #b4b4c8; --tj-nav: #b1b1c6; --tj-card: #181824; --tj-border: rgba(255,255,255,.12); --tj-link: #a6b8ff; --tj-label: #adbaff; --tj-wordmark: linear-gradient(135deg, #d4a843, #b8866c 40%, #5c8a8a); color-scheme: dark; }
   :global(*) { box-sizing: border-box; }
-  :global(body) { margin: 0; background: #fafaf7; color: #1a1a24; font: 16px/1.8 "Inter", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
-  :global(a) { color: #3352ad; text-underline-offset: 4px; }
-  :global(a:focus-visible) { outline: 3px solid #7893ff; outline-offset: 5px; }
+  :global(body) { margin: 0; background: var(--tj-bg); color: var(--tj-text); font: 16px/1.8 "Inter", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  :global(a) { color: var(--tj-link); text-underline-offset: 4px; }
+  :global(a:focus-visible), button:focus-visible { outline: 3px solid #7893ff; outline-offset: 5px; }
   header, main, footer { width: min(1100px, 100% - 48px); margin-inline: auto; }
   header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 28px 36px; font-size: 14px; }
-  header a { color: #7a7a8a; text-decoration: none; }
+  header a { color: var(--tj-nav); text-decoration: none; }
   header a:hover { color: #b8860b; }
-  header a.site-wordmark { font: 700 26px "Playfair Display", Georgia, serif; letter-spacing: .04em; background: linear-gradient(135deg, #b8860b, #8b5e3c 40%, #4a6b6b); background-clip: text; -webkit-background-clip: text; color: transparent; }
-  header nav { display: flex; flex-wrap: wrap; gap: 24px; justify-content: flex-end; }
-  header span { color: #7a7a8a; letter-spacing: .06em; }
+  header a.site-wordmark { font: 700 26px "Playfair Display", Georgia, serif; letter-spacing: .04em; background: var(--tj-wordmark); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; justify-content: flex-end; }
+  header span { color: var(--tj-nav); letter-spacing: .06em; }
+  #tiljotThemeToggle { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; border: 1px solid var(--tj-border); border-radius: 50px; background: var(--tj-card); color: var(--tj-text); font: inherit; cursor: pointer; }
+  #tiljotThemeToggle:hover { border-color: #7893ff; }
   .hero { background: radial-gradient(ellipse at top, #25365d, #11182d 65%); color: #f7f8fc; border-radius: 14px; padding: 60px 28px 38px; text-align: center; }
   .logo { display: block; width: 148px; height: 148px; margin: 0 auto 22px; border-radius: 28px; }
   .status { display: inline-block; color: #c9d3f9; background: #263351; border: 1px solid #475474; border-radius: 20px; padding: 3px 14px; font-size: 12px; }
@@ -77,14 +118,14 @@ const logo = '/images/tiljot/tiljot-logo.png';
   .contact:hover { background: #9aafff; }
   .availability { color: #adb9d5; font-size: 12px; margin-top: 18px; }
   .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 26px 0; }
-  article { background: white; border: 1px solid rgba(0,0,0,.06); border-radius: 14px; padding: 28px; }
-  article span { color: #586da2; font-size: 11px; letter-spacing: .12em; }
+  article { background: var(--tj-card); border: 1px solid var(--tj-border); border-radius: 14px; padding: 28px; }
+  article span { color: var(--tj-label); font-size: 11px; letter-spacing: .12em; }
   h2 { font-family: "Noto Serif SC", Georgia, serif; font-size: 21px; line-height: 1.55; margin: 12px 0; }
-  article p, .details p, dd, .english p { color: #525e75; margin-bottom: 0; }
-  .details { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 42px 30px; border-block: 1px solid rgba(0,0,0,.12); }
+  article p, .details p, dd, .english p { color: var(--tj-muted); margin-bottom: 0; }
+  .details { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 42px 30px; border-block: 1px solid var(--tj-border); }
   dl { margin: 0; } dt { font-weight: 650; } dt:not(:first-child) { margin-top: 22px; } dd { margin: 5px 0 0; font-size: 14px; }
   .english { padding: 32px 30px 20px; max-width: 850px; }
   .english p { font-size: 14px; }
-  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 12px; color: #66718a; padding-block: 30px 40px; }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--tj-nav); padding-block: 30px 40px; }
   @media (max-width: 720px) { header, main, footer { width: min(100% - 28px, 1100px); } header { align-items: flex-start; } header nav { gap: 6px 16px; font-size: 12px; } .features, .details { grid-template-columns: 1fr; } .features { gap: 14px; } .hero { padding: 38px 20px 28px; } .logo { width: 120px; height: 120px; border-radius: 22px; } .details { gap: 24px; padding: 26px 14px; } .english { padding: 22px 14px; } .desktop-break { display: none; } }
 </style>
