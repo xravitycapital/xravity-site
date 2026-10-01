@@ -8,6 +8,12 @@ const netlifyConfigPath = new URL('netlify.toml', root);
 const deployGuidePath = new URL('DEPLOY.md', root);
 
 const requiredKeys = [
+  'products_tag',
+  'products_title',
+  'tiljot_status',
+  'tiljot_tagline',
+  'tiljot_description',
+  'tiljot_visit',
   'blog_search_label',
   'blog_search_placeholder',
   'blog_tools_label',

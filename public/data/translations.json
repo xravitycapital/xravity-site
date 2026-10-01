@@ -1,5 +1,11 @@
 {
   "nav_home": "Home",
+  "products_tag": "Independent products",
+  "products_title": "Tools I’m building",
+  "tiljot_status": "Preparing invitation testing",
+  "tiljot_tagline": "From your wrist to your cursor.",
+  "tiljot_description": "Speak on Apple Watch. Turn speech into text locally on your Mac, review it, and decide when to send.",
+  "tiljot_visit": "Explore TilJot",
   "nav_about": "About",
   "nav_gallery": "Gallery",
   "nav_blog": "Blog",
@@ -115,6 +121,12 @@
 
   "zh": {
     "nav_home": "首页",
+    "products_tag": "独立产品",
+    "products_title": "我正在打造的工具",
+    "tiljot_status": "正在准备邀请内测",
+    "tiljot_tagline": "从手腕，到光标。",
+    "tiljot_description": "在 Apple Watch 上说话，在 Mac 上本地转成文字。检查、修改，然后由你决定何时发送。",
+    "tiljot_visit": "了解 TilJot",
     "nav_about": "关于",
     "nav_gallery": "图片",
     "nav_blog": "文章",

@@ -1,0 +1,36 @@
+<section id="products" aria-labelledby="products-title">
+  <div class="container">
+    <p class="section-tag" data-i18n="products_tag">Independent products</p>
+    <h2 id="products-title" class="section-title" data-i18n="products_title">Tools I’m building</h2>
+    <article class="product-card">
+      <div class="product-mark">
+        <img src="/images/tiljot/tiljot-logo.png" width="600" height="600" alt="TilJot" loading="lazy" />
+        <span>APPLE WATCH · MAC</span>
+      </div>
+      <div class="product-copy">
+        <p class="product-status" data-i18n="tiljot_status">Preparing invitation testing</p>
+        <h3>TilJot</h3>
+        <p class="product-tagline" data-i18n="tiljot_tagline">From your wrist to your cursor.</p>
+        <p class="product-description" data-i18n="tiljot_description">Speak on Apple Watch. Turn speech into text locally on your Mac, review it, and decide when to send.</p>
+        <a class="product-link" href="/tiljot/" data-i18n="tiljot_visit">Explore TilJot</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  #products { background: var(--bg); scroll-margin-top: 80px; }
+  .section-title { margin-bottom: 2rem; }
+  .product-card { display: grid; grid-template-columns: 36% 1fr; overflow: hidden; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--bg-card); }
+  .product-mark { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; background: radial-gradient(ellipse at top, #25365d, #11182d 70%); padding: 3rem 2rem; }
+  .product-mark img { width: min(180px, 100%); height: auto; }
+  .product-mark span { font: .75rem var(--font-mono); color: #c4cde2; letter-spacing: .1em; text-align: center; }
+  .product-copy { padding: 3rem; }
+  .product-status { color: var(--text-muted); font-size: .875rem; }
+  h3 { font-size: 2rem; line-height: 1.3; letter-spacing: -.04em; margin: .75rem 0; }
+  .product-tagline { color: var(--text); font-size: 1.125rem; margin-bottom: 1rem; }
+  .product-description { color: var(--text-muted); max-width: 33rem; }
+  .product-link { display: inline-block; color: var(--text); text-decoration: none; border: 1px solid var(--border-strong); border-radius: var(--radius-pill); padding: .65rem 1.4rem; margin-top: 1.5rem; transition: border-color .2s, background .2s; }
+  .product-link:hover { border-color: #7893ff; background: rgba(120,147,255,.08); }
+  @media (max-width: 640px) { .product-card { grid-template-columns: 1fr; } .product-mark { padding: 2rem; gap: 1rem; } .product-mark img { width: 112px; } .product-copy { padding: 1.5rem; } }
+</style>
