@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import Analytics from '../components/Analytics.astro';
+import translations from '../../public/data/translations.json';
+import { createHash } from 'node:crypto';
 
 interface Props {
   title?: string;
@@ -22,6 +24,7 @@ const siteUrl = Astro.site?.toString()?.replace(/\/$/, '') ?? 'https://xravity.x
 const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImage = new URL(image, siteUrl).toString();
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const translationsVersion = createHash('sha256').update(JSON.stringify(translations)).digest('hex').slice(0, 12);
 ---
 <!DOCTYPE html>
 <html lang={lang === 'zh' ? 'zh-CN' : 'en'} data-theme="light">
@@ -61,7 +64,7 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>X</text></svg>" />
   <Analytics />
 </head>
-<body>
+<body data-translations-version={translationsVersion}>
   <!-- Redirect Netlify Identity tokens to /admin/ (once only) -->
   <script>
     (function() {
@@ -314,7 +317,8 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     async function loadTranslations(lang: string) {
       const map: Record<string, string> = {};
       try {
-        const res = await fetch('/data/translations.json');
+        const version = document.body.dataset.translationsVersion;
+        const res = await fetch(`/data/translations.json?v=${version || 'legacy'}`);
         const data = await res.json();
         // English keys
         for (const [k, v] of Object.entries(data)) {
