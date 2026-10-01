@@ -1,0 +1,118 @@
+---
+// Owner approved the simplified policy for publication when needed for distribution.
+const contact = 'xravityai@outlook.com';
+---
+
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="TilJot 的语音识别、配对、诊断、反馈和数据删除说明。" />
+    <link rel="canonical" href="https://xravity.xyz/tiljot/privacy/" />
+    <title>TilJot 隐私政策与支持</title>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/">Xravity <span>/ TilJot</span></a>
+      <a href="#english" lang="en">English</a>
+    </header>
+    <main>
+      <p class="eyebrow">PRIVACY &amp; SUPPORT</p>
+      <h1>TilJot 隐私政策与支持</h1>
+      <p class="meta">生效及修订：2026 年 10 月 2 日 · 适用版本：0.1.0 系列</p>
+      <p class="intro">从手腕，到光标。语音识别在你的 Mac 上完成；是否把文字发送给其他应用，由你决定。</p>
+      <nav aria-label="目录">
+        <a href="#processing">语音与文字</a>
+        <a href="#storage">保存与删除</a>
+        <a href="#network">联网与第三方</a>
+        <a href="#contact">支持与隐私请求</a>
+      </nav>
+
+      <section id="processing">
+        <h2>1. 谁负责，以及我们如何处理语音</h2>
+        <p>TilJot 由个人开发者维护。本政策涵盖 TilJot 的 Mac、iPhone 和 Apple Watch 应用。你可通过本页邮箱联系维护者；网站其他页面的访问政策见 <a href="/privacy">Xravity 网站隐私政策</a>。</p>
+        <p>你主动开始录音后，Apple Watch 采集语音，经加密蓝牙传到已配对的 Mac，由 Mac 本地识别并通过你选择的 TilJot 输入法输入文字。iPhone 用于安装、可信配对与配置同步。当前单次录音上限为 75 秒。</p>
+        <p>TilJot 不会自动向开发者上传录音或转写正文，不会自动将你的内容用于训练，也不会自动收集你的改字痕迹用于学习。正式发布包不提供开发用录音留存入口。识别过程中需要音频缓冲；这些说明并不保证操作系统的交换、崩溃记录或所有日志都不含数据。</p>
+        <p>录音及蓝牙连接需要相应系统权限。可选的“手表提交至 Codex”还需要 Mac 辅助功能权限：启用后，TilJot 会在本机临时核对当前 Codex 进程、窗口、草稿文字和发送控件。只有你主动长按才请求提交；核验失败不会自动发送，结果不确定时不会自动重试。</p>
+        <p>关闭可选提交功能、撤销系统权限或退出应用可以停止相应处理。普通听写不会自动提交聊天消息，也不会执行听写内容中的命令。</p>
+      </section>
+
+      <section id="storage">
+        <h2>2. 哪些数据会保留，怎样删除</h2>
+        <dl>
+          <dt>最近转写与当前草稿</dt>
+          <dd>Mac 进程内的最近转写列表最多 20 条，该路径不保存到磁盘；退出进程会结束此列表。Codex 草稿核对是本机临时处理，不是训练集。已经输入其他应用的文字，须在该应用中自行处理。</dd>
+          <dt>本地诊断</dt>
+          <dd>TilJot 保存阶段、时间、耗时和计数等有界数字记录。诊断摘要按需预览最近 3 轮；另有最多 50 轮、7 天窗口的本地历史，加载或新增记录时裁剪，不承诺停用后到时自动擦盘。摘要不会自动上传，选择复制会覆盖系统剪贴板。</dd>
+          <dt>模型、设置与安装备份</dt>
+          <dd>模型文件、下载校验信息、偏好设置和升级恢复备份保存在本机，通常不随卸载自动删除。完整清除应先核实实际存储位置，再针对性删除；如不确定，请联系支持，勿清空其他应用目录。</dd>
+          <dt>配对身份与凭证</dt>
+          <dd>设备身份、信任信息及配对凭证用于认证连接，部分保存在系统钥匙串或本地配对存储。配对二维码包含短期凭证，请勿公开。撤销配对或“清除本机配置”不等于清除全部钥匙串、模型和其他设备数据；卸载也不保证清除这些内容。</dd>
+          <dt>你自愿发送的反馈</dt>
+          <dd>你发送的邮件、说明、经检查的截图或诊断摘要保存在支持邮箱及其服务商，仅用于支持、问题调查和回复，在处理问题所需期间保留，不设统一30天期限。你可通过支持邮箱申请删除自己提交的反馈；法律要求或处理纠纷确需保留的部分除外。</dd>
+        </dl>
+        <p>请勿在反馈中发送密码、验证码、配对二维码、密钥或他人的私人资料。默认测试不要求上传录音或全天录屏；若需要录音诊断，会另行说明采集范围、保存与删除安排并征求同意。诊断同意不等于训练同意。</p>
+      </section>
+
+      <section id="network">
+        <h2>3. 哪些操作会联网</h2>
+        <p>安装、TestFlight、模型下载和更新需要互联网。下载来源按版本锁定并进行摘要校验；下载服务及托管服务可能处理 IP 地址等常规请求信息。Apple/TestFlight 的安装与诊断处理适用 Apple 自身政策。</p>
+        <p>把文字提交给 Codex 或其他目标应用后，适用该应用自身的数据处理规则。TilJot 的本地识别不表示目标应用也离线。邮件支持使用邮箱服务商，服务商可能按自身政策保留邮件及技术记录。</p>
+        <p>本页自身不加载统计脚本、广告、外部字体或联系表单，但网站托管和网络服务仍可能记录访问请求。TilJot 不出售听写内容，也不以听写正文或录音投放个性化广告。</p>
+      </section>
+
+      <section id="contact">
+        <h2>4. 反馈、删除请求与退出</h2>
+        <p>支持及隐私联系：<a href={`mailto:${contact}`}>{contact}</a>。可在主题写“TilJot 反馈”或“TilJot 隐私请求”。删除请求请说明要处理哪封反馈邮件，无需发送身份证或全部听写内容。</p>
+        <p>你可以停止使用、撤销权限或退出内测，不需要提交私人录音。远程支持无法代你清除已输入目标应用的内容，或远程删除本机模型、钥匙串和备份。</p>
+        <p>政策如有更新会在本页注明日期；涉及新的音频上传、训练用途或显著变化时，须先说明并取得所需同意。问题仍无法解决时，可向适用的数据保护机构反映。</p>
+      </section>
+
+      <section id="english" lang="en">
+        <p class="eyebrow">ENGLISH SUMMARY</p>
+        <h2>TilJot privacy and support</h2>
+        <p class="meta">Effective and revised October 2, 2026 · Version 0.1.0 series</p>
+        <p>TilJot is maintained by an individual developer. This policy covers its Mac, iPhone and Apple Watch apps. You start recording on Apple Watch; encrypted Bluetooth delivers audio to your paired Mac for local recognition and input. iPhone handles installation, pairing and configuration. Each recording is limited to 75 seconds.</p>
+        <p>TilJot does not automatically upload recordings or transcripts to the developer, use your content for training, or learn from your edits. Public builds do not expose development recording retention. Processing requires temporary audio buffers; this is not a guarantee that all system logs, swap or crash records are data-free.</p>
+        <p>Optional Codex submission needs Mac Accessibility permission and temporary, local inspection of the current process, window, draft and submit control. Only your deliberate long press requests submission. Unverified targets are not submitted and uncertain outcomes are not automatically retried. Ordinary dictation does not send messages or execute spoken instructions.</p>
+        <p>The in-memory recent-transcript list holds up to 20 entries and ends when the Mac process exits; text already entered elsewhere remains with that application. Local numeric diagnostics include a three-round preview and a history capped at 50 rounds within a seven-day window, pruned when loaded or updated, not by a guaranteed timed wipe. Diagnostics are not automatically uploaded. Copying a summary replaces the clipboard.</p>
+        <p>Models, settings, installation backups and pairing identities may persist after uninstalling. Some credentials use the system Keychain. Revoking a pairing or clearing local configuration is not a complete data wipe. Confirm exact storage locations before deleting local files; do not clear unrelated applications or your entire Keychain.</p>
+        <p>Downloads, updates, hosting and Apple/TestFlight require network services, which may process standard request metadata such as IP addresses under their own policies. Submitted text follows the target application's policy; local recognition does not make that application offline. Support email providers process voluntarily shared messages. This page loads no analytics, advertisements, external fonts or contact form, but hosting may retain access logs.</p>
+        <p>Voluntary feedback is stored in the support mailbox and processed by its email provider, only for support, investigation and replies. It is retained for the time needed to handle the issue, without a uniform 30-day deadline. You may request deletion of feedback you submitted; information necessary for legal obligations or disputes is excepted. Do not share passwords, pairing QR codes or private third-party data. Recording diagnostics require separate informed consent, not implied training permission.</p>
+        <p>Contact <a href={`mailto:${contact}`}>{contact}</a> for support, privacy or feedback deletion requests. Stop using the app or revoke permissions to stop the corresponding processing. Remote support cannot delete your local files or content in other apps. Material new upload or training purposes require advance explanation and the necessary consent. Updates will show a revision date on this page.</p>
+      </section>
+    </main>
+    <footer>TilJot · 本地语音输入 <span lang="en">Local voice input</span></footer>
+  </body>
+</html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(html) { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  :global(body) { margin: 0; background: #f6f7fb; color: #202531; font: 16px/1.85 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  :global(a) { color: #294dae; text-underline-offset: 4px; overflow-wrap: anywhere; }
+  :global(a:focus-visible) { outline: 3px solid #5077df; outline-offset: 5px; border-radius: 3px; }
+  header, main, footer { width: min(100% - 48px, 820px); margin-inline: auto; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 28px; }
+  .brand { color: #202531; text-decoration: none; font-weight: 700; }
+  .brand span { color: #626a7b; font-weight: 400; }
+  main { background: white; border: 1px solid #e0e5ee; border-radius: 22px; padding: 44px; }
+  .draft { background: #fff7e8; border: 1px solid #e7c982; border-radius: 12px; padding: 16px 20px; color: #664807; margin-bottom: 32px; }
+  .draft p { margin: 6px 0 0; font-size: 14px; }
+  .eyebrow { color: #536b9a; font-size: 12px; letter-spacing: .16em; font-weight: 700; }
+  h1 { font-size: clamp(26px, 4.2vw, 36px); line-height: 1.35; letter-spacing: -.025em; margin: 10px 0; }
+  h2 { font-size: 21px; line-height: 1.5; margin: 0 0 18px; }
+  .meta { color: #626a7b; font-size: 13px; }
+  .intro { font-size: 18px; margin-block: 25px; }
+  nav { display: flex; flex-wrap: wrap; gap: 12px 22px; padding-block: 20px; border-block: 1px solid #e5e8f0; font-size: 14px; }
+  section { padding-top: 36px; }
+  section + section { margin-top: 30px; border-top: 1px solid #e5e8f0; }
+  p { margin: 14px 0; }
+  dt { font-weight: 650; margin-top: 20px; }
+  dd { margin: 4px 0 0; }
+  footer { padding: 24px 0 36px; color: #626a7b; font-size: 13px; }
+  footer span { margin-left: 12px; }
+  @media (max-width: 540px) { header, main, footer { width: min(100% - 28px, 820px); } main { padding: 24px 20px; border-radius: 16px; } header { padding-block: 20px; } .draft { padding: 14px; } }
+  @media (prefers-reduced-motion: reduce) { :global(html) { scroll-behavior: auto; } }
+</style>

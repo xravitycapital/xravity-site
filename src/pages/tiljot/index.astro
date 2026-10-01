@@ -1,12 +1,14 @@
 ---
-const title = 'TilJot — 从手腕，到光标';
-const description = '在 Apple Watch 上说话，在配对的 Mac 上本地识别，将文字输入当前光标位置。';
+import { tiljotCopy } from '../../data/tiljot-copy';
+const c = tiljotCopy.en;
+const title = c.title;
+const description = c.description;
 const url = 'https://xravity.xyz/tiljot/';
 const logo = '/images/tiljot/tiljot-logo.png';
 ---
 
 <!doctype html>
-<html lang="zh-Hans" data-theme="light">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,8 +19,13 @@ const logo = '/images/tiljot/tiljot-logo.png';
       // Read the shared preference before first paint, without requiring storage access.
       (() => {
         let theme = 'light';
-        try { if (localStorage.getItem('xravity_theme') === 'dark') theme = 'dark'; } catch {}
+        let lang = 'en';
+        try {
+          if (localStorage.getItem('xravity_theme') === 'dark') theme = 'dark';
+          if (localStorage.getItem('xravity_lang') === 'zh') lang = 'zh';
+        } catch {}
         document.documentElement.dataset.theme = theme;
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
         document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#0d0d14' : '#fafaf7';
       })();
     </script>
@@ -38,49 +45,81 @@ const logo = '/images/tiljot/tiljot-logo.png';
     <meta name="twitter:image" content={`https://xravity.xyz${logo}`} />
   </head>
   <body>
-    <header><a class="site-wordmark" href="/">Xravity</a><nav aria-label="产品导航"><a href="/#products">返回产品目录</a><span>TilJot / 产品</span><button id="tiljotThemeToggle" type="button" aria-label="切换为深色主题"><span aria-hidden="true">☾</span><span class="theme-label">深色</span></button></nav></header>
+    <header><a class="site-wordmark" href="/">Xravity</a><nav aria-label={c.navigation} data-tj-aria="navigation"><a href="/#products" data-tj-i18n="back">{c.back}</a><span data-tj-i18n="product">{c.product}</span><div class="preferences"><button id="tiljotLangToggle" type="button" aria-label={c.language}><strong>EN</strong> | 中文</button><button id="tiljotThemeToggle" type="button" aria-label={c.toDark}><span aria-hidden="true">☾</span><span class="theme-label">{c.dark}</span></button></div></nav></header>
     <main>
       <section class="hero" aria-labelledby="product-title">
-        <img class="logo" src={logo} width="600" height="600" alt="TilJot 蓝紫色声波与终端标志" fetchpriority="high" />
-        <p class="status">正在准备邀请内测</p>
+        <img class="logo" src={logo} width="600" height="600" alt={c.logo} data-tj-alt="logo" fetchpriority="high" />
+        <p class="status" data-tj-i18n="status">{c.status}</p>
         <h1 id="product-title">TilJot</h1>
-        <p class="tagline">从手腕，到光标。</p>
-        <p class="intro">在 Apple Watch 上说话，把文字输入 Mac 的当前输入框。<br class="desktop-break" />语音在配对的 Mac 上本地识别，是否发送，由你决定。</p>
-        <a class="contact" href="mailto:xravityai@outlook.com?subject=TilJot%20%E5%86%85%E6%B5%8B%E5%92%A8%E8%AF%A2">联系开发者</a>
-        <p class="availability">尚未公开下载 · 本页不是 App Store 上架公告</p>
+        <p class="tagline" data-tj-i18n="tagline">{c.tagline}</p>
+        <p class="intro"><span data-tj-i18n="introOne">{c.introOne}</span>{' '}<br class="desktop-break" /><span data-tj-i18n="introTwo">{c.introTwo}</span></p>
+        <a class="contact" href="mailto:xravityai@outlook.com?subject=TilJot%20beta%20testing" data-tj-i18n="contact">{c.contact}</a>
+        <p class="availability" data-tj-i18n="availability">{c.availability}</p>
       </section>
-      <section class="features" aria-label="产品能力">
-        <article><span>01 / INPUT</span><h2>说话，文字到光标</h2><p>支持中文、英文和混合听写。通过选中的 TilJot 输入法输入文字，普通听写不会自动提交消息或执行命令。</p></article>
-        <article><span>02 / LOCAL</span><h2>在你的 Mac 上识别</h2><p>手表经加密蓝牙直连配对 Mac。iPhone 用于安装、可信配对和配置同步，不要求听写始终经手机中转。</p></article>
-        <article><span>03 / CONTROL</span><h2>检查以后，再发送</h2><p>可选的 Codex 草稿提交由你主动长按触发。可以先在电脑改字；目标无法核验时不提交，结果不确定时不自动重试。</p></article>
+      <section class="features" aria-label={c.capabilities} data-tj-aria="capabilities">
+        <article><span>01 / INPUT</span><h2 data-tj-i18n="inputTitle">{c.inputTitle}</h2><p data-tj-i18n="inputText">{c.inputText}</p></article>
+        <article><span>02 / LOCAL</span><h2 data-tj-i18n="localTitle">{c.localTitle}</h2><p data-tj-i18n="localText">{c.localText}</p></article>
+        <article><span>03 / CONTROL</span><h2 data-tj-i18n="controlTitle">{c.controlTitle}</h2><p data-tj-i18n="controlText">{c.controlText}</p></article>
       </section>
       <section class="details" aria-labelledby="beta-title">
-        <div><h2 id="beta-title">先把体验做好，再开放下载。</h2><p>首批内测关注首次安装、连接恢复、完整转写、电脑编辑和只提交一次。下载入口、正式隐私政策与安装说明将在准备完成后提供。</p></div>
-        <dl><dt>需要的设备</dt><dd>Apple Silicon Mac、iPhone 及配对的 Apple Watch。Mac 需准备本地识别模型。</dd><dt>当前边界</dt><dd>单次录音最多 75 秒。语音识别可能出错，耳语、专名及混说尤其需要检查；其他应用提交和独立 Steer 尚未提供。</dd><dt>联网说明</dt><dd>模型下载、更新和 TestFlight 需要联网。主动提交文字后适用目标应用的数据规则，本地识别不代表目标应用也离线。</dd></dl>
+        <div><h2 id="beta-title" data-tj-i18n="betaTitle">{c.betaTitle}</h2><p data-tj-i18n="betaText">{c.betaText}</p></div>
+        <dl><dt data-tj-i18n="devices">{c.devices}</dt><dd data-tj-i18n="devicesText">{c.devicesText}</dd><dt data-tj-i18n="limits">{c.limits}</dt><dd data-tj-i18n="limitsText">{c.limitsText}</dd><dt data-tj-i18n="network">{c.network}</dt><dd data-tj-i18n="networkText">{c.networkText}</dd></dl>
       </section>
-      <section lang="en" class="english" aria-labelledby="english-title"><h2 id="english-title">From your wrist to your cursor.</h2><p>TilJot turns speech from Apple Watch into text at your Mac cursor. Recognition runs locally on your paired Mac. Chinese, English and mixed-language dictation are supported. Optional Codex submission is deliberate, not automatic. Invitation testing is being prepared; public downloads are not available yet.</p></section>
     </main>
-    <footer><span>TilJot · An independent product by Xravity</span><a href="mailto:xravityai@outlook.com">xravityai@outlook.com</a></footer>
+    <footer><span data-tj-i18n="footer">{c.footer}</span><a href="/tiljot/support/" data-tj-i18n="support">{c.support}</a><a href="/tiljot/privacy/" data-tj-i18n="privacy">{c.privacy}</a><a href="mailto:xravityai@outlook.com">xravityai@outlook.com</a></footer>
   </body>
 </html>
 
 <script>
+  import { tiljotCopy } from '../../data/tiljot-copy';
+  let language: 'en' | 'zh' = 'en';
+  const langToggle = document.getElementById('tiljotLangToggle')!;
   const toggle = document.getElementById('tiljotThemeToggle')!;
   const icon = toggle.querySelector('[aria-hidden]')!;
   const label = toggle.querySelector('.theme-label')!;
   function applyTheme(theme: string) {
     const dark = theme === 'dark';
     document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-    toggle.setAttribute('aria-label', dark ? '切换为浅色主题' : '切换为深色主题');
+    const c = tiljotCopy[language];
+    toggle.setAttribute('aria-label', dark ? c.toLight : c.toDark);
     icon.textContent = dark ? '☼' : '☾';
-    label.textContent = dark ? '浅色' : '深色';
+    label.textContent = dark ? c.light : c.dark;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#0d0d14' : '#fafaf7');
+  }
+  function applyLanguage(lang: string) {
+    language = lang === 'zh' ? 'zh' : 'en';
+    const c = tiljotCopy[language];
+    const value = (key: string) => c[key as keyof typeof c];
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+    document.title = c.title;
+    document.querySelectorAll<HTMLElement>('[data-tj-i18n]').forEach(el => {
+      const text = value(el.dataset.tjI18n!);
+      if (text) el.textContent = text;
+    });
+    document.querySelectorAll<HTMLElement>('[data-tj-aria]').forEach(el => el.setAttribute('aria-label', value(el.dataset.tjAria!)));
+    document.querySelectorAll<HTMLElement>('[data-tj-alt]').forEach(el => el.setAttribute('alt', value(el.dataset.tjAlt!)));
+    document.querySelector('meta[name="description"]')?.setAttribute('content', c.description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', c.title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', c.description);
+    langToggle.innerHTML = language === 'zh' ? 'EN | <strong>中文</strong>' : '<strong>EN</strong> | 中文';
+    langToggle.setAttribute('aria-label', c.language);
+    applyTheme(document.documentElement.dataset.theme || 'light');
+  }
+  function restoreLanguage() {
+    try { applyLanguage(localStorage.getItem('xravity_lang') || 'en'); }
+    catch { applyLanguage(document.documentElement.lang.startsWith('zh') ? 'zh' : 'en'); }
   }
   function restoreTheme() {
     try { applyTheme(localStorage.getItem('xravity_theme') || 'light'); }
     catch { applyTheme(document.documentElement.dataset.theme || 'light'); }
   }
   restoreTheme();
+  restoreLanguage();
+  langToggle.addEventListener('click', () => {
+    const next = language === 'en' ? 'zh' : 'en';
+    applyLanguage(next);
+    try { localStorage.setItem('xravity_lang', next); } catch {}
+  });
   toggle.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     applyTheme(next);
@@ -88,8 +127,10 @@ const logo = '/images/tiljot/tiljot-logo.png';
   });
   window.addEventListener('storage', event => {
     if (event.key === 'xravity_theme' || event.key === null) restoreTheme();
+    if (event.key === 'xravity_lang' || event.key === null) restoreLanguage();
   });
   window.addEventListener('pageshow', restoreTheme);
+  window.addEventListener('pageshow', restoreLanguage);
 </script>
 
 <style>
@@ -106,8 +147,9 @@ const logo = '/images/tiljot/tiljot-logo.png';
   header a.site-wordmark { font: 700 26px "Playfair Display", Georgia, serif; letter-spacing: .04em; background: var(--tj-wordmark); background-clip: text; -webkit-background-clip: text; color: transparent; }
   header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; justify-content: flex-end; }
   header span { color: var(--tj-nav); letter-spacing: .06em; }
-  #tiljotThemeToggle { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; border: 1px solid var(--tj-border); border-radius: 50px; background: var(--tj-card); color: var(--tj-text); font: inherit; cursor: pointer; }
-  #tiljotThemeToggle:hover { border-color: #7893ff; }
+  .preferences { display: flex; gap: 10px; }
+  .preferences button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; border: 1px solid var(--tj-border); border-radius: 50px; background: var(--tj-card); color: var(--tj-text); font: inherit; cursor: pointer; white-space: nowrap; }
+  .preferences button:hover { border-color: #7893ff; }
   .hero { background: radial-gradient(ellipse at top, #25365d, #11182d 65%); color: #f7f8fc; border-radius: 14px; padding: 60px 28px 38px; text-align: center; }
   .logo { display: block; width: 148px; height: 148px; margin: 0 auto 22px; border-radius: 28px; }
   .status { display: inline-block; color: #c9d3f9; background: #263351; border: 1px solid #475474; border-radius: 20px; padding: 3px 14px; font-size: 12px; }

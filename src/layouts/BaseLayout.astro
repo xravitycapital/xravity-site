@@ -300,17 +300,18 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
     (window as any).toast = toast;
 
     // ─── Language Toggle ───
-    let curLang = localStorage.getItem('xravity_lang') || 'en';
+    let curLang = 'en';
+    try { curLang = localStorage.getItem('xravity_lang') === 'zh' ? 'zh' : 'en'; } catch {}
     const langBtn = document.getElementById('langToggle');
+    const updateLangBtn = () => {
+      if (langBtn) langBtn.innerHTML = curLang === 'zh' ? 'EN | <strong>中文</strong>' : '<strong>EN</strong> | 中文';
+    };
     if (langBtn) {
-      const updateLangBtn = () => {
-        langBtn.innerHTML = curLang === 'zh' ? 'EN | <strong>中文</strong>' : '<strong>EN</strong> | 中文';
-      };
       updateLangBtn();
 
       langBtn.addEventListener('click', async () => {
         curLang = curLang === 'en' ? 'zh' : 'en';
-        localStorage.setItem('xravity_lang', curLang);
+        try { localStorage.setItem('xravity_lang', curLang); } catch {}
         document.documentElement.lang = curLang === 'zh' ? 'zh-CN' : 'en';
         updateLangBtn();
         await applyTranslations(curLang);
@@ -341,12 +342,14 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
           }
         }
       } catch(e) { console.warn('Translation load failed:', e); }
-      i18nMap = map;
       return map;
     }
 
     async function applyTranslations(lang: string) {
       const map = await loadTranslations(lang);
+      // A slower earlier request must not overwrite the newest language choice.
+      if (lang !== curLang) return;
+      i18nMap = map;
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = (el as HTMLElement).dataset.i18n;
@@ -379,6 +382,20 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
 
       document.dispatchEvent(new CustomEvent('xravity:i18n', { detail: { lang, map } }));
     }
+
+    function restoreLanguage() {
+      let next = curLang;
+      try { next = localStorage.getItem('xravity_lang') === 'zh' ? 'zh' : 'en'; } catch {}
+      if (next === curLang) return;
+      curLang = next;
+      document.documentElement.lang = curLang === 'zh' ? 'zh-CN' : 'en';
+      updateLangBtn();
+      applyTranslations(curLang);
+    }
+    window.addEventListener('storage', event => {
+      if (event.key === 'xravity_lang' || event.key === null) restoreLanguage();
+    });
+    window.addEventListener('pageshow', restoreLanguage);
 
     // Init language
     document.addEventListener('DOMContentLoaded', () => {
