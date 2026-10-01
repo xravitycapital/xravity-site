@@ -1,0 +1,84 @@
+---
+const title = 'TilJot — 从手腕，到光标';
+const description = '在 Apple Watch 上说话，在配对的 Mac 上本地识别，将文字输入当前光标位置。';
+const url = 'https://xravity.xyz/tiljot/';
+const logo = '/images/tiljot/tiljot-logo.png';
+---
+
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#11182d" />
+    <link rel="canonical" href={url} />
+    <link rel="icon" type="image/png" href={logo} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={`https://xravity.xyz${logo}`} />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="600" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content={`https://xravity.xyz${logo}`} />
+  </head>
+  <body>
+    <header><a href="/">← Xravity 个人站</a><span>PRODUCT / 产品</span></header>
+    <main>
+      <section class="hero" aria-labelledby="product-title">
+        <img class="logo" src={logo} width="600" height="600" alt="TilJot 蓝紫色声波与终端标志" fetchpriority="high" />
+        <p class="status">正在准备邀请内测</p>
+        <h1 id="product-title">TilJot</h1>
+        <p class="tagline">从手腕，到光标。</p>
+        <p class="intro">在 Apple Watch 上说话，把文字输入 Mac 的当前输入框。<br class="desktop-break" />语音在配对的 Mac 上本地识别，是否发送，由你决定。</p>
+        <a class="contact" href="mailto:xravityai@outlook.com?subject=TilJot%20%E5%86%85%E6%B5%8B%E5%92%A8%E8%AF%A2">联系开发者</a>
+        <p class="availability">尚未公开下载 · 本页不是 App Store 上架公告</p>
+      </section>
+      <section class="features" aria-label="产品能力">
+        <article><span>01 / INPUT</span><h2>说话，文字到光标</h2><p>支持中文、英文和混合听写。通过选中的 TilJot 输入法输入文字，普通听写不会自动提交消息或执行命令。</p></article>
+        <article><span>02 / LOCAL</span><h2>在你的 Mac 上识别</h2><p>手表经加密蓝牙直连配对 Mac。iPhone 用于安装、可信配对和配置同步，不要求听写始终经手机中转。</p></article>
+        <article><span>03 / CONTROL</span><h2>检查以后，再发送</h2><p>可选的 Codex 草稿提交由你主动长按触发。可以先在电脑改字；目标无法核验时不提交，结果不确定时不自动重试。</p></article>
+      </section>
+      <section class="details" aria-labelledby="beta-title">
+        <div><h2 id="beta-title">先把体验做好，再开放下载。</h2><p>首批内测关注首次安装、连接恢复、完整转写、电脑编辑和只提交一次。下载入口、正式隐私政策与安装说明将在准备完成后提供。</p></div>
+        <dl><dt>需要的设备</dt><dd>Apple Silicon Mac、iPhone 及配对的 Apple Watch。Mac 需准备本地识别模型。</dd><dt>当前边界</dt><dd>单次录音最多 75 秒。语音识别可能出错，耳语、专名及混说尤其需要检查；其他应用提交和独立 Steer 尚未提供。</dd><dt>联网说明</dt><dd>模型下载、更新和 TestFlight 需要联网。主动提交文字后适用目标应用的数据规则，本地识别不代表目标应用也离线。</dd></dl>
+      </section>
+      <section lang="en" class="english" aria-labelledby="english-title"><h2 id="english-title">From your wrist to your cursor.</h2><p>TilJot turns speech from Apple Watch into text at your Mac cursor. Recognition runs locally on your paired Mac. Chinese, English and mixed-language dictation are supported. Optional Codex submission is deliberate, not automatic. Invitation testing is being prepared; public downloads are not available yet.</p></section>
+    </main>
+    <footer><span>TilJot · An independent product by Xravity</span><a href="mailto:xravityai@outlook.com">xravityai@outlook.com</a></footer>
+  </body>
+</html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) { margin: 0; background: #f5f6fa; color: #20283a; font: 16px/1.8 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  :global(a) { color: #3352ad; text-underline-offset: 4px; }
+  :global(a:focus-visible) { outline: 3px solid #7893ff; outline-offset: 5px; }
+  header, main, footer { width: min(1080px, 100% - 48px); margin-inline: auto; }
+  header { display: flex; justify-content: space-between; gap: 20px; padding-block: 28px; font-size: 13px; }
+  header a { color: #46516b; text-decoration: none; }
+  header span { color: #66718a; letter-spacing: .12em; }
+  .hero { background: radial-gradient(ellipse at top, #25365d, #11182d 65%); color: #f7f8fc; border-radius: 28px; padding: 60px 28px 38px; text-align: center; }
+  .logo { display: block; width: 148px; height: 148px; margin: 0 auto 22px; border-radius: 28px; }
+  .status { display: inline-block; color: #c9d3f9; background: #263351; border: 1px solid #475474; border-radius: 20px; padding: 3px 14px; font-size: 12px; }
+  h1 { font-size: clamp(42px, 8vw, 64px); margin: 12px 0 0; letter-spacing: -.045em; line-height: 1.25; }
+  .tagline { font-size: clamp(23px, 4vw, 32px); margin: 12px 0 20px; font-weight: 500; }
+  .intro { color: #c4cde2; margin: 0 auto 28px; max-width: 680px; }
+  .contact { display: inline-block; background: #7893ff; color: #101a34; text-decoration: none; padding: 10px 25px; border-radius: 12px; font-weight: 650; }
+  .contact:hover { background: #9aafff; }
+  .availability { color: #adb9d5; font-size: 12px; margin-top: 18px; }
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 26px 0; }
+  article { background: white; border: 1px solid #e2e6ef; border-radius: 18px; padding: 28px; }
+  article span { color: #586da2; font-size: 11px; letter-spacing: .12em; }
+  h2 { font-size: 21px; line-height: 1.55; margin: 12px 0; }
+  article p, .details p, dd, .english p { color: #525e75; margin-bottom: 0; }
+  .details { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 42px 30px; border-block: 1px solid #dce2ed; }
+  dl { margin: 0; } dt { font-weight: 650; } dt:not(:first-child) { margin-top: 22px; } dd { margin: 5px 0 0; font-size: 14px; }
+  .english { padding: 32px 30px 20px; max-width: 850px; }
+  .english p { font-size: 14px; }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 12px; color: #66718a; padding-block: 30px 40px; }
+  @media (max-width: 720px) { header, main, footer { width: min(100% - 28px, 1080px); } .features, .details { grid-template-columns: 1fr; } .features { gap: 14px; } .hero { padding: 38px 20px 28px; border-radius: 20px; } .logo { width: 120px; height: 120px; border-radius: 22px; } .details { gap: 24px; padding: 26px 14px; } .english { padding: 22px 14px; } .desktop-break { display: none; } }
+</style>
