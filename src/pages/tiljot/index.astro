@@ -54,6 +54,7 @@ const logo = '/images/tiljot/tiljot-logo.png';
         <p class="tagline" data-tj-i18n="tagline">{c.tagline}</p>
         <p class="intro"><span data-tj-i18n="introOne">{c.introOne}</span>{' '}<br class="desktop-break" /><span data-tj-i18n="introTwo">{c.introTwo}</span></p>
         <a class="contact" href="mailto:xravityai@outlook.com?subject=TilJot%20beta%20testing" data-tj-i18n="contact">{c.contact}</a>
+        <a id="tiljotBetaDownload" class="beta-download" href="https://tiljot-beta-downloads.netlify.app/?lang=en&amp;theme=light" referrerpolicy="no-referrer" data-tj-i18n="download">{c.download}</a>
         <p class="availability" data-tj-i18n="availability">{c.availability}</p>
       </section>
       <section class="features" aria-label={c.capabilities} data-tj-aria="capabilities">
@@ -85,6 +86,11 @@ const logo = '/images/tiljot/tiljot-logo.png';
     icon.textContent = dark ? '☼' : '☾';
     label.textContent = dark ? c.light : c.dark;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#0d0d14' : '#fafaf7');
+    const download = document.getElementById('tiljotBetaDownload') as HTMLAnchorElement;
+    const address = new URL(download.href);
+    address.searchParams.set('lang', language);
+    address.searchParams.set('theme', dark ? 'dark' : 'light');
+    download.href = address.href;
   }
   function applyLanguage(lang: string) {
     language = lang === 'zh' ? 'zh' : 'en';
@@ -158,6 +164,8 @@ const logo = '/images/tiljot/tiljot-logo.png';
   .intro { color: #c4cde2; margin: 0 auto 28px; max-width: 680px; }
   .contact { display: inline-block; background: #7893ff; color: #101a34; text-decoration: none; padding: 10px 25px; border-radius: 12px; font-weight: 650; }
   .contact:hover { background: #9aafff; }
+  .beta-download { display: inline-block; color: #d8e1ff; border: 1px solid #7086b4; border-radius: 12px; padding: 9px 20px; margin: 12px; text-decoration: none; font-weight: 600; }
+  .beta-download:hover { background: #263351; }
   .availability { color: #adb9d5; font-size: 12px; margin-top: 18px; }
   .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 26px 0; }
   article { background: var(--tj-card); border: 1px solid var(--tj-border); border-radius: 14px; padding: 28px; }
