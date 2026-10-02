@@ -10,6 +10,7 @@ const deployGuidePath = new URL('DEPLOY.md', root);
 const requiredKeys = [
   'products_tag',
   'products_title',
+  'tiljot_name',
   'tiljot_status',
   'tiljot_tagline',
   'tiljot_description',
