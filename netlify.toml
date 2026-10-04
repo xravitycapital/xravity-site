@@ -68,3 +68,9 @@
   from = "/admin/"
   to = "/admin/index.html"
   status = 200
+
+# The Anxin Ayi prototype contains example data and stays out of search indexes.
+[[headers]]
+  for = "/anxin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
