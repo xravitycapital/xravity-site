@@ -20,7 +20,7 @@ const contact = 'xravityai@outlook.com';
     <main>
       <p class="eyebrow">PRIVACY &amp; SUPPORT</p>
       <h1>提腕记隐私政策与支持</h1>
-      <p class="meta">生效及修订：2026 年 10 月 2 日 · 适用版本：0.1.0 系列</p>
+      <p class="meta">生效：2026 年 10 月 2 日 · 修订：2026 年 10 月 11 日 · 适用版本：0.1.0 系列</p>
       <p class="intro">从手腕，到光标。语音识别在你的 Mac 上完成；是否把文字发送给其他应用，由你决定。</p>
       <nav aria-label="目录">
         <a href="#processing">语音与文字</a>
@@ -33,7 +33,7 @@ const contact = 'xravityai@outlook.com';
         <h2>1. 谁负责，以及我们如何处理语音</h2>
         <p>提腕记（TilJot）由个人开发者维护。本政策涵盖 提腕记的 Mac、iPhone 和 Apple Watch 应用。你可通过本页邮箱联系维护者；网站其他页面的访问政策见 <a href="/privacy">Xravity 网站隐私政策</a>。</p>
         <p>你主动开始录音后，Apple Watch 采集语音，经加密蓝牙传到已配对的 Mac，由 Mac 本地识别并通过你选择的 提腕记输入法输入文字。iPhone 用于安装、可信配对与配置同步。当前单次录音上限为 75 秒。</p>
-        <p>提腕记不会自动向开发者上传录音或转写正文，不会自动将你的内容用于训练，也不会自动收集你的改字痕迹用于学习。正式发布包不提供开发用录音留存入口。识别过程中需要音频缓冲；这些说明并不保证操作系统的交换、崩溃记录或所有日志都不含数据。</p>
+        <p>提腕记不会自动向开发者上传录音、转写正文或本机词语记忆，不会将这些内容用于模型训练。新版可在本机记忆支持的短词纠正及拼音选词，具体保存与控制方式见下节。正式发布包不提供开发用录音留存入口。识别过程中需要音频缓冲；这些说明并不保证操作系统的交换、崩溃记录或所有日志都不含数据。</p>
         <p>录音及蓝牙连接需要相应系统权限。可选的“手表提交至 Codex”还需要 Mac 辅助功能权限：启用后，提腕记会在本机临时核对当前 Codex 进程、窗口、草稿文字和发送控件。只有你主动长按才请求提交；核验失败不会自动发送，结果不确定时不会自动重试。</p>
         <p>关闭可选提交功能、撤销系统权限或退出应用可以停止相应处理。普通听写不会自动提交聊天消息，也不会执行听写内容中的命令。</p>
       </section>
@@ -43,6 +43,9 @@ const contact = 'xravityai@outlook.com';
         <dl>
           <dt>最近转写与当前草稿</dt>
           <dd>Mac 进程内的最近转写列表最多 20 条，该路径不保存到磁盘；退出进程会结束此列表。Codex 草稿核对是本机临时处理，不是训练集。已经输入其他应用的文字，须在该应用中自行处理。</dd>
+          <dt>本机词库与词语记忆</dt>
+          <dd>人工词库保存你添加的词条。在启用短词纠正学习时，提腕记可从支持的、已确认听写插入片段中的修改保存短词的原词、纠正词及确认次数；候选记录可能在首次合适纠正后保留，两次不同听写中的一致纠正后才加入个人词库。这不是整段草稿存档，也不是模型训练。可在 Mac 词库中暂停学习、暂停应用词库或删除已生成的词条；暂停不会自动清空已有记录。</dd>
+          <dd>中文拼音输入法还会在本机保存已确认选词、拼音和次数，用于候选排序及常用词／人名召回。这些记录不上传开发者，通常不随卸载自动删除；完整清除前请核实实际存储位置，不确定时联系支持。</dd>
           <dt>本地诊断</dt>
           <dd>提腕记保存阶段、时间、耗时和计数等有界数字记录。诊断摘要按需预览最近 3 轮；另有最多 50 轮、7 天窗口的本地历史，加载或新增记录时裁剪，不承诺停用后到时自动擦盘。摘要不会自动上传，选择复制会覆盖系统剪贴板。</dd>
           <dt>模型、设置与安装备份</dt>
@@ -72,11 +75,13 @@ const contact = 'xravityai@outlook.com';
       <section id="english" lang="en">
         <p class="eyebrow">ENGLISH SUMMARY</p>
         <h2>TilJot privacy and support</h2>
-        <p class="meta">Effective and revised October 2, 2026 · Version 0.1.0 series</p>
+        <p class="meta">Effective October 2, 2026 · Revised October 11, 2026 · Version 0.1.0 series</p>
         <p>TilJot is maintained by an individual developer. This policy covers its Mac, iPhone and Apple Watch apps. You start recording on Apple Watch; encrypted Bluetooth delivers audio to your paired Mac for local recognition and input. iPhone handles installation, pairing and configuration. Each recording is limited to 75 seconds.</p>
-        <p>TilJot does not automatically upload recordings or transcripts to the developer, use your content for training, or learn from your edits. Public builds do not expose development recording retention. Processing requires temporary audio buffers; this is not a guarantee that all system logs, swap or crash records are data-free.</p>
+        <p>TilJot does not automatically upload recordings, transcripts or local word memory to the developer, or use them for model training. New builds can remember supported short-word corrections and Pinyin selections on your Mac, as described below. Public builds do not expose development recording retention. Processing requires temporary audio buffers; this is not a guarantee that all system logs, swap or crash records are data-free.</p>
         <p>Optional Codex submission needs Mac Accessibility permission and temporary, local inspection of the current process, window, draft and submit control. Only your deliberate long press requests submission. Unverified targets are not submitted and uncertain outcomes are not automatically retried. Ordinary dictation does not send messages or execute spoken instructions.</p>
         <p>The in-memory recent-transcript list holds up to 20 entries and ends when the Mac process exits; text already entered elsewhere remains with that application. Local numeric diagnostics include a three-round preview and a history capped at 50 rounds within a seven-day window, pruned when loaded or updated, not by a guaranteed timed wipe. Diagnostics are not automatically uploaded. Copying a summary replaces the clipboard.</p>
+        <p>Manual vocabulary stores entries you add. When short-correction learning is enabled, supported edits within confirmed dictation insertions can retain short original/corrected word pairs and confirmation counts locally. A candidate may be retained after the first eligible correction; two consistent corrections in separate dictation sessions are required before it enters your personal vocabulary. This is not a full-draft archive or model training. In the Mac vocabulary controls you can pause learning, disable vocabulary application or delete generated entries. Pausing does not automatically erase existing records.</p>
+        <p>The Chinese Pinyin input method also stores confirmed word selections, Pinyin and counts locally for candidate ordering and word/name recall. These records are not uploaded to the developer and may remain after uninstalling. Confirm exact storage locations before a complete removal, or contact support if unsure.</p>
         <p>Models, settings, installation backups and pairing identities may persist after uninstalling. Some credentials use the system Keychain. Revoking a pairing or clearing local configuration is not a complete data wipe. Confirm exact storage locations before deleting local files; do not clear unrelated applications or your entire Keychain.</p>
         <p>Downloads, updates, hosting and Apple/TestFlight require network services, which may process standard request metadata such as IP addresses under their own policies. Submitted text follows the target application's policy; local recognition does not make that application offline. Support email providers process voluntarily shared messages. This page loads no analytics, advertisements, external fonts or contact form, but hosting may retain access logs.</p>
         <p>Voluntary feedback is stored in the support mailbox and processed by its email provider, only for support, investigation and replies. It is retained for the time needed to handle the issue, without a uniform 30-day deadline. You may request deletion of feedback you submitted; information necessary for legal obligations or disputes is excepted. Do not share passwords, pairing QR codes or private third-party data. Recording diagnostics require separate informed consent, not implied training permission.</p>
