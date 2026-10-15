@@ -20,8 +20,8 @@ const contact = 'xravityai@outlook.com';
     <main>
       <p class="eyebrow">PRIVACY &amp; SUPPORT</p>
       <h1>提腕记隐私政策与支持</h1>
-      <p class="meta">生效：2026 年 10 月 2 日 · 修订：2026 年 10 月 14 日 · 适用版本：0.1.0 系列（含构建 1.3.0）</p>
-      <p class="intro">从手腕，到光标，也可以记录灵感。输入模式在 Mac 本地识别；灵感模式在手表保存原音、补传手机并在手机本地转写。是否把文字发送给其他应用，由你决定。</p>
+      <p class="meta">生效：2026 年 10 月 2 日 · 修订：2026 年 10 月 15 日 · 适用版本：0.1.0 系列（含构建 1.4.1）</p>
+      <p class="intro">从手腕，到光标，也可以记录灵感。输入模式在 Mac 本地识别；灵感保留原音，可在配对设备之间传送并在支持的手机或 Mac 上本地转写。是否同步或发送文字，由你决定。</p>
       <nav aria-label="目录">
         <a href="#processing">语音与文字</a>
         <a href="#storage">保存与删除</a>
@@ -33,7 +33,9 @@ const contact = 'xravityai@outlook.com';
         <h2>1. 谁负责，以及我们如何处理语音</h2>
         <p>提腕记（TilJot）由个人开发者维护。本政策涵盖 提腕记的 Mac、iPhone 和 Apple Watch 应用。你可通过本页邮箱联系维护者；网站其他页面的访问政策见 <a href="/privacy">Xravity 网站隐私政策</a>。</p>
         <p>输入模式：你主动开始录音后，Apple Watch 采集语音，经加密蓝牙传到已配对的 Mac，由 Mac 本地识别并通过你选择的 提腕记输入法输入文字。iPhone 用于安装、可信配对与配置同步。输入模式有单轮时长限制；它不等同于灵感录音的时长限制。</p>
-        <p>自构建 1.3.0 起，灵感模式不需要 Mac：原始录音先保存在手表，随后通过 Apple 的设备间传输机制补传到配对的 iPhone。手机保存原音，并在支持的设备、系统和语言条件下使用 Apple 本地语音识别转写；目前需要 iOS 26，首次使用可能需要联网下载系统语言资源。不支持本地转写或资源未就绪时，不会自动改用开发者的云端转写服务。</p>
+        <p>灵感模式先把原音保存在录音设备。手表默认补传配对手机，也可选择优先发送到已配对的 Mac；开始录音时 Mac 未就绪则使用手机，已确定发往 Mac 后中断则留在手表等待补传。Mac 还可在你主动开始后用所选麦克风记录灵感。Mac 录制的原音不会自动反向发送到手机。灵感会保留原音，普通输入模式默认不留存录音。</p>
+        <p>构建 1.4.1 的手机到 Mac 灵感同步默认关闭。开启后只自动同步之后的新记录；历史记录须主动选择。所选原音、标题、转写和编辑通过已认证加密连接传送到配对 Mac，需要两端运行且本地网络可达。关闭同步会停止后续同步，但不删除已有副本。Mac 对手机来源记录的编辑、删除和恢复需要手机确认；离线冲突由用户选择处理。这不是云同步。</p>
+        <p>灵感本地转写使用 Apple 的设备端识别能力，需要支持的设备、语言及 iOS 26／macOS 26。首次使用可能联网下载系统语言资源；不支持或资源未就绪时，不会自动改用开发者的云端转写。普通输入模式仍由 Mac 本地识别引擎处理。旧 Mac 1.1.9-r2 不支持这些新版灵感功能。</p>
         <p>提腕记不会自动向开发者上传录音、转写正文或本机词语记忆，不会将这些内容用于模型训练。新版可在本机记忆支持的短词纠正及拼音选词，具体保存与控制方式见下节。正式发布包不提供开发用录音留存入口。识别过程中需要音频缓冲；这些说明并不保证操作系统的交换、崩溃记录或所有日志都不含数据。</p>
         <p>录音、语音识别及蓝牙连接需要相应系统权限。可选的手表发送或控制功能还需要 Mac 辅助功能权限：启用后，提腕记会在本机临时核对受支持目标应用的进程、窗口、草稿文字和对应控件。只有你明确操作对应按钮才请求发送或执行该控件操作；具体点击或长按方式以当前界面为准。核验失败不会自动发送，结果不确定时不会自动重试。</p>
         <p>关闭可选提交功能、撤销系统权限或退出应用可以停止相应处理。普通听写不会自动提交聊天消息，也不会执行听写内容中的命令。</p>
@@ -43,7 +45,8 @@ const contact = 'xravityai@outlook.com';
         <h2>2. 哪些数据会保留，怎样删除</h2>
         <dl>
           <dt>灵感原音、转写与编辑</dt>
-          <dd>构建 1.3.0 会在手表保存灵感原音并补传手机；手机本地保存接收到的录音、转写文字及你编辑的标题和正文。当前灵感功能没有删除或批量清理入口，也没有云备份；相关存储被排除在系统备份之外。退出录音界面不等于删除，卸载手机应用可能丢失手机内的记录，也不代表其他设备上的副本同步删除。请先用非敏感短录音测试，勿把它当作唯一长期存档。</dd>
+          <dd>接收设备在本地保存灵感原音、转写、标题和编辑。构建 1.4.1 提供“最近删除”和恢复；不会按固定天数自动清空，永久删除需要明确操作且不可恢复。手表仅清理已被目标端确认完整接收的副本，不删除接收端原音。跨设备删除需恢复连接及同步后才能传播，离线副本不会立即消失。仅移除 Mac 上的手机记录副本会保留手机记录，并保护待同步编辑。</dd>
+          <dd>灵感没有云备份，相关存储被排除在系统备份之外。退出录音界面不等于删除；卸载一端不等于删除其他端副本，且可能丢失该端记录。旧安装包不能恢复已永久删除的灵感；自行导出的文件须独立管理。请先用非敏感短录音测试，勿把它当作唯一长期存档。</dd>
           <dt>最近转写与当前草稿</dt>
           <dd>Mac 进程内的最近转写列表最多 20 条，该路径不保存到磁盘；退出进程会结束此列表。Codex 草稿核对是本机临时处理，不是训练集。已经输入其他应用的文字，须在该应用中自行处理。</dd>
           <dt>本机词库与词语记忆</dt>
@@ -78,12 +81,15 @@ const contact = 'xravityai@outlook.com';
       <section id="english" lang="en">
         <p class="eyebrow">ENGLISH SUMMARY</p>
         <h2>TilJot privacy and support</h2>
-        <p class="meta">Effective October 2, 2026 · Revised October 14, 2026 · Version 0.1.0 series, including build 1.3.0</p>
+        <p class="meta">Effective October 2, 2026 · Revised October 15, 2026 · Version 0.1.0 series, including build 1.4.1</p>
         <p>TilJot is maintained by an individual developer. This policy covers its Mac, iPhone and Apple Watch apps. In Input mode, you start recording on Apple Watch; encrypted Bluetooth delivers audio to your paired Mac for local recognition and input. iPhone handles installation, pairing and configuration. Input-session duration limits are separate from Ideas recording limits.</p>
-        <p>Starting with build 1.3.0, Ideas mode does not require a Mac. Original recordings are saved on Apple Watch and transferred to its paired iPhone through Apple's device-transfer mechanism. iPhone stores the audio and uses Apple's on-device speech recognition when the device, system and language are supported. This currently requires iOS 26; initial system language assets may need an internet download. Unavailable local recognition does not automatically fall back to a developer-operated cloud transcription service.</p>
+        <p>Ideas first saves original audio on the recording device. Watch defaults to transferring to its paired iPhone, with an optional paired-Mac-first destination. If Mac is unavailable when recording starts, iPhone is used; after a Mac destination has been fixed, interruptions leave the recording on Watch for later transfer to Mac. Mac can also record Ideas with your selected microphone after you explicitly start recording. Mac originals are not automatically sent back to iPhone. Ideas retains audio; ordinary Input mode does not retain recordings by default.</p>
+        <p>In build 1.4.1, iPhone-to-Mac Ideas sync is off by default. Enabling it automatically syncs only subsequent recordings; historical items require explicit selection. Selected audio, titles, transcripts and edits travel over an authenticated encrypted connection to your paired Mac, with both apps running and local network reachability. Turning sync off stops future sync without deleting existing copies. Mac edits, deletions and restores of phone-origin records require phone acknowledgement; offline conflicts require a user decision. This is not cloud sync.</p>
+        <p>Ideas transcription uses Apple's on-device recognition on supported devices and languages with iOS 26 or macOS 26. Initial system language assets may require an internet download. Unavailable recognition does not automatically fall back to a developer cloud service. Ordinary Input mode continues using the local Mac recognition engine. The older Mac 1.1.9-r2 package does not support these new Ideas features.</p>
         <p>TilJot does not automatically upload recordings, transcripts or local word memory to the developer, or use them for model training. New builds can remember supported short-word corrections and Pinyin selections on your Mac, as described below. Public builds do not expose development recording retention. Processing requires temporary audio buffers; this is not a guarantee that all system logs, swap or crash records are data-free.</p>
         <p>Recording, speech recognition and Bluetooth require the corresponding system permissions. Optional Watch send/control features need Mac Accessibility permission and temporary, local inspection of a supported target's process, window, draft and relevant control. Only your explicit action on the corresponding button requests submission or that control's action; follow the current interface for tap or long-press gestures. Unverified targets are not submitted and uncertain outcomes are not automatically retried. Ordinary dictation does not send messages or execute spoken instructions.</p>
-        <p>In build 1.3.0, Ideas audio is retained on Watch and transferred to iPhone. iPhone locally stores received audio, transcripts and your title/text edits. Ideas currently has no delete or bulk-cleanup control and no cloud backup; its storage is excluded from system backups. Leaving the recording screen does not delete a recording. Uninstalling the phone app may lose phone records and does not imply deletion of copies on other devices. Use non-sensitive short test recordings and do not rely on this as your only long-term archive.</p>
+        <p>Receiving devices locally store Ideas audio, transcripts, titles and edits. Build 1.4.1 provides Recently Deleted and restore controls, without automatic purging after a fixed number of days. Permanent deletion is explicit and irreversible. Watch cleanup removes only copies whose complete reception was confirmed by the destination; it does not delete the destination's original. Cross-device deletion propagates after reconnection and sync, not immediately to offline devices. Removing only the Mac copy of a phone record preserves the phone record and protects pending edits.</p>
+        <p>Ideas has no cloud backup and its storage is excluded from system backups. Leaving the recording screen does not delete audio. Uninstalling one app may lose that device's records and does not imply deletion on other devices. Old installers cannot restore permanently deleted Ideas. Manage exported files separately. Use non-sensitive short test recordings and do not rely on this as your only long-term archive.</p>
         <p>The in-memory recent-transcript list holds up to 20 entries and ends when the Mac process exits; text already entered elsewhere remains with that application. Local numeric diagnostics include a three-round preview and a history capped at 50 rounds within a seven-day window, pruned when loaded or updated, not by a guaranteed timed wipe. Diagnostics are not automatically uploaded. Copying a summary replaces the clipboard.</p>
         <p>Manual vocabulary stores entries you add. When short-correction learning is enabled, supported edits within confirmed dictation insertions can retain short original/corrected word pairs and confirmation counts locally. A candidate may be retained after the first eligible correction; two consistent corrections in separate dictation sessions are required before it enters your personal vocabulary. This is not a full-draft archive or model training. In the Mac vocabulary controls you can pause learning, disable vocabulary application or delete generated entries. Pausing does not automatically erase existing records.</p>
         <p>The Chinese Pinyin input method also stores confirmed word selections, Pinyin and counts locally for candidate ordering and word/name recall. These records are not uploaded to the developer and may remain after uninstalling. Confirm exact storage locations before a complete removal, or contact support if unsure.</p>
