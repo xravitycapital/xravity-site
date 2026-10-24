@@ -206,6 +206,7 @@ body {
 
 /* ─── Hero ─── */
 #hero {
+  --hero-type-size: clamp(3.1rem, 6vw, 5.8rem);
   min-height:100vh; display:flex; align-items:center; justify-content:center;
   position:relative; z-index:1;
   background: radial-gradient(ellipse at 50% 40%, var(--hero-glow) 0%, transparent 70%);
@@ -819,21 +820,24 @@ body {
   padding: 9rem 3rem 6rem;
   background: radial-gradient(ellipse at 80% 42%, var(--hero-glow) 0%, transparent 45%);
 }
-.hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr); align-items: center; gap: 2rem; }
+/* The frame and text slots stay the same when switching interface language. */
+.hero-layout { display: grid; width: 100%; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr); align-items: center; gap: 2rem; }
 .hero-content { max-width: 650px; padding: 0; text-align: left; }
 .hero-tag, .section-tag { font-size: 0.68rem; letter-spacing: 0.2em; }
+.hero-tag { line-height: 1.5rem; }
 .hero-tag::after, .section-tag::after { content: ""; display: inline-block; width: 2.2rem; height: 1px; margin: 0 0 0.22rem 0.75rem; background: currentColor; opacity: 0.7; }
-.hero-headline { display: flex; flex-direction: column; max-width: 740px; margin: 1.25rem 0 1.7rem; color: var(--text); font-family: var(--font-sans); font-size: clamp(3.1rem, 6vw, 5.8rem); font-weight: 700; letter-spacing: -0.075em; line-height: 0.98; }
+.hero-headline { display: flex; flex-direction: column; justify-content: space-between; min-block-size: calc(var(--hero-type-size) * 5.7); max-width: 740px; margin: 1.25rem 0 1.7rem; color: var(--text); font-family: var(--font-sans); font-size: var(--hero-type-size); font-weight: 700; letter-spacing: -0.075em; line-height: 0.98; }
 .hero-headline span { display: block; }
 .hero-headline .hero-accent { color: var(--accent); }
 .hero-headline .hero-tail { color: var(--text-muted); font-size: 0.7em; font-weight: 500; letter-spacing: -0.055em; margin-top: 0.55rem; }
-.hero-sub { max-width: 520px; margin: 0 0 2.2rem; color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
-.hero-actions { display: flex; align-items: center; gap: 1.3rem; flex-wrap: wrap; }
+.hero-sub { max-width: 520px; min-block-size: 5.1rem; margin: 0 0 2.2rem; color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
+.hero-actions { display: flex; align-items: center; gap: 1.3rem; flex-wrap: wrap; min-block-size: 3.75rem; }
 .hero-cta { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.9rem 1.45rem; border: 0; border-radius: 5px; background: var(--accent); color: #fff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-decoration: none; transition: transform .25s, background .25s, box-shadow .25s; }
 .hero-cta::after { content: "→"; font-size: 1.05rem; }
+.hero-cta { min-block-size: 3.75rem; justify-content: center; }
 .hero-cta::before { display: none; }
 .hero-cta:hover { color: #fff; background: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 28%, transparent); }
-.hero-secondary { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.72rem; text-decoration: none; border-bottom: 1px solid var(--border-strong); padding-bottom: 0.25rem; }
+.hero-secondary { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.5rem; text-decoration: none; border-bottom: 1px solid var(--border-strong); padding-bottom: 0.25rem; }
 .hero-secondary:hover { color: var(--accent); border-color: var(--accent); }
 
 .hero-signal { position: relative; min-height: 480px; isolation: isolate; }
@@ -910,7 +914,9 @@ footer { border-top: 1px solid var(--border-strong); background: var(--bg); }
 }
 
 @media (max-width: 500px) {
-  .hero-headline { font-size: clamp(2.5rem, 12vw, 3.5rem); }
+  #hero { --hero-type-size: clamp(2.5rem, 12vw, 3.5rem); }
+  .hero-headline { min-block-size: calc(var(--hero-type-size) * 6.5); }
+  .hero-sub { min-block-size: 6.8rem; }
   .hero-signal { min-height: 300px; }
   .signal-orbit-one { width: 220px; height: 220px; }
   .signal-orbit-two { width: 160px; height: 265px; }
@@ -921,6 +927,10 @@ footer { border-top: 1px solid var(--border-strong); background: var(--bg); }
   .signal-label-independence { right: -0.5rem; }
   .signal-label-security { left: 2%; }
   .product-copy { padding: 2rem 1.5rem; }
+}
+
+@media (max-width: 360px) {
+  .hero-sub { min-block-size: 8.5rem; }
 }
 
 /* Chinese uses one UI family and its own rhythm, rather than Latin display tracking. */
@@ -947,23 +957,23 @@ html:lang(zh-CN) .nav-links a { font-size: 0.85rem; font-weight: 500; letter-spa
 html:lang(zh-CN) :is(.hero-tag, .section-tag) { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; }
 html:lang(zh-CN) .hero-headline {
   font-family: "Xravity Display SC", var(--font-sans);
-  font-size: clamp(3.25rem, 5.2vw, 5rem);
+  font-size: calc(var(--hero-type-size) * 1.08);
   font-weight: 900;
   font-synthesis: none;
   letter-spacing: -0.025em;
-  line-height: 1.22;
-  margin: 1.25rem 0 1.6rem;
+  line-height: 1.12;
   line-break: strict;
 }
 html:lang(zh-CN) .hero-headline .hero-tail {
   font-family: var(--font-sans);
-  font-size: 0.36em;
+  font-size: 0.46em;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.2;
   letter-spacing: 0.04em;
-  margin-top: 1.25rem;
+  margin-top: 0.55rem;
+  min-block-size: calc(var(--hero-type-size) * 0.7 * 0.98);
 }
-html:lang(zh-CN) .hero-sub { max-width: 32em; font-weight: 400; line-height: 1.95; }
+html:lang(zh-CN) .hero-sub { font-weight: 400; line-height: 1.7; }
 html:lang(zh-CN) .hero-cta { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em; }
 html:lang(zh-CN) .hero-secondary { font-size: 0.8rem; }
 html:lang(zh-CN) .signal-core { font-size: 1.15rem; font-weight: 500; }
@@ -973,14 +983,13 @@ html:lang(zh-CN) .signal-label small { font-size: 0.7rem; letter-spacing: 0.02em
 html:lang(zh-CN) .signal-caption { font-size: 0.7rem; line-height: 1.8; }
 html:lang(zh-CN) .section-title {
   font-family: var(--font-sans);
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
   font-weight: 600;
   letter-spacing: 0.025em;
-  line-height: 1.5;
+  line-height: 1.25;
   text-wrap: balance;
   line-break: strict;
 }
-html:lang(zh-CN) .principles-heading .section-title { max-width: 13em; }
+html:lang(zh-CN) .principles-heading .section-title { max-width: 560px; }
 html:lang(zh-CN) :is(.principles-intro, .principle-card p, .about-text p, .product-description) { line-height: 1.95; }
 html:lang(zh-CN) .principle-card h3 { font-weight: 600; letter-spacing: 0.06em; }
 html:lang(zh-CN) .principle-card a { font-size: 0.8rem; }
@@ -991,14 +1000,9 @@ html:lang(zh-CN) .footer-motto { font-size: 0.8rem; letter-spacing: 0.06em; }
 html:lang(zh-CN) .post-body { line-height: 2; }
 html:lang(zh-CN) .post-body :is(h2, h3, h4) { letter-spacing: 0.02em; line-height: 1.55; }
 
-@media (max-width: 900px) {
-  html:lang(zh-CN) .hero-headline { font-size: clamp(3rem, 8vw, 4.5rem); }
-}
 @media (max-width: 500px) {
-  html:lang(zh-CN) .hero-headline { font-size: clamp(2.5rem, 11.5vw, 3.5rem); line-height: 1.28; }
+  html:lang(zh-CN) .hero-headline { font-size: var(--hero-type-size); line-height: 1.2; }
   html:lang(zh-CN) .hero-headline .hero-tail { font-size: 0.42em; }
-  html:lang(zh-CN) .hero-sub { font-size: 0.95rem; }
-  html:lang(zh-CN) .hero-actions { gap: 1rem; }
   html:lang(zh-CN) .signal-label { font-size: 0.75rem; }
   html:lang(zh-CN) .signal-label small, html:lang(zh-CN) .signal-caption { font-size: 0.65rem; }
   html:lang(zh-CN) .signal-caption { right: 0; bottom: -4%; }
