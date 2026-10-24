@@ -97,22 +97,6 @@ body {
   #cursor-dot, #cursor-ring { display: none !important; }
 }
 
-/* ─── Chinese text optimizations ─── */
-:lang(zh-CN) body {
-  letter-spacing: 0.02em;
-  word-spacing: 0.05em;
-}
-:lang(zh-CN) .hero-name {
-  font-family: "Noto Serif SC", "STSong", "SimSun", var(--font-serif);
-}
-:lang(zh-CN) .section-title {
-  font-family: "Noto Serif SC", "STSong", "SimSun", var(--font-serif);
-  font-weight: 700;
-}
-:lang(zh-CN) .post-body {
-  line-height: 2;
-}
-
 /* ─── Progress Bar ─── */
 #progress-bar {
   position:fixed; top:0; left:0; height:3px;
@@ -928,4 +912,82 @@ footer { border-top: 1px solid var(--border-strong); background: var(--bg); }
   .signal-label-independence { right: -0.5rem; }
   .signal-label-security { left: 2%; }
   .product-copy { padding: 2rem 1.5rem; }
+}
+
+/* Chinese uses one UI family and its own rhythm, rather than Latin display tracking. */
+html:lang(zh-CN) {
+  --font-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: var(--font-sans);
+}
+html:lang(zh-CN) body {
+  letter-spacing: 0.015em;
+  word-spacing: normal;
+  line-height: 1.85;
+}
+html:lang(zh-CN) :is(.nav-context, .lang-toggle, .hero-tag, .section-tag,
+  .hero-secondary, .signal-core, .signal-label, .signal-caption,
+  .principle-card a, .product-status, .timeline-year, .footer-motto,
+  .resource-category, .blog-date, .contact-form label, .footer-links) {
+  font-family: var(--font-sans);
+  letter-spacing: 0.06em;
+}
+html:lang(zh-CN) :is(button, input, textarea, select) { font-family: var(--font-sans); }
+html:lang(zh-CN) .nav-logo { letter-spacing: -0.035em; }
+html:lang(zh-CN) .nav-context { font-size: 0.7rem; }
+html:lang(zh-CN) .nav-links a { font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; }
+html:lang(zh-CN) :is(.hero-tag, .section-tag) { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; }
+html:lang(zh-CN) .hero-headline {
+  font-size: clamp(2.5rem, 3.8vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  margin: 1.25rem 0 1.6rem;
+  line-break: strict;
+}
+html:lang(zh-CN) .hero-headline .hero-tail {
+  font-size: 0.58em;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  margin-top: 0.8rem;
+}
+html:lang(zh-CN) .hero-sub { max-width: 32em; font-weight: 400; line-height: 1.95; }
+html:lang(zh-CN) .hero-cta { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em; }
+html:lang(zh-CN) .hero-secondary { font-size: 0.8rem; }
+html:lang(zh-CN) .signal-core { font-size: 1.15rem; font-weight: 500; }
+html:lang(zh-CN) .signal-label { font-size: 0.85rem; line-height: 1.6; }
+html:lang(zh-CN) .signal-label b { font-weight: 500; }
+html:lang(zh-CN) .signal-label small { font-size: 0.7rem; letter-spacing: 0.02em; }
+html:lang(zh-CN) .signal-caption { font-size: 0.7rem; line-height: 1.8; }
+html:lang(zh-CN) .section-title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  line-height: 1.5;
+  text-wrap: balance;
+  line-break: strict;
+}
+html:lang(zh-CN) .principles-heading .section-title { max-width: 13em; }
+html:lang(zh-CN) :is(.principles-intro, .principle-card p, .about-text p, .product-description) { line-height: 1.95; }
+html:lang(zh-CN) .principle-card h3 { font-weight: 600; letter-spacing: 0.06em; }
+html:lang(zh-CN) .principle-card a { font-size: 0.8rem; }
+html:lang(zh-CN) .product-status { font-size: 0.75rem; }
+html:lang(zh-CN) .product-copy h3 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; letter-spacing: 0.04em; }
+html:lang(zh-CN) :is(.timeline-desc, .skill-level, .resource-description, .blog-info p) { line-height: 1.85; }
+html:lang(zh-CN) .footer-motto { font-size: 0.8rem; letter-spacing: 0.06em; }
+html:lang(zh-CN) .post-body { line-height: 2; }
+html:lang(zh-CN) .post-body :is(h2, h3, h4) { letter-spacing: 0.02em; line-height: 1.55; }
+
+@media (max-width: 900px) {
+  html:lang(zh-CN) .hero-headline { font-size: clamp(2rem, 5.7vw, 3rem); }
+}
+@media (max-width: 500px) {
+  html:lang(zh-CN) .hero-headline { font-size: clamp(1.65rem, 7.2vw, 2.5rem); line-height: 1.45; }
+  html:lang(zh-CN) .hero-headline .hero-tail { font-size: 0.65em; }
+  html:lang(zh-CN) .hero-sub { font-size: 0.95rem; }
+  html:lang(zh-CN) .hero-actions { gap: 1rem; }
+  html:lang(zh-CN) .signal-label { font-size: 0.75rem; }
+  html:lang(zh-CN) .signal-label small, html:lang(zh-CN) .signal-caption { font-size: 0.65rem; }
+  html:lang(zh-CN) .signal-caption { right: 0; bottom: -4%; }
 }
