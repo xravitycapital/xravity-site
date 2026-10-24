@@ -1,29 +1,40 @@
----
-import siteData from '../data/site.json';
----
-
 <section id="hero">
-  <div class="hero-content">
-    <p class="hero-tag" data-i18n="hero_tag">
-      {siteData.hero.tag}
-    </p>
-    <h1 class="hero-name" aria-label="Xravity">
-      <span class="x">X</span><span data-i18n="hero_name">{siteData.hero.name}</span>
-    </h1>
-    <p class="hero-sub" data-i18n="hero_sub">
-      {siteData.hero.sub}
-    </p>
-    <a href="#about" class="hero-cta" data-i18n="hero_cta">
-      {siteData.hero.cta}
-    </a>
+  <div class="container hero-layout">
+    <div class="hero-content">
+      <p class="hero-tag" data-i18n="hero_tag">Capability console</p>
+      <h1 class="hero-headline">
+        <span data-i18n="hero_title_1">Be more capable,</span>
+        <span data-i18n="hero_title_2">more independent,</span>
+        <span class="hero-accent" data-i18n="hero_title_3">more secure</span>
+        <span class="hero-tail" data-i18n="hero_title_4">in an AI-driven world.</span>
+      </h1>
+      <p class="hero-sub" data-i18n="hero_sub">
+        Xravity is a technology and capability studio for thoughtful builders, independent creators, and anyone who wants practical leverage with AI.
+      </p>
+      <div class="hero-actions">
+        <a href="#principles" class="hero-cta" data-i18n="hero_cta">Explore the system</a>
+        <a href="#about" class="hero-secondary" data-i18n="hero_secondary">Why Xravity</a>
+      </div>
+    </div>
+
+    <div class="hero-signal" aria-hidden="true">
+      <div class="signal-orbit signal-orbit-one"></div>
+      <div class="signal-orbit signal-orbit-two"></div>
+      <div class="signal-core"><span data-i18n="hero_signal_center">YOU</span></div>
+      <span class="signal-label signal-label-knowledge"><b data-i18n="hero_signal_knowledge">Knowledge</b><small data-i18n="hero_signal_knowledge_sub">Learn faster</small></span>
+      <span class="signal-label signal-label-skills"><b data-i18n="hero_signal_skills">Skills</b><small data-i18n="hero_signal_skills_sub">Do more</small></span>
+      <span class="signal-label signal-label-independence"><b data-i18n="hero_signal_independence">Independence</b><small data-i18n="hero_signal_independence_sub">Own your path</small></span>
+      <span class="signal-label signal-label-security"><b data-i18n="hero_signal_security">Security</b><small data-i18n="hero_signal_security_sub">Stay in control</small></span>
+      <span class="signal-caption" data-i18n="hero_signal_caption">Human agency<br />amplified by AI</span>
+    </div>
   </div>
   <div
     class="scroll-indicator"
     id="scrollIndicator"
     role="button"
     tabindex="0"
-    aria-label="Scroll to About"
-    data-i18n-aria="scroll_to_about"
+    aria-label="Scroll to principles"
+    data-i18n-aria="scroll_to_principles"
   >
     <span class="line"></span>
     <small data-i18n="scroll">Scroll</small>
@@ -32,14 +43,14 @@ import siteData from '../data/site.json';
 
 <script>
   const scrollIndicator = document.getElementById('scrollIndicator');
-  const scrollToAbout = () => {
-    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToPrinciples = () => {
+    document.getElementById('principles')?.scrollIntoView({ behavior: 'smooth' });
   };
-  scrollIndicator?.addEventListener('click', scrollToAbout);
+  scrollIndicator?.addEventListener('click', scrollToPrinciples);
   scrollIndicator?.addEventListener('keydown', event => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      scrollToAbout();
+      scrollToPrinciples();
     }
   });
 </script>

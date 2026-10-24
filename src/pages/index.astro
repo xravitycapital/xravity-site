@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
+import Principles from '../components/Principles.astro';
 import Products from '../components/Products.astro';
 import About from '../components/About.astro';
 import Gallery from '../components/Gallery.astro';
@@ -14,9 +15,10 @@ import StructuredData from '../components/StructuredData.astro';
 ---
 
 <BaseLayout>
-  <StructuredData type="person" />
+  <StructuredData type="organization" />
   <Nav />
   <Hero />
+  <Principles />
   <Products />
   <BlogList />
   <ResourcesList />

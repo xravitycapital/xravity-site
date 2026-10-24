@@ -1,9 +1,9 @@
 {
   "site": {
     "name": "Xravity",
-    "description": "A personal independent site sharing design notes, building logs, images, and useful resources.",
+    "description": "A technology and capability studio helping people become more capable, independent, and secure in an AI-driven world.",
     "url": "https://xravity.xyz",
-    "footer": "\\u00a9 2026 Xravity. Crafted with gravity and grace."
+    "footer": "\\u00a9 2026 Xravity. Built for human agency in an AI-driven world."
   },
   "hero": {
     "tag": "Design · Build · Share",
@@ -13,9 +13,9 @@
   },
   "about": {
     "title": "About Xravity",
-    "p1": "Hi, I am <span class=\"highlight\">Xravity</span> — a creator documenting design, technology, and independent publishing.",
-    "p2": "This site collects practical notes, visual references, useful tools, and project logs from my creative process.",
-    "p3": "The long-term goal is to turn it into a small but useful content library."
+    "p1": "Xravity is an independent technology studio helping people stay capable, independent, and secure as AI changes the way we work.",
+    "p2": "We share practical ideas, useful resources, and focused tools for people who want more agency over their work and future.",
+    "p3": "The long-term goal is simple: make technology feel more understandable, more useful, and more yours."
   },
   "timeline": [
     {

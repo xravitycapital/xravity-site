@@ -37,7 +37,7 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
   <!-- Font preconnect for faster loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <meta name="theme-color" content="#fafaf7" />
+  <meta id="theme-color-meta" name="theme-color" content="#f4f7fb" />
   <title>{title}</title>
 
   <!-- Open Graph -->
@@ -106,10 +106,12 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
     // ─── Theme ───
     let i18nMap: Record<string, string> = {};
     const themeToggle = document.getElementById('themeToggle')!;
+    const themeColorMeta = document.getElementById('theme-color-meta') as HTMLMetaElement | null;
     function applyTheme(theme: string) {
       const dark = theme === 'dark';
       document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
       themeToggle.querySelector('span')!.textContent = dark ? '☾' : '☼';
+      if (themeColorMeta) themeColorMeta.content = dark ? '#071018' : '#f4f7fb';
     }
     function restoreTheme() {
       try { applyTheme(localStorage.getItem('xravity_theme') || 'light'); }
@@ -155,11 +157,13 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
     const dot = document.getElementById('cursor-dot')!;
     const ring = document.getElementById('cursor-ring')!;
     let mx = 0, my = 0, dx = 0, dy = 0, rx = 0, ry = 0;
+    let pointerActive = false;
     const finePointer = window.matchMedia('(pointer: fine)').matches;
     if (finePointer && !reducedMotion) {
-      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; pointerActive = true; });
+      window.addEventListener('blur', () => { pointerActive = false; });
 
-      document.querySelectorAll('a,button,.blog-card,.gallery-item,.contact-link,.skill-card,.section-block')
+      document.querySelectorAll('a,button,.blog-card,.gallery-item,.contact-link,.skill-card,.principle-card,.section-block,.hero-signal')
         .forEach(el => {
           el.addEventListener('mouseenter', () => ring.classList.add('hover'));
           el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
@@ -222,7 +226,7 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
         const ddx = mx - this.x, ddy = my - this.y;
         const d = Math.sqrt(ddx * ddx + ddy * ddy);
         const R = 250;
-        if (d < R && d > 0) {
+        if (pointerActive && d < R && d > 0) {
           const f = (R - d) / R;
           const a = Math.atan2(ddy, ddx);
           this.x += Math.cos(a) * f * 2.2;
@@ -300,8 +304,9 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
     (window as any).toast = toast;
 
     // ─── Language Toggle ───
-    let curLang = 'en';
-    try { curLang = localStorage.getItem('xravity_lang') === 'zh' ? 'zh' : 'en'; } catch {}
+    // Chinese is the first-visit default; an explicit English choice is remembered.
+    let curLang = 'zh';
+    try { curLang = localStorage.getItem('xravity_lang') === 'en' ? 'en' : 'zh'; } catch {}
     const langBtn = document.getElementById('langToggle');
     const updateLangBtn = () => {
       if (langBtn) langBtn.innerHTML = curLang === 'zh' ? 'EN | <strong>中文</strong>' : '<strong>EN</strong> | 中文';
@@ -385,7 +390,7 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
 
     function restoreLanguage() {
       let next = curLang;
-      try { next = localStorage.getItem('xravity_lang') === 'zh' ? 'zh' : 'en'; } catch {}
+      try { next = localStorage.getItem('xravity_lang') === 'en' ? 'en' : 'zh'; } catch {}
       if (next === curLang) return;
       curLang = next;
       document.documentElement.lang = curLang === 'zh' ? 'zh-CN' : 'en';

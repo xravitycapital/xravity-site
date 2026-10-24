@@ -26,7 +26,7 @@ const requiredKeys = [
   'read_article',
   'menu_open',
   'menu_close',
-  'scroll_to_about',
+  'scroll_to_principles',
   'copy_link',
 ];
 
