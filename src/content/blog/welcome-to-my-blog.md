@@ -1,21 +1,45 @@
 ---
-title: "Welcome to My Blog"
-date: 2026-06-01
-excerpt: "This is the first post on my personal site. Click to read more."
-category: Notes
-lang: en
-tags: ["welcome", "personal"]
+title: "欢迎来到 Xravity：把能力与主动权，留在自己手里"
+date: 2026-10-24
+excerpt: "更有能力，更加独立，也更加安全。这是 Xravity 的起点，也是我们想和你一起探索的方向。"
+category: Xravity
+lang: zh
+tags: ["欢迎", "AI", "独立创造"]
+featured: true
 ---
 
-Welcome! This is the start of my blog on **Xravity**. Here I will share thoughts on design, code, photography, and the creative process.
+欢迎来到 Xravity。
 
-## What to Expect
+AI 正在改变我们学习、工作和创造的方式。工具越来越强，但真正重要的问题依然是：**我们自己，有没有因此变得更有能力？**
 
-I'll be writing about:
+Xravity 是一个独立技术工作室。我们希望做一些实在的事情，帮助你在 AI 驱动的世界里，更有能力、更加独立，也更加安全。
 
-- **Design** — branding, UI/UX, and visual storytelling
-- **Development** — frontend tips, tools, and workflows  
-- **Photography** — techniques, gear, and photo essays
-- **Life** — the creative journey and lessons learned
+## 更有能力：把想法变成行动
 
-Stay tuned for more content!
+好的工具应该让你更容易学会一件事、完成一个项目、解决一个问题。这里会分享我们亲自实践过的方法、AI 工作流、产品经验，以及真正值得收藏的资源。
+
+我们关心的不只是“这个工具能做什么”，也包括“你用完之后，能多做些什么”。
+
+## 更加独立：让工具服务于你的判断
+
+用好 AI，不等于把思考和选择交给 AI。我们希望帮助你建立属于自己的技能、工作方式和创造空间，让技术成为助力，让方向仍然由你决定。
+
+你可以借助工具走得更远，也应该有能力理解它、选择它，必要时离开它。
+
+## 更加安全：知道自己的内容去了哪里
+
+便利不应该意味着对数据和隐私失去掌控。我们会认真对待工具的权限、数据流向和使用边界，把这些问题讲清楚，也落实到正在打造的产品里。
+
+[提腕记 / TilJot](/tiljot/) 是其中一个起点：从手腕上的语音，到 Mac 上的文字，让表达更顺手，也让是否发送文字的决定留在你手里。具体功能与数据处理方式，可以在产品页和隐私说明中了解。
+
+## 从这里开始
+
+- 在 [资源区](/resources/) 找到实用工具和参考。
+- 在 [产品区](/#products) 了解我们正在打造什么。
+- 在这里阅读后续的实践记录、方法与思考。
+
+这个站点会随着真实的工作和尝试不断生长。我们希望每一篇内容、每一个工具，都能为你的生活多添一点能力和底气。
+
+也欢迎在评论里说说：**你最希望 AI 帮你解决什么问题？又有什么主动权，是你希望一直留在自己手里的？**
+
+更有能力，更加独立，也更加安全。我们从这里开始。

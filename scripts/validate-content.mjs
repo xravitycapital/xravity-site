@@ -28,6 +28,14 @@ const requiredKeys = [
   'menu_close',
   'scroll_to_principles',
   'copy_link',
+  'comments_tag',
+  'comments_title',
+  'comments_intro',
+  'comments_github',
+  'comments_privacy',
+  'comments_loading',
+  'comments_retry',
+  'comments_error',
 ];
 
 const translations = JSON.parse(await readFile(translationPath, 'utf8'));

@@ -915,7 +915,7 @@ footer { border-top: 1px solid var(--border-strong); background: var(--bg); }
 
 @media (max-width: 500px) {
   #hero { --hero-type-size: clamp(2.5rem, 12vw, 3.5rem); }
-  .hero-headline { min-block-size: calc(var(--hero-type-size) * 6.5); }
+  .hero-headline { min-block-size: calc(var(--hero-type-size) * 5.1); }
   .hero-sub { min-block-size: 6.8rem; }
   .hero-signal { min-height: 300px; }
   .signal-orbit-one { width: 220px; height: 220px; }
@@ -930,6 +930,7 @@ footer { border-top: 1px solid var(--border-strong); background: var(--bg); }
 }
 
 @media (max-width: 360px) {
+  .hero-headline { min-block-size: calc(var(--hero-type-size) * 5.85); }
   .hero-sub { min-block-size: 8.5rem; }
 }
 

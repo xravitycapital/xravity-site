@@ -41,6 +41,16 @@ The migration requires:
 
 Do not put a GitHub OAuth client secret or personal access token in this repository.
 
+## Blog Comments
+
+Giscus is installed only on `xravitycapital/xravity-site`. Blog comments live in the repository's **Announcements** discussion category. Readers sign in with GitHub to post, reply, and react; no GitHub password or access token is stored by the website.
+
+- Moderate discussions at `https://github.com/xravitycapital/xravity-site/discussions`; GitHub provides edit, delete, hide, and lock controls according to the user's permissions.
+- `src/components/GiscusComment.astro` contains the public repository/category IDs. Keep the `blog/<slug>` discussion key stable when editing article titles or changing interface languages, so existing replies stay attached to the article.
+- `giscus.json` restricts embedding to production, the Giscus configuration page, and the local development origins. Add a new production domain there before moving domains.
+- Comments load near the viewport and follow the website language and theme. If a browser blocks the widget, readers can retry or open the GitHub discussions link.
+- To disable comments, remove the component from the blog template. Existing discussions remain on GitHub until explicitly deleted.
+
 ## Local Development
 
 Run from the project folder:

@@ -1,46 +1,107 @@
 ---
-// Set your real Giscus IDs here after setup:
-//   1. Enable GitHub Discussions in your repo settings
-//   2. Install https://github.com/apps/giscus
-//   3. Go to https://giscus.app to get your repo-id and category-id
-const giscusRepo = 'xravitycapital/xravity-site';
-const giscusRepoId = 'PLACEHOLDER';   // ← Replace with your real ID
-const giscusCategory = 'Comments';
-const giscusCategoryId = 'PLACEHOLDER'; // ← Replace with your real ID
-const giscusEnabled = !giscusRepoId.includes('PLACEHOLDER');
+interface Props { discussionKey: string; }
+const { discussionKey } = Astro.props;
+const repo = 'xravitycapital/xravity-site';
 ---
 
-<div class="comments-section">
-  {giscusEnabled ? (
-    <script
-      src="https://giscus.app/client.js"
-      data-repo={giscusRepo}
-      data-repo-id={giscusRepoId}
-      data-category={giscusCategory}
-      data-category-id={giscusCategoryId}
-      data-mapping="pathname"
-      data-strict="0"
-      data-reactions-enabled="1"
-      data-emit-metadata="0"
-      data-input-position="bottom"
-      data-theme="preferred_color_scheme"
-      data-lang="en"
-      data-loading="lazy"
-      async
-    >
-    </script>
-  ) : (
-    <p style="text-align:center;color:var(--text-muted);font-size:0.9rem;padding:1.5rem;">
-      💬 Comments coming soon. The site owner needs to <a href="https://giscus.app" style="color:var(--accent);">set up Giscus</a>.
-    </p>
-  )}
-</div>
+<aside class="comments-section" aria-labelledby="comments-title" id="comments">
+  <p class="section-tag" data-i18n="comments_tag">Join the conversation</p>
+  <h2 id="comments-title" data-i18n="comments_title">Comments & reactions</h2>
+  <p class="comments-intro" data-i18n="comments_intro">Sign in with GitHub to comment, reply, or react. Your contributions are public.</p>
+  <div class="comments-actions">
+    <a href={`https://github.com/${repo}/discussions`} target="_blank" rel="noopener noreferrer" data-i18n="comments_github">View discussions on GitHub ↗</a>
+    <a href="/privacy#comments" data-i18n="comments_privacy">Comment privacy</a>
+  </div>
+  <p id="comments-status" class="comments-status" role="status" data-i18n="comments_loading">Loading comments…</p>
+  <button id="comments-retry" class="btn-outline" type="button" hidden data-i18n="comments_retry">Retry loading comments</button>
+  <div class="giscus" id="comments-root" data-repo={repo} data-repo-id="R_kgDOS4vadQ" data-category="Announcements" data-category-id="DIC_kwDOS4vadc4DJfDv" data-discussion-key={`blog/${discussionKey}`} aria-busy="true"></div>
+  <noscript><p>请在 GitHub Discussions 中参与讨论。You can join the discussion on GitHub using the link above.</p></noscript>
+</aside>
+
+<script>
+  const root = document.getElementById('comments-root')!;
+  const status = document.getElementById('comments-status')!;
+  const retry = document.getElementById('comments-retry') as HTMLButtonElement;
+  let started = false;
+  let timer: ReturnType<typeof setTimeout>;
+  const language = () => document.documentElement.lang.startsWith('zh') ? 'zh-CN' : 'en';
+  const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  function frame() { return root.querySelector<HTMLIFrameElement>('iframe.giscus-frame'); }
+  function syncAppearance() {
+    const iframe = frame();
+    if (!iframe) return;
+    iframe.title = language() === 'zh-CN' ? '评论与讨论' : 'Comments and discussion';
+    iframe.contentWindow?.postMessage({ giscus: { setConfig: { theme: theme(), lang: language() } } }, 'https://giscus.app');
+  }
+  function showFailure() {
+    clearTimeout(timer);
+    root.setAttribute('aria-busy', 'false');
+    status.hidden = false;
+    status.dataset.i18n = 'comments_error';
+    status.textContent = (window as any).xravityT?.('comments_error') || 'Comments could not load. Retry or join on GitHub.';
+    retry.hidden = false;
+  }
+  const frames = new MutationObserver(() => {
+    const iframe = frame();
+    if (!iframe || iframe.dataset.appearanceBound) return;
+    iframe.dataset.appearanceBound = 'true';
+    iframe.addEventListener('load', () => {
+      clearTimeout(timer);
+      status.hidden = true;
+      retry.hidden = true;
+      root.setAttribute('aria-busy', 'false');
+      syncAppearance();
+    });
+  });
+  frames.observe(root, { childList: true, subtree: true });
+  function loadComments() {
+    if (started) return;
+    started = true;
+    retry.hidden = true;
+    status.hidden = false;
+    status.dataset.i18n = 'comments_loading';
+    status.textContent = (window as any).xravityT?.('comments_loading') || 'Loading comments…';
+    root.setAttribute('aria-busy', 'true');
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    Object.assign(script.dataset, {
+      repo: root.dataset.repo!, repoId: root.dataset.repoId!,
+      category: root.dataset.category!, categoryId: root.dataset.categoryId!,
+      mapping: 'specific', term: root.dataset.discussionKey!, strict: '1',
+      reactionsEnabled: '1', emitMetadata: '0', inputPosition: 'top',
+      theme: theme(), lang: language(), loading: 'lazy',
+    });
+    script.addEventListener('error', showFailure);
+    timer = setTimeout(showFailure, 15000);
+    root.appendChild(script);
+  }
+  retry.addEventListener('click', () => {
+    root.replaceChildren();
+    started = false;
+    loadComments();
+  });
+  new MutationObserver(syncAppearance).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'lang'] });
+  document.addEventListener('xravity:i18n', syncAppearance);
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      loadComments();
+    }, { rootMargin: '240px' });
+    observer.observe(root);
+  } else { loadComments(); }
+</script>
 
 <style>
-  .comments-section {
-    max-width: 720px;
-    margin: 3rem auto 0;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-  }
+  .comments-section { max-width:720px; margin:3rem auto 0; padding-top:2rem; border-top:1px solid var(--border); scroll-margin-top:6rem; }
+  h2 { margin:0 0 0.8rem; font:600 1.6rem/1.4 var(--font-sans); }
+  .comments-intro { color:var(--text-muted); font-size:0.9rem; line-height:1.8; }
+  .comments-actions { display:flex; flex-wrap:wrap; column-gap:1.5rem; margin:0.6rem 0 1.5rem; }
+  .comments-actions a { color:var(--accent); font-size:0.8rem; min-height:44px; display:inline-flex; align-items:center; cursor:pointer; }
+  .comments-status { color:var(--text-muted); font-size:0.85rem; padding:1rem 0; }
+  .giscus { width:100%; min-width:0; }
+  #comments-retry { margin-bottom:1rem; cursor:pointer; }
+  #comments-retry[hidden] { display:none; }
 </style>

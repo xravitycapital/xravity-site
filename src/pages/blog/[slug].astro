@@ -81,6 +81,7 @@ const contentLanguage = post.data.lang === 'zh' ? 'zh-CN' : 'en';
 
         <!-- Share -->
         <div class="share-row">
+          <a href="#comments" class="share-btn" aria-label="Comments & reactions" data-i18n-aria="comments_title">💬</a>
           <span style="font-size:0.85rem;color:var(--text-muted);" data-i18n="share">Share:</span>
           <a
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(new URL('/blog/' + post.slug, Astro.site).toString())}`}
@@ -123,7 +124,7 @@ const contentLanguage = post.data.lang === 'zh' ? 'zh-CN' : 'en';
       )}
 
       <!-- Giscus Comments -->
-      <GiscusComment />
+      <GiscusComment discussionKey={post.slug} />
     </div>
   </section>
   <Footer />

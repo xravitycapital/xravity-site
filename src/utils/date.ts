@@ -1,6 +1,7 @@
 export function formatDate(ts: Date, lang: string = 'en'): string {
   const locale = lang === 'zh' ? 'zh-CN' : 'en-US';
   return ts.toLocaleDateString(locale, {
+    timeZone: 'UTC',
     year: 'numeric',
     month: 'short',
     day: 'numeric'
