@@ -4,6 +4,15 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap");
 
+/* Self-hosted Noto Sans SC Black, subset to the Chinese brand headline. */
+@font-face {
+  font-family: "Xravity Display SC";
+  src: url("/fonts/xravity-zh-display-900.woff") format("woff");
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+}
+
 /* ─── Theme Variables ─── */
 :root {
   --bg:            #f4f7fb;
@@ -937,19 +946,22 @@ html:lang(zh-CN) .nav-context { font-size: 0.7rem; }
 html:lang(zh-CN) .nav-links a { font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; }
 html:lang(zh-CN) :is(.hero-tag, .section-tag) { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; }
 html:lang(zh-CN) .hero-headline {
-  font-size: clamp(2.5rem, 3.8vw, 3.5rem);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  line-height: 1.35;
+  font-family: "Xravity Display SC", var(--font-sans);
+  font-size: clamp(3.25rem, 5.2vw, 5rem);
+  font-weight: 900;
+  font-synthesis: none;
+  letter-spacing: -0.025em;
+  line-height: 1.22;
   margin: 1.25rem 0 1.6rem;
   line-break: strict;
 }
 html:lang(zh-CN) .hero-headline .hero-tail {
-  font-size: 0.58em;
+  font-family: var(--font-sans);
+  font-size: 0.36em;
   font-weight: 400;
   line-height: 1.6;
   letter-spacing: 0.04em;
-  margin-top: 0.8rem;
+  margin-top: 1.25rem;
 }
 html:lang(zh-CN) .hero-sub { max-width: 32em; font-weight: 400; line-height: 1.95; }
 html:lang(zh-CN) .hero-cta { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em; }
@@ -980,11 +992,11 @@ html:lang(zh-CN) .post-body { line-height: 2; }
 html:lang(zh-CN) .post-body :is(h2, h3, h4) { letter-spacing: 0.02em; line-height: 1.55; }
 
 @media (max-width: 900px) {
-  html:lang(zh-CN) .hero-headline { font-size: clamp(2rem, 5.7vw, 3rem); }
+  html:lang(zh-CN) .hero-headline { font-size: clamp(3rem, 8vw, 4.5rem); }
 }
 @media (max-width: 500px) {
-  html:lang(zh-CN) .hero-headline { font-size: clamp(1.65rem, 7.2vw, 2.5rem); line-height: 1.45; }
-  html:lang(zh-CN) .hero-headline .hero-tail { font-size: 0.65em; }
+  html:lang(zh-CN) .hero-headline { font-size: clamp(2.5rem, 11.5vw, 3.5rem); line-height: 1.28; }
+  html:lang(zh-CN) .hero-headline .hero-tail { font-size: 0.42em; }
   html:lang(zh-CN) .hero-sub { font-size: 0.95rem; }
   html:lang(zh-CN) .hero-actions { gap: 1rem; }
   html:lang(zh-CN) .signal-label { font-size: 0.75rem; }
