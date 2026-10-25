@@ -1,4 +1,10 @@
 {
-  "origins": ["https://xravity.xyz", "https://giscus.app", "http://localhost:4321", "http://127.0.0.1:4321"],
+  "origins": [
+    "https://xravity.xyz",
+    "https://giscus.app",
+    "http://localhost:4321",
+    "http://127.0.0.1:4321",
+    "https://cloudflare-preview-xravity-site.xravity.workers.dev"
+  ],
   "defaultCommentOrder": "newest"
 }
