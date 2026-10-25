@@ -73,12 +73,13 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-60NSLRCLLD'
         <h2 id="maintenance-title">发布与安全</h2>
         <p id="security-status" class="security-status" role="status">正在核查后台注册策略…</p>
         <div class="admin-links">
-          <a href="https://github.com/xravitycapital/xravity-site/actions" target="_blank" rel="noopener noreferrer">查看自动构建 ↗</a>
+          <a href="https://app.netlify.com/projects/xravity/deploys" target="_blank" rel="noopener noreferrer">生产发布状态 ↗</a>
+          <a href="https://github.com/xravitycapital/xravity-site/actions" target="_blank" rel="noopener noreferrer">代码与内容检查 ↗</a>
           <a href="https://github.com/xravitycapital/xravity-site/commits/main/" target="_blank" rel="noopener noreferrer">发布记录与回滚 ↗</a>
           <a href="https://github.com/xravitycapital/xravity-site/discussions" target="_blank" rel="noopener noreferrer">管理文章评论 ↗</a>
           <a href="https://app.netlify.com/projects/xravity/identity?tab=registration" target="_blank" rel="noopener noreferrer">管理员与注册设置 ↗</a>
         </div>
-        <details><summary>发布后没有更新怎么办</summary><p>先确认文章没有开启草稿，再检查 GitHub 构建和 Cloudflare 发布状态。保存成功不等于构建完成；若失败，先查看日志，不要重复提交同一篇内容。</p><p>设置了草稿仍会在仓库中保存。不要把密钥、密码或私人资料写入文章和站点设置。</p></details>
+        <details><summary>发布后没有更新怎么办</summary><p>先确认文章没有开启草稿，再检查 GitHub 检查和 Netlify 生产发布状态。保存成功不等于构建完成；若失败，先查看日志，不要重复提交同一篇内容。</p><p>设置了草稿仍会在仓库中保存。不要把密钥、密码或私人资料写入文章和站点设置。</p></details>
       </section>
     </div>
     <footer class="admin-footer">本页内容概览生成于 <time datetime={builtAt}>{builtAt}</time> · 数据随每次成功构建更新</footer>
