@@ -4,3 +4,8 @@ dist/
 .DS_Store
 .astro/data-store.json
 .astro/settings.json
+dist-cloudflare/
+.wrangler/
+.dev.vars
+.dev.vars.*
+cloudflare/worker-configuration.d.ts

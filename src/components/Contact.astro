@@ -27,6 +27,7 @@ import siteData from '../data/site.json';
       data-netlify="true"
       data-netlify-honeypot="bot-field"
       class="contact-form"
+      data-contact-endpoint="/"
     >
       <!-- Hidden field for Netlify Forms -->
       <input type="hidden" name="form-name" value="contact" />
@@ -129,8 +130,9 @@ import siteData from '../data/site.json';
     if (errorEl) errorEl.style.display = 'none';
 
     try {
-      const body = new FormData(form);
-      const response = await fetch('/', { method: 'POST', headers: { 'Accept': 'application/json' }, body });
+      const body = new URLSearchParams();
+      new FormData(form).forEach((value, key) => { if (typeof value === 'string') body.set(key, value); });
+      const response = await fetch(form.dataset.contactEndpoint || '/', { method: 'POST', headers: { 'Accept': 'application/json' }, body });
       if (!response.ok) throw new Error(`Contact form request failed: ${response.status}`);
       if (successEl) successEl.style.display = 'block';
       form.reset();

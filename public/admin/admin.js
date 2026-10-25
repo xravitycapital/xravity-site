@@ -4,7 +4,8 @@
   var prompt = byId('login-prompt'), workspace = byId('adminWorkspace'), editorShell = byId('editorShell');
   var login = byId('loginBtn'), retry = byId('retryBtn'), editorBtn = byId('editorBtn');
   var overviewBtn = byId('overviewBtn'), logout = byId('logoutBtn');
-  var identityUrl = document.body.dataset.identityUrl;
+  var identityUrl = new URL(document.body.dataset.identityUrl, location.origin).href.replace(/\/$/, '');
+  var previewBranch = document.body.dataset.previewBranch;
   var hasAccountToken = /(invite_token|recovery_token|confirmation_token)=/.test(location.hash);
   var authenticated = false, identityBound = false, cmsStarted = false, cmsLoading = false, cmsInitialized = false;
   var identityTimer, sessionCheck = 0;
@@ -48,6 +49,7 @@
       await window.netlifyIdentity.refresh();
       if (attempt !== sessionCheck) return;
       authenticated = true; prompt.hidden = true; workspace.hidden = false; editorShell.hidden = true;
+      if (previewBranch) status('editor-status', '预览验证模式：保存仅提交至 ' + previewBranch + '，不会发布到正式站。');
       overviewBtn.hidden = false; logout.hidden = false; retry.hidden = true;
       window.netlifyIdentity.close();
       checkSecurity();

@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const source = await readFile(new URL('../../public/admin/admin.js', import.meta.url), 'utf8');
 const tick = () => new Promise(resolve => setImmediate(resolve));
-function setup({ user = null, expired = false, missingIdentity = false, failScripts = false, failPrimary = false, render = true, alreadyInitialized = false } = {}) {
+function setup({ user = null, expired = false, missingIdentity = false, failScripts = false, failPrimary = false, render = true, alreadyInitialized = false, preview = false } = {}) {
   const elements = new Map();
   const timers = new Map(), loaded = [], identityEvents = {};
   let timerId = 0, cmsInits = 0, settingsCalls = 0;
@@ -15,13 +15,13 @@ function setup({ user = null, expired = false, missingIdentity = false, failScri
   };
   const identity = {
     on: (name, fn) => { identityEvents[name] = fn; },
-    init: options => { assert.equal(options.APIUrl, 'https://xravity.xyz/.netlify/identity'); if (!alreadyInitialized) identityEvents.init(user); },
+    init: options => { assert.equal(options.APIUrl, preview ? 'https://cloudflare-preview-xravity-site.xravity.workers.dev/.netlify/identity' : 'https://xravity.xyz/.netlify/identity'); if (!alreadyInitialized) identityEvents.init(user); },
     setLocale: locale => assert.equal(locale, 'zhCN'),
     currentUser: () => user, refresh: async () => { if (expired) throw Error('expired'); },
     close() {}, open() {}, logout: () => identityEvents.logout(),
   };
   const context = {
-    document: { body: { dataset: { identityUrl: 'https://xravity.xyz/.netlify/identity' } }, getElementById: el, createElement: () => ({ remove() {} }), head: { appendChild(script) {
+    document: { body: { dataset: preview ? {identityUrl:'/.netlify/identity',previewBranch:'cloudflare-preview'} : { identityUrl: 'https://xravity.xyz/.netlify/identity' } }, getElementById: el, createElement: () => ({ remove() {} }), head: { appendChild(script) {
       loaded.push(script.src);
       if (failScripts || (failPrimary && script.src.includes('unpkg.com'))) script.onerror();
       else {
@@ -30,7 +30,7 @@ function setup({ user = null, expired = false, missingIdentity = false, failScri
       }
     } } },
     window: { netlifyIdentity: missingIdentity ? undefined : identity },
-    location: { hash: '', reload() {} },
+    location: { hash: '', origin:preview ? 'https://cloudflare-preview-xravity-site.xravity.workers.dev' : 'https://xravity.xyz', reload() {} }, URL,
     setTimeout: (fn, ms) => { timers.set(++timerId, { fn, ms }); return timerId; },
     clearTimeout: id => timers.delete(id), AbortController,
     fetch: async () => { settingsCalls++; return { ok: true, json: async () => ({ disable_signup: true }) }; },
@@ -48,6 +48,13 @@ test('anonymous visitors never load CMS or receive the authenticated overview', 
   await app.el('editorBtn').handlers.click();
   assert.equal(app.loaded.length, 0);
   assert.equal(app.settingsCalls, 0);
+});
+
+test('preview session uses same-origin auth and labels branch isolation', async () => {
+  const app = setup({user:{},preview:true}); await tick();
+  assert.equal(app.el('adminWorkspace').hidden,false);
+  assert.match(app.el('editor-status').textContent,/cloudflare-preview/);
+  assert.match(app.el('editor-status').textContent,/不会发布到正式站/);
 });
 
 test('failed identity loading produces a visible retry state', async () => {

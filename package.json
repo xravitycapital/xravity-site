@@ -6,17 +6,26 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "postbuild": "node scripts/prepare-cloudflare.mjs",
     "preview": "astro preview",
     "check:content": "node scripts/validate-content.mjs",
     "check:logic": "node --test scripts/tests/*.test.mjs",
-    "check": "npm run build && npm run check:content && npm run check:logic"
+    "check:worker": "wrangler types cloudflare/worker-configuration.d.ts && tsc -p cloudflare/tsconfig.json",
+    "check": "npm run build && npm run check:content && npm run check:logic && npm run check:worker",
+    "preview:cloudflare": "wrangler dev --port 8787 --local",
+    "upload:preview": "wrangler versions upload --preview-alias cloudflare-preview"
   },
   "engines": {
-    "node": ">=18.17.0"
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^5.10.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261025.1",
+    "typescript": "7.0.2",
+    "wrangler": "4.152.0"
   }
 }
