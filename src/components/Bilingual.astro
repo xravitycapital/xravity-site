@@ -4,6 +4,6 @@ const { zh, en, heading = 'h2', tone = '', size = '', motion = 'chars', class: e
 const Tag = heading;
 ---
 <div class:list={['xr-bi', tone && `is-${tone}`, size, extra]}>
-  <Tag class="zh" lang="zh-CN" data-xr={motion}>{zh}</Tag>
-  <p class="en" lang="en" data-xr="words" data-xr-delay="300">{en}</p>
+  <Tag class="zh" lang="zh-CN" data-story-locale="zh" data-xr={motion}>{zh}</Tag>
+  <Tag class="en" lang="en" data-story-locale="en" data-xr={motion === 'slam' ? 'slam' : 'words'}>{en}</Tag>
 </div>

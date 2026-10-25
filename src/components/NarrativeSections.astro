@@ -1,5 +1,6 @@
 ---
 import Bilingual from './Bilingual.astro';
+import StoryText from './StoryText.astro';
 interface Props { part: 'question' | 'futures' | 'blueprint' | 'principle' | 'standard' | 'join'; }
 const { part } = Astro.props;
 const steps = [['记录','Capture'],['记忆','Memory'],['行动','Agent'],['秘书','Secretary'],['算力','Compute']];
@@ -7,17 +8,17 @@ const steps = [['记录','Capture'],['记忆','Memory'],['行动','Agent'],['秘
 {part === 'question' && <section id="question" class="story-section story-question" data-field="silver" aria-labelledby="question-title">
   <div class="container story-center">
     <Bilingual heading="p" zh="人类有史以来最强大的工具  正在诞生" en="The most powerful tool in human history  is being born" size="story-kicker" />
-    <p class="story-turn" lang="zh-CN" data-xr="fade">而是</p>
+    <p class="story-turn" data-xr="fade"><StoryText zh="而是" en="But the question is" /></p>
     <div id="question-title"><Bilingual zh="它为谁服务？" en="Who will it serve?" motion="slam" size="story-slam" /></div>
   </div>
 </section>}
 {part === 'futures' && <section id="futures" class="story-section" data-field="cold" aria-labelledby="futures-title">
   <div class="container">
-    <h2 id="futures-title" class="xr-label" data-xr="track">两种未来 · TWO FUTURES</h2>
+    <h2 id="futures-title" class="xr-label" data-xr="track"><StoryText zh="两种未来" en="Two futures" /></h2>
     <div class="futures-grid">
       <article class="xr-card future-card future-cold" data-xr="fade">
         <Bilingual heading="h3" zh="一种未来  权力走向集中" en="One future  Power concentrates in a few hands" tone="cold" />
-        <p class="story-body" lang="zh-CN">AI 掌握在少数巨头手里  你的数据和选择  都由别人决定</p>
+        <Bilingual heading="p" zh="AI 掌握在少数巨头手里  你的数据和选择  都由别人决定" en="AI is controlled by a few giants  your data and your choices are decided for you" size="story-body-pair" />
       </article>
       <article class="xr-card future-card future-gold" data-xr="fade" data-xr-delay="150">
         <Bilingual heading="h3" zh="另一种未来  权力走向分散" en="Another future  Power spreads to everyone" tone="gold" />
@@ -29,22 +30,24 @@ const steps = [['记录','Capture'],['记忆','Memory'],['行动','Agent'],['秘
 </section>}
 {part === 'blueprint' && <section id="blueprint" class="story-section" data-field="gold" aria-labelledby="blueprint-title">
   <div class="container">
-    <p class="xr-label" data-xr="track">蓝图 · THE BLUEPRINT</p>
+    <p class="xr-label" data-xr="track"><StoryText zh="蓝图" en="The blueprint" /></p>
     <div id="blueprint-title"><Bilingual zh="一步一步  让 AI 真正为你所用" en="Step by step  AI that truly works for you" size="story-heading" /></div>
-    <ol class="blueprint-steps" aria-label="蓝图五步">
+    <ol class="blueprint-steps">
       {steps.map(([zh,en],i)=><li class:list={['blueprint-step',i===0 && 'is-current']} aria-current={i===0?'step':undefined}>
         <span class="step-number">{String(i+1).padStart(2,'0')}</span>
         <Bilingual heading="h3" zh={zh} en={en} />
-        <span class="step-status">{i===0?'第一步 · NOW':'NEXT'}</span>
+        <span class="step-status"><StoryText zh={i===0?'第一步 · 现在':'下一步'} en={i===0?'STEP ONE · NOW':'NEXT'} /></span>
       </li>)}
     </ol>
   </div>
 </section>}
 {part === 'principle' && <section id="founding-principle" class="story-section story-quote" data-field="gold" aria-labelledby="founding-title">
   <div class="container story-center">
-    <p class="xr-label" data-xr="track">创始原则 · OUR FOUNDING PRINCIPLE</p>
-    <h2 id="founding-title" class="founding-lines"><span class="xr-serif" lang="zh-CN" data-xr="chars">我们永远不会</span><span class="xr-serif principle-gold" lang="zh-CN" data-xr="chars" data-xr-delay="500">把你困在我们的产品里</span></h2>
-    <p class="founding-english" lang="en" data-xr="words" data-xr-delay="800">We will never trap you in our products</p>
+    <p class="xr-label" data-xr="track"><StoryText zh="创始原则" en="Our founding principle" /></p>
+    <div id="founding-title">
+      <h2 class="founding-lines" data-story-locale="zh" lang="zh-CN"><span class="xr-serif" data-xr="chars">我们永远不会</span><span class="xr-serif principle-gold" data-xr="chars" data-xr-delay="300">把你困在我们的产品里</span></h2>
+      <h2 class="founding-lines founding-en" data-story-locale="en" lang="en"><span data-xr="words">We will never</span><span class="principle-gold" data-xr="words" data-xr-delay="300">trap you in our products</span></h2>
+    </div>
   </div>
 </section>}
 {part === 'standard' && <section id="open-standard" class="story-section story-standard" data-field="gold" aria-labelledby="standard-title">
@@ -64,6 +67,6 @@ const steps = [['记录','Capture'],['记忆','Memory'],['行动','Agent'],['秘
       <Bilingual heading="h3" zh="早期用户" en="Early adopters" tone="gold" />
       <Bilingual heading="h3" zh="合作伙伴" en="Partners" tone="gold" />
     </div>
-    <a href="#contact" class="xr-btn">联系我们 · Get in touch</a>
+    <a href="#contact" class="xr-btn"><StoryText zh="联系我们" en="Get in touch" /></a>
   </div>
 </section>}

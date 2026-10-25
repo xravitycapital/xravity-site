@@ -23,7 +23,15 @@
 .narrative-page .xr-bi :is(.zh,.en) { margin: 0; }
 .narrative-page .xr-bi .zh { font-family: var(--xr-font-sans); text-wrap: balance; }
 .narrative-page .xr-bi :is(h1,h2,h3).zh, .narrative-page .hero-commitments .zh { font-family: 'Xravity Story SC', var(--xr-font-sans); }
-.narrative-page .xr-bi .en { font-family: var(--xr-font-sans); font-size: .62em; font-weight: 300; letter-spacing: 0; text-wrap: balance; }
+.narrative-page .xr-bi .en { font-family: var(--xr-font-sans); font-size: 1em; font-weight: 650; letter-spacing: -.035em; line-height: 1.16; text-wrap: balance; color: var(--xr-ink); }
+.narrative-page .xr-bi.is-gold .en { color: var(--xr-gold); }
+.narrative-page .xr-bi.is-cold .en { color: var(--xr-cold-light); }
+.narrative-page .story-body-pair .en { font-weight: 400; line-height: 1.6; color: var(--xr-ink-2); letter-spacing: -.015em; }
+.narrative-page .founding-lines.founding-en > span { font-family: var(--font-serif); }
+html:lang(en) .narrative-page .brand-proposition { font-size: clamp(40px,4.5vw,68px); }
+html:lang(en) .narrative-page .story-slam { font-size: clamp(40px,7vw,108px); }
+html:lang(en) .narrative-page .hero-commitments .xr-bi { font-size: 21px; }
+html:lang(en) .narrative-page .join-people .xr-bi { font-size: clamp(26px,2.4vw,36px); }
 .narrative-page .story-section { padding: clamp(96px,15vh,180px) 48px; scroll-margin-top: 80px; overflow-x: clip; }
 .narrative-page .story-center { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 36px; }
 .narrative-page .story-center > * { max-width: 100%; }
@@ -99,6 +107,13 @@
   .narrative-page .join-people { margin-block: 10px; gap: 32px; }
   .narrative-page .founding-lines { font-size: clamp(26px,6.4vw,36px); }
   .narrative-page .founding-english { font-size: clamp(16.12px,3.968vw,22.32px); }
+  html:lang(en) .narrative-page .brand-proposition { font-size: clamp(40px,9vw,62px); }
+  html:lang(en) .narrative-page .hero-commitments .xr-bi { font-size: 26px; }
+  html:lang(en) .narrative-page .story-heading { font-size: 32px; }
+  html:lang(en) .narrative-page .story-slam { font-size: 44px; }
+  html:lang(en) .narrative-page .future-card > .xr-bi:first-child { font-size: 28px; }
+  html:lang(en) .narrative-page .promise-card > .xr-bi { font-size: 28px; }
+  html:lang(en) .narrative-page .promise-card > .promise-detail { font-size: 20px; }
 }
 
 .narrative-page .xr-phrase { display: inline-block; white-space: nowrap; }

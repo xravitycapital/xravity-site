@@ -1,5 +1,6 @@
 ---
 import Bilingual from './Bilingual.astro';
+import StoryText from './StoryText.astro';
 const promises = [
   ['更有能力','More capable','让 AI 成为你自己的能力','Make AI your own strength'],
   ['更独立','More independent','不依附巨头  自己做主','Free from the giants  free to choose'],
@@ -8,7 +9,7 @@ const promises = [
 ---
 <section id="principles" class="story-section" data-field="gold" aria-labelledby="principles-title">
   <div class="container">
-    <h2 id="principles-title" class="xr-label" data-xr="track">我们的愿景 · OUR VISION</h2>
+    <h2 id="principles-title" class="xr-label" data-xr="track"><StoryText zh="我们的愿景" en="Our vision" /></h2>
     <div class="promise-grid">
       {promises.map(([zh,en,promise,english],i)=><article class="xr-card promise-card" data-xr="fade" data-xr-delay={i*120}>
         <span class="promise-number">{String(i+1).padStart(2,'0')}</span>

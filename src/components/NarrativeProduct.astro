@@ -1,5 +1,6 @@
 ---
 import Bilingual from './Bilingual.astro';
+import StoryText from './StoryText.astro';
 ---
 <section id="products" data-field="gold" aria-labelledby="products-title">
   <div class="container">
@@ -7,11 +8,11 @@ import Bilingual from './Bilingual.astro';
     <Bilingual heading="p" zh="我们的  从手腕开始" en="Ours begins on your wrist" tone="gold" size="story-kicker product-prelude" />
     <article class="product-card">
       <div class="product-mark">
-        <img src="/images/tiljot/tiljot-logo.png" width="600" height="600" alt="提腕记 / TilJot" loading="lazy" />
+        <img src="/images/tiljot/tiljot-logo.png" width="600" height="600" alt="TilJot" loading="lazy" />
         <span>APPLE WATCH · MAC</span>
       </div>
       <div class="product-copy">
-        <p class="product-status beta-badge" data-i18n="tiljot_status">公测现已开启 · Public beta now open</p>
+        <p class="product-status beta-badge"><StoryText zh="公测现已开启" en="Public beta now open" /></p>
         <h3 data-i18n="tiljot_name">TilJot</h3>
         <Bilingual heading="p" zh="抬手说话  文字直接出现在电脑上" en="Speak on Apple Watch  text appears at your cursor" size="story-body-pair" />
         <p class="product-description" data-i18n="tiljot_description">Speak on Apple Watch. Turn speech into text locally on your Mac, review it, and decide when to send.</p>

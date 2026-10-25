@@ -9,11 +9,17 @@ deployment instructions or a reason to remove existing functionality.
 - Dark only: neutral `#0b0b0e`, champagne `#d9b36c`, white `#f1f2f5`.
 - First visits use Chinese. No theme switch or remembered light preference is
   applied on public pages, including TilJot. Historical light assets are inactive.
-- The original homepage composition remains the main entrance, with its large
-  three-line commitments, live orbital mark, product cards and content sections.
-- The long bilingual story lives only at `/vision/`, linked from navigation.
-  Its proposition is “让 AI 为你所用 / AI that works for you”; Chinese leads
-  with a 62% / 300-weight English companion. UI language remains separate.
+- Home is a working-studio entrance: retain its large three-line commitments,
+  show a clearly labeled Watch → Mac workflow illustration, direct visitors to
+  products, writing and resources. Keep the pointer-attraction network, but not
+  the vision hero's large gold orbital panel. Use restrained white actions and
+  fine rules rather than the vision page's cinematic gold buttons.
+- The long story lives only at `/vision/`, linked from navigation. Its complete
+  copy follows the site's shared `xravity_lang` choice: Chinese or English, not
+  a permanently Chinese-first bilingual stack. English is full-size primary
+  content. Preserve authored film/content language; switching UI does not
+  translate the video. `StoryText.astro` and `Bilingual.astro` use locale-tagged
+  text selected by `html:lang`, with the remembered language applied pre-paint.
 - The field is a website-native interpretation, not a copy of all film scenes:
   connected nodes, travelling pulses, slow breathing, pointer attraction and
   elastic return. Do not replace the three commitments with four unrelated labels.
@@ -33,7 +39,7 @@ deployment instructions or a reason to remove existing functionality.
   rendering for reduced-motion preferences. No external animation library.
 - `src/scripts/xravity-field.mjs` and `xravity-motion.mjs` adapt the supplied
   scripts: gold/cold/silver modes, initial and cold→gold bursts, character blur,
-  300ms delayed English, one-time entrances, retained pointer attraction and
+  locale-specific text entrances, one-time entrances, retained pointer attraction and
   explicit RAF cancellation for hidden/offscreen/reduced-motion states.
 - `src/components/NarrativeSections.astro`: section 8 copy and story order.
   The five-step blueprint marks only 01 Capture as current; later steps are NEXT.

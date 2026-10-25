@@ -1,20 +1,21 @@
 ---
 import Bilingual from './Bilingual.astro';
+import StoryText from './StoryText.astro';
 ---
 <section id="hero" data-field="gold">
   <div class="container hero-layout">
     <div class="hero-content">
       <p class="xr-label" data-xr="track">XRAVITY</p>
       <Bilingual heading="h1" zh="让 AI 为你所用" en="AI that works for you" size="brand-proposition" />
-      <div class="hero-commitments" aria-label="更有能力 · 更独立 · 更安全">
+      <div class="hero-commitments">
         <Bilingual heading="p" zh="更有能力" en="More capable" />
         <Bilingual heading="p" zh="更独立" en="More independent" />
         <Bilingual heading="p" zh="更安全" en="More secure" />
       </div>
       <Bilingual heading="p" zh="在 AI 驱动的世界里" en="In an AI-driven world" tone="gold" size="hero-context" />
       <div class="hero-actions">
-        <a href="#vision" class="xr-btn">观看愿景片 · Watch the film</a>
-        <a href="/tiljot/" class="xr-btn is-ghost">TilJot 公测已开启</a>
+        <a href="#vision" class="xr-btn"><StoryText zh="观看愿景片" en="Watch the film" /></a>
+        <a href="/tiljot/" class="xr-btn is-ghost"><StoryText zh="提腕记公测已开启" en="TilJot public beta" /></a>
       </div>
     </div>
 

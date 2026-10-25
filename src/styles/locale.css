@@ -1,0 +1,3 @@
+/* One shared language choice; both texts remain available without a network fetch. */
+html:lang(zh) [data-story-locale="en"],
+html:lang(en) [data-story-locale="zh"] { display: none !important; }

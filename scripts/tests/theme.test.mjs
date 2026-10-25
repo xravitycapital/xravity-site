@@ -12,10 +12,13 @@ test('all public layouts are dark only, even for a remembered light preference',
   }
   assert.doesNotMatch(layout,/styles\/light.css/);
 });
-test('original hero mark and pointer field remain available',async()=>{
+test('home workbench keeps the pointer field and vision retains the orbital artwork',async()=>{
   const hero=await source('src/components/Hero.astro');
   assert.equal((hero.match(/<canvas class="brand-network"/g)||[]).length,1);
-  assert.match(hero,/class="field-mark field-mark-dark" src="\/brand\/xravity-mark\.svg"/);
+  assert.match(hero,/hero-workbench/);
+  assert.doesNotMatch(hero,/field-mark-dark/);
+  const visionHero=await source('src/components/NarrativeHero.astro');
+  assert.match(visionHero,/class="field-mark field-mark-dark" src="\/brand\/xravity-mark\.svg"/);
   assert.doesNotMatch(hero,/field-mark-light/);
   assert.match(layout,/createBrandNetwork\(document\.getElementById\('particles'\)/);
 });

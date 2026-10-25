@@ -1,56 +1,39 @@
+---
+import StoryText from './StoryText.astro';
+---
 <section id="hero">
   <div class="container hero-layout">
     <div class="hero-content">
-      <p class="hero-tag" data-i18n="hero_tag">AI, on your terms</p>
+      <p class="hero-tag"><StoryText zh="独立的工具  清醒的思考" en="Independent tools  clear thinking" /></p>
       <h1 class="hero-headline">
         <span data-i18n="hero_title_1">Be more capable,</span>
         <span data-i18n="hero_title_2">more independent,</span>
         <span class="hero-accent" data-i18n="hero_title_3">more secure</span>
         <span class="hero-tail" data-i18n="hero_title_4">in an AI-driven world.</span>
       </h1>
-      <p class="hero-sub" data-i18n="hero_sub">
-        We build tools and share ideas that put AI's power in your hands. More possibility, without giving up your independence.
-      </p>
+      <p class="hero-sub" data-i18n="hero_sub">We build tools and share ideas that put AI's power in your hands. More possibility, without giving up your independence.</p>
       <div class="hero-actions">
-        <a href="#vision" class="hero-cta" data-i18n="hero_cta">Watch the vision film</a>
-        <a href="#products" class="hero-secondary" data-i18n="hero_secondary">Explore what we're building</a>
+        <a href="#products" class="hero-cta"><StoryText zh="探索我们的产品" en="Explore our products" /></a>
+        <a href="/vision/" class="hero-secondary"><StoryText zh="为什么做这件事" en="Why we're building" /></a>
       </div>
     </div>
-
-    <div class="hero-signal brand-field" aria-hidden="true">
-      <canvas class="brand-network"></canvas>
-      <div class="field-heading"><span>XR / 001</span><span data-i18n="field_heading">A field of possibility</span></div>
-      <img class="field-mark field-mark-dark" src="/brand/xravity-mark.svg" alt="" width="220" height="210" fetchpriority="high" />
-      <span class="field-coordinate">X — RAVITY</span>
-      <span class="field-principle field-principle-one"><i>01</i><b data-i18n="principle_capability_title">Capability</b></span>
-      <span class="field-principle field-principle-two"><i>02</i><b data-i18n="principle_independence_title">Independence</b></span>
-      <span class="field-principle field-principle-three"><i>03</i><b data-i18n="principle_security_title">Security</b></span>
-      <div class="field-footer"><span data-i18n="field_footer">Not another orbit. Your own trajectory.</span><span>↗</span></div>
+    <div class="hero-signal hero-workbench">
+      <canvas class="brand-network" aria-hidden="true"></canvas>
+      <div class="workbench-top"><span>XR / LAB 01</span><span class="workbench-kicker"><StoryText zh="从想法到工具" en="From ideas to tools" /></span></div>
+      <div class="workbench-product">
+        <p class="workbench-label"><StoryText zh="正在打造" en="In the making" /></p>
+        <h2 data-i18n="tiljot_name">TilJot</h2>
+        <p data-i18n="tiljot_tagline">From your wrist to your cursor.</p>
+      </div>
+      <div class="workbench-flow" aria-hidden="true">
+        <div class="watch-preview"><div class="watch-face"><div class="voice-wave">{[1,2,3,4,5,6,7].map(n=><i style={`--bar:${n}`}></i>)}</div><span><StoryText zh="说出想法" en="An idea, spoken" /></span></div></div>
+        <div class="flow-connector"><span></span><b>↗</b></div>
+        <div class="mac-preview"><div class="mac-toolbar"><i></i><i></i><i></i><span>TilJot</span></div><div class="mac-content"><p><StoryText zh="想法  从这里开始" en="Ideas start here" /></p><span class="typing-line"></span><span class="typing-line short"></span><span class="input-caret"></span></div></div>
+      </div>
+      <div class="workbench-steps"><span>01 / APPLE WATCH</span><span>02 / MAC</span></div>
+      <div class="workbench-bottom"><span><StoryText zh="语音在 Mac 本地识别" en="Recognized locally on your Mac" /></span><a href="/tiljot/"><StoryText zh="了解提腕记" en="Explore TilJot" /> <b aria-hidden="true">↗</b></a></div>
+      <p class="workbench-note"><StoryText zh="工作流程示意" en="Workflow illustration" /></p>
     </div>
-  </div>
-  <div
-    class="scroll-indicator"
-    id="scrollIndicator"
-    role="button"
-    tabindex="0"
-    aria-label="Scroll to principles"
-    data-i18n-aria="scroll_to_principles"
-  >
-    <span class="line"></span>
-    <small data-i18n="scroll">Scroll</small>
+    <nav class="home-index" aria-label="Explore Xravity"><a href="#products"><span>01</span><StoryText zh="产品与工具" en="Products & tools" /><b aria-hidden="true">↗</b></a><a href="/blog/"><span>02</span><StoryText zh="实践与思考" en="Notes & ideas" /><b aria-hidden="true">↗</b></a><a href="/resources/"><span>03</span><StoryText zh="精选资源" en="Useful resources" /><b aria-hidden="true">↗</b></a></nav>
   </div>
 </section>
-
-<script>
-  const scrollIndicator = document.getElementById('scrollIndicator');
-  const scrollToPrinciples = () => {
-    document.getElementById('principles')?.scrollIntoView({ behavior: 'smooth' });
-  };
-  scrollIndicator?.addEventListener('click', scrollToPrinciples);
-  scrollIndicator?.addEventListener('keydown', event => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      scrollToPrinciples();
-    }
-  });
-</script>

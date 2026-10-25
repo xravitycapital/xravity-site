@@ -1,4 +1,5 @@
 ---
+import '../styles/home.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
@@ -15,7 +16,7 @@ import Footer from '../components/Footer.astro';
 import StructuredData from '../components/StructuredData.astro';
 ---
 
-<BaseLayout>
+<BaseLayout home>
   <StructuredData type="organization" />
   <Nav />
   <main>
