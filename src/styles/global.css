@@ -1019,7 +1019,7 @@ html:lang(zh-CN) .post-body :is(h2, h3, h4) { letter-spacing: 0.02em; line-heigh
 }
 
 /* The website's own composition: editorial type / an independent living field.
-   The supplied artwork stays on a dark stage, including in the warm light theme. */
+   Base dark stage; light.css opens the same geometry onto the light surface. */
 .nav-logo { background-clip: border-box; -webkit-background-clip: border-box; }
 @media (min-width: 901px) and (max-width: 1180px) { .nav-context { display: none; } }
 .brand-field {
@@ -1034,6 +1034,7 @@ html:lang(zh-CN) .post-body :is(h2, h3, h4) { letter-spacing: 0.02em; line-heigh
 .field-footer { bottom: 1.6rem; border-top: 1px solid rgba(217,179,108,.25); padding-top: 1rem; }
 .field-footer span:last-child { font-size: 1.2rem; color: #d9b36c; }
 .field-mark { position: absolute; top: 11%; left: 7%; width: 86%; height: 78%; object-fit: contain; animation: field-breathe 11s ease-in-out infinite; }
+.field-mark-light { visibility: hidden; }
 .field-coordinate { position: absolute; top: 78%; left: 50%; transform: translate(-50%, -50%); font: .55rem/1 var(--font-mono); letter-spacing: .35em; color: #efd9a8; }
 .field-principle { position: absolute; display: flex; gap: .6rem; align-items: center; font: .65rem/1.5 var(--font-sans); letter-spacing: .02em; padding: .45rem .6rem; background: rgba(11,11,14,.76); border: 1px solid rgba(217,179,108,.22); backdrop-filter: blur(5px); }
 .field-principle i { font: .5rem/1 var(--font-mono); color: #d9b36c; font-style: normal; }

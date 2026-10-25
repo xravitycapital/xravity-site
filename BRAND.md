@@ -13,8 +13,11 @@ deployment instructions or a reason to remove existing functionality.
   self-hosted Chinese display font, separate UI language toggle, and light/dark
   switch. First visits remain Chinese + light; explicit preferences persist.
 - Preserve the supplied SVG files. Light navigation/footer use a monochrome ink
-  CSS treatment without a black badge; the hero field keeps the original gold
-  artwork on its dark stage in both themes. Dark navigation remains unchanged.
+  CSS treatment without a black badge. The light hero uses an open, feathered
+  field with an ink/bronze color variant and floating labels; no dark panel
+  or hard outer frame. Dark navigation and the dark hero stage remain unchanged.
+- `xravity-mark-light.svg` changes only colors/glow opacity from the supplied
+  mark: path, circles, proportions, stroke widths and motion stay identical.
 - The field is a website-native interpretation, not a copy of all film scenes:
   connected nodes, travelling pulses, slow breathing, pointer attraction and
   elastic return. Do not replace the three commitments with four unrelated labels.

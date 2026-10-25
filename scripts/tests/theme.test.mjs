@@ -31,3 +31,21 @@ test('light-only styles cannot restyle dark selectors or remove the particle sur
   assert.match(light,/filter: brightness\(0\) saturate\(100%\)/);
   assert.match(layout,/theme-color-meta.*#f7f8fa/);
 });
+
+test('open light hero preserves the source mark geometry and the live canvas', async () => {
+  const original=await readFile(new URL('../../public/brand/xravity-mark.svg',import.meta.url),'utf8');
+  const adapted=await readFile(new URL('../../public/brand/xravity-mark-light.svg',import.meta.url),'utf8');
+  const geometry=svg=>svg.replace(/#[a-f0-9]{6}/gi,'#COLOR')
+    .replace(/(stop-opacity|stroke-opacity)="[^"]*"/g,'$1="OPACITY"').trim();
+  assert.equal(geometry(adapted),geometry(original),'light mark may change only colors and glow opacity');
+  const hero=await readFile(new URL('../../src/components/Hero.astro',import.meta.url),'utf8');
+  assert.equal((hero.match(/<canvas class="brand-network"/g)||[]).length,1);
+  assert.match(hero,/class="field-mark field-mark-dark" src="\/brand\/xravity-mark\.svg"/);
+  assert.match(hero,/class="field-mark field-mark-light" src="\/brand\/xravity-mark-light\.svg"/);
+  const field=light.match(/html\[data-theme="light"\] \.brand-field \{([\s\S]*?)\n\}/)?.[1]||'';
+  assert.match(field,/border-color: transparent/);
+  assert.match(field,/box-shadow: none/);
+  assert.match(field,/background: radial-gradient/);
+  assert.doesNotMatch(field,/url\(/);
+  assert.match(light,/mask-image: radial-gradient/);
+});

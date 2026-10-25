@@ -51,9 +51,30 @@ html[data-theme="light"] .hero-secondary {
 }
 html[data-theme="light"] .hero-secondary:hover { color: #835d25; }
 html[data-theme="light"] .brand-field {
-  border-color: rgba(176,141,76,.48);
-  border-radius: 10px;
-  box-shadow: 0 0 0 3px rgba(255,255,255,.85), 0 28px 70px -24px rgba(26,44,70,.28);
+  /* An open field, not a dark card pasted onto a white page. Keep its layout
+     slot and interactive canvas, but let the light and links dissolve at edges. */
+  overflow: visible;
+  border-color: transparent;
+  border-radius: 0;
+  background: radial-gradient(ellipse at 50% 49%, rgba(217,179,108,.22), rgba(217,179,108,.08) 36%, transparent 70%);
+  box-shadow: none;
+}
+html[data-theme="light"] .brand-network {
+  opacity: .7;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 28%, transparent 72%);
+  mask-image: radial-gradient(ellipse at center, #000 28%, transparent 72%);
+}
+html[data-theme="light"] .field-mark-dark { visibility: hidden; }
+html[data-theme="light"] .field-mark-light { visibility: visible; }
+html[data-theme="light"] :is(.field-heading,.field-footer) { color: #526075; }
+html[data-theme="light"] :is(.field-heading span:first-child,.field-footer span:last-child,.field-coordinate,.field-principle i) { color: #835d25; }
+html[data-theme="light"] .field-footer { border-top-color: rgba(131,93,37,.16); }
+html[data-theme="light"] .field-principle {
+  background: rgba(255,255,255,.68);
+  border-color: rgba(131,93,37,.2);
+  border-radius: 50px;
+  color: #253e5c;
+  box-shadow: 0 3px 14px rgba(25,44,71,.035);
 }
 html[data-theme="light"] .vision-section { background: #eef1f5; }
 html[data-theme="light"] .vision-player video {
@@ -86,9 +107,4 @@ html[data-theme="light"] :is(.theme-toggle,#back-to-top) {
   color: #253e5c;
   border-color: rgba(29,49,78,.16);
   box-shadow: 0 4px 18px rgba(25,44,71,.1);
-}
-@media (max-width: 900px) {
-  html[data-theme="light"] .brand-field {
-    box-shadow: 0 0 0 2px rgba(255,255,255,.9), 0 20px 45px -22px rgba(26,44,70,.26);
-  }
 }
