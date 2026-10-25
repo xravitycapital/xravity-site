@@ -1,17 +1,18 @@
 ---
 import StoryText from './StoryText.astro';
+import copy from '../../public/data/translations.json';
 ---
 <section id="hero">
   <div class="container hero-layout">
     <div class="hero-content">
       <p class="hero-tag"><StoryText zh="独立的工具  清醒的思考" en="Independent tools  clear thinking" /></p>
       <h1 class="hero-headline">
-        <span data-i18n="hero_title_1">Be more capable,</span>
-        <span data-i18n="hero_title_2">more independent,</span>
-        <span class="hero-accent" data-i18n="hero_title_3">more secure</span>
-        <span class="hero-tail" data-i18n="hero_title_4">in an AI-driven world.</span>
+        <span><StoryText zh={copy.zh.hero_title_1} en={copy.hero_title_1} /></span>
+        <span><StoryText zh={copy.zh.hero_title_2} en={copy.hero_title_2} /></span>
+        <span class="hero-accent"><StoryText zh={copy.zh.hero_title_3} en={copy.hero_title_3} /></span>
+        <span class="hero-tail"><StoryText zh={copy.zh.hero_title_4} en={copy.hero_title_4} /></span>
       </h1>
-      <p class="hero-sub" data-i18n="hero_sub">We build tools and share ideas that put AI's power in your hands. More possibility, without giving up your independence.</p>
+      <p class="hero-sub"><StoryText zh={copy.zh.hero_sub} en={copy.hero_sub} /></p>
       <div class="hero-actions">
         <a href="#products" class="hero-cta"><StoryText zh="探索我们的产品" en="Explore our products" /></a>
         <a href="/vision/" class="hero-secondary"><StoryText zh="为什么做这件事" en="Why we're building" /></a>
@@ -22,8 +23,8 @@ import StoryText from './StoryText.astro';
       <div class="workbench-top"><span>XR / LAB 01</span><span class="workbench-kicker"><StoryText zh="从想法到工具" en="From ideas to tools" /></span></div>
       <div class="workbench-product">
         <p class="workbench-label"><StoryText zh="正在打造" en="In the making" /></p>
-        <h2 data-i18n="tiljot_name">TilJot</h2>
-        <p data-i18n="tiljot_tagline">From your wrist to your cursor.</p>
+        <h2><StoryText zh={copy.zh.tiljot_name} en={copy.tiljot_name} /></h2>
+        <p><StoryText zh={copy.zh.tiljot_tagline} en={copy.tiljot_tagline} /></p>
       </div>
       <div class="workbench-flow" aria-hidden="true">
         <div class="watch-preview"><div class="watch-face"><div class="voice-wave">{[1,2,3,4,5,6,7].map(n=><i style={`--bar:${n}`}></i>)}</div><span><StoryText zh="说出想法" en="An idea, spoken" /></span></div></div>

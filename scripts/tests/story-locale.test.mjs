@@ -37,4 +37,7 @@ test('home has a distinct product-led entrance without replacing the cinematic v
   assert.doesNotMatch(home,/field-mark-dark|id="question"/);
   assert.match(vision,/field-mark-dark/);assert.doesNotMatch(vision,/hero-workbench/);
   const css=await source('src/styles/home.css');assert.match(css,/@media \(prefers-reduced-motion: reduce\)/);
+  const hero=await source('src/components/Hero.astro');
+  assert.match(hero,/StoryText zh=\{copy.zh.hero_title_1\} en=\{copy.hero_title_1\}/);
+  assert.doesNotMatch(hero,/data-i18n="hero_title_[1-4]"/,'the first paint must not wait for a translation fetch');
 });
