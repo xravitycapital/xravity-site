@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { limit = 4, showHeader = true, standalone = false } = Astro.props;
-const resources = await getCollection('resources');
+const resources = (await getCollection('resources')).filter(resource => standalone || !['Astro Documentation','Decap CMS'].includes(resource.data.title));
 resources.sort((a, b) => {
   const featuredDiff = Number(b.data.featured) - Number(a.data.featured);
   if (featuredDiff !== 0) return featuredDiff;
@@ -20,7 +20,7 @@ const categories = [...new Set(resources.map(resource => resource.data.category)
 const ResourceTitle = standalone ? 'h2' : 'h3';
 ---
 
-<section id="resources" class:list={{ 'content-page': standalone, 'resources-index-page': standalone }}>
+{(standalone || visibleResources.length > 0) && <section id="resources" data-field="gold" class:list={{ 'content-page': standalone, 'resources-index-page': standalone }}>
   <div class="container">
     {standalone && <ContentPageHeader kind="resources" />}
     {!standalone && showHeader && (
@@ -73,7 +73,7 @@ const ResourceTitle = standalone ? 'h2' : 'h3';
       }
     </div>
   </div>
-</section>
+</section>}
 
 <script>
   const search = document.getElementById('resourceSearch') as HTMLInputElement | null;

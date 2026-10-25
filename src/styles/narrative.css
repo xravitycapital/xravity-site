@@ -1,0 +1,107 @@
+/* Section 8 composition; supplied tokens and artwork, existing routes/CMS. */
+@font-face { font-family: 'Xravity Story SC'; src: url('/fonts/xravity-story-sans-900.ttf') format('truetype'); font-weight: 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Xravity Principle SC'; src: url('/fonts/xravity-principle-serif-600.ttf') format('truetype'); font-weight: 600; font-style: normal; font-display: swap; }
+.narrative-page { --xr-font-serif: 'Xravity Principle SC', 'Noto Serif SC', 'Songti SC', 'STSong', serif; }
+.narrative-page { background: transparent; }
+.narrative-page #particles { opacity: 1; }
+.narrative-page section { background-color: transparent; }
+.narrative-page .container { max-width: 1200px; }
+.narrative-page #hero { min-height: max(780px, 100svh); height: auto; padding: 145px 48px 100px; background: transparent; }
+.narrative-page .hero-layout { grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: 56px; }
+.narrative-page .hero-content { min-width: 0; }
+.narrative-page .brand-proposition { font-size: clamp(40px,4.8vw,72px); margin: 28px 0 36px; }
+.narrative-page .brand-proposition .zh { font-weight: 900; letter-spacing: -.025em; }
+.narrative-page .hero-commitments { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 0 0 30px; }
+.narrative-page .hero-commitments .xr-bi { font-size: clamp(20px,1.95vw,28px); }
+.narrative-page .hero-context { font-size: clamp(18px,1.65vw,24px); }
+.narrative-page .hero-actions { margin-top: 36px; gap: 12px; flex-wrap: wrap; }
+.narrative-page .hero-actions .xr-btn { font-size: 13px; min-height: 48px; justify-content: center; }
+.narrative-page .xr-btn { text-decoration: none; }
+.narrative-page .brand-field { min-height: 510px; }
+.narrative-page .xr-bi { min-width: 0; }
+.xr-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.narrative-page .xr-bi :is(.zh,.en) { margin: 0; }
+.narrative-page .xr-bi .zh { font-family: var(--xr-font-sans); text-wrap: balance; }
+.narrative-page .xr-bi :is(h1,h2,h3).zh, .narrative-page .hero-commitments .zh { font-family: 'Xravity Story SC', var(--xr-font-sans); }
+.narrative-page .xr-bi .en { font-family: var(--xr-font-sans); font-size: .62em; font-weight: 300; letter-spacing: 0; text-wrap: balance; }
+.narrative-page .story-section { padding: clamp(96px,15vh,180px) 48px; scroll-margin-top: 80px; overflow-x: clip; }
+.narrative-page .story-center { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 36px; }
+.narrative-page .story-center > * { max-width: 100%; }
+.narrative-page .story-center .xr-bi { align-items: center; }
+.narrative-page .story-heading { font-size: clamp(30px,3.65vw,56px); }
+.narrative-page .story-kicker { font-size: clamp(22px,2.5vw,38px); }
+.narrative-page .story-slam { font-size: clamp(40px,7.8vw,118px); }
+.narrative-page .story-slam .zh { font-weight: 900; }
+.narrative-page .standard-slam { font-size: clamp(34px,6.6vw,100px); }
+.narrative-page .story-question { min-height: 88svh; display: flex; align-items: center; }
+.narrative-page .story-turn { font-weight: 700; color: var(--xr-gold); }
+.narrative-page .story-body { white-space: pre-wrap; color: var(--xr-ink-2); line-height: 1.9; }
+.narrative-page .story-body-pair { font-size: clamp(18px,1.6vw,24px); }
+.narrative-page .story-body-pair .zh { font-weight: 500; line-height: 1.7; }
+.narrative-page .futures-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; margin: 48px 0; }
+.narrative-page .future-card { padding: clamp(28px,3.5vw,48px); display: flex; flex-direction: column; gap: 26px; justify-content: flex-end; min-height: 360px; }
+.narrative-page .future-card > .xr-bi:first-child { font-size: clamp(24px,2.3vw,36px); }
+.narrative-page .future-cold { background: radial-gradient(ellipse at 35% 15%,rgba(58,111,216,.23),transparent 70%), rgba(11,11,14,.64); }
+.narrative-page .future-cold:hover { border-color: rgba(127,147,189,.6); box-shadow: 0 0 45px -25px rgba(58,111,216,.5); }
+.narrative-page .future-gold { background: radial-gradient(ellipse at 65% 15%,rgba(217,179,108,.12),transparent 75%), rgba(11,11,14,.64); }
+.narrative-page .future-choice { text-align: center; align-items: center; }
+.narrative-page .promise-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin-top: 48px; }
+.narrative-page .promise-card { padding: 32px; }
+.narrative-page .promise-card > .xr-bi { font-size: 30px; margin-top: 24px; }
+.narrative-page .promise-card > .promise-detail { font-size: 20px; }
+.narrative-page .promise-number { font: 200 64px/1 var(--xr-font-sans); color: transparent; -webkit-text-stroke: 1px var(--xr-line-gold); }
+.narrative-page .blueprint-steps { list-style: none; display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); margin-top: 52px; border-top: 1px solid var(--xr-line); padding: 0; }
+.narrative-page .blueprint-step { padding: 28px 18px; border-right: 1px solid var(--xr-line); color: var(--xr-mute); }
+.narrative-page .blueprint-step:not(.is-current) :is(.zh,.step-number,.step-status) { color: var(--xr-mute); }
+.narrative-page .blueprint-step:last-child { border-right: 0; }
+.narrative-page .blueprint-step .xr-bi { font-size: 26px; margin-top: 20px; }
+.narrative-page .blueprint-step.is-current { opacity: 1; position: relative; }
+.narrative-page .blueprint-step.is-current::before { content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px; background: var(--xr-gold); box-shadow: 0 0 18px var(--xr-gold); }
+.narrative-page .step-number { font: 200 44px/1 var(--xr-font-sans); color: var(--xr-gold); }
+.narrative-page .step-status { display: block; margin-top: 16px; font: 500 11px/1.5 var(--xr-font-sans); letter-spacing: .2em; color: var(--xr-gold); }
+.narrative-page .product-prelude { margin: 24px 0 48px; }
+.narrative-page #products { background: transparent; padding: 96px 48px; }
+.narrative-page .product-card { background: linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01)); }
+.narrative-page .product-status { display: inline-block; border: 1px solid var(--xr-line-gold); border-radius: 999px; padding: 6px 12px; font-size: 12px; color: var(--xr-gold); }
+.narrative-page .story-quote { background: radial-gradient(ellipse at 50% 100%,rgba(128,92,32,.16),transparent 70%); }
+.narrative-page .founding-lines { font-size: clamp(28px,4vw,60px); line-height: 1.4; font-weight: 600; margin: 0; }
+.narrative-page .founding-lines span { display: block; font-family: var(--xr-font-serif); }
+.narrative-page .principle-gold { color: var(--xr-gold); margin-top: .24em; }
+.narrative-page .founding-english { font-size: clamp(17.36px,2.48vw,37.2px); color: var(--xr-mute); font-weight: 300; line-height: 1.4; max-width: 920px; margin: 0; }
+.narrative-page .story-standard { background: radial-gradient(ellipse at 50% 65%,rgba(217,179,108,.12),transparent 62%); }
+.narrative-page .story-standard .story-body-pair { max-width: 800px; }
+.narrative-page .join-people { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 56px; margin: 10px 0 24px; }
+.narrative-page .join-people .xr-bi { font-size: clamp(28px,3.2vw,48px); }
+.narrative-page footer .footer-brand { background: transparent; padding: 0; }
+.narrative-page footer .footer-brand img { width: 220px; height: auto; max-height: none; }
+.mobile-page-controls { display: none; }
+@media (max-width: 900px) {
+  #themeToggle, #back-to-top { display: none !important; }
+  .mobile-page-controls { display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .mobile-page-controls :is(button,a) { min-height: 44px; padding: 10px 14px; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--text); background: var(--bg-card); font: 500 14px/1.5 var(--font-sans); }
+  .narrative-page #hero { padding: 125px 20px 72px; min-height: 100svh; }
+  .narrative-page .hero-layout { grid-template-columns: 1fr; gap: 52px; }
+  .narrative-page .brand-proposition { font-size: clamp(36px,8.8vw,62px); }
+  .narrative-page .hero-commitments { grid-template-columns: 1fr; gap: 20px; }
+  .narrative-page .hero-commitments .xr-bi { font-size: 26px; }
+  .narrative-page .hero-context { font-size: 20px; }
+  .narrative-page .brand-field { min-height: 345px; margin-top: 0; }
+  .narrative-page .hero-actions { flex-direction: column; align-items: stretch; }
+  .narrative-page .story-section, .narrative-page #products { padding: 88px 20px; }
+  .narrative-page .story-question { min-height: 78svh; }
+  .narrative-page .story-center { gap: 28px; }
+  .narrative-page .futures-grid, .narrative-page .promise-grid, .narrative-page .join-people { grid-template-columns: 1fr; gap: 20px; }
+  .narrative-page .future-card { min-height: 340px; }
+  .narrative-page .blueprint-steps { grid-template-columns: 1fr; }
+  .narrative-page .blueprint-step { border-right: 0; border-bottom: 1px solid var(--xr-line); display: grid; grid-template-columns: 50px 1fr; column-gap: 20px; align-items: start; }
+  .narrative-page .blueprint-step .xr-bi { margin-top: 0; }
+  .narrative-page .step-status { grid-column: 2; margin-top: 12px; }
+  .narrative-page .join-people { margin-block: 10px; gap: 32px; }
+  .narrative-page .founding-lines { font-size: clamp(26px,6.4vw,36px); }
+  .narrative-page .founding-english { font-size: clamp(16.12px,3.968vw,22.32px); }
+}
+
+.narrative-page .xr-phrase { display: inline-block; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .narrative-page *, .narrative-page *::before, .narrative-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

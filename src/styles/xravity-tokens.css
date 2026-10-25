@@ -1,0 +1,170 @@
+/* =====================================================================
+   Xravity design tokens + base components
+   Extracted from the vision film (Xravity-Vision-v10). Dark-first.
+   ===================================================================== */
+
+:root {
+  /* ---------- colour ---------- */
+  --xr-bg:            #0B0B0E;   /* neutral near-black, never pure #000 for pages */
+  --xr-bg-raised:     #121217;   /* cards, nav on scroll */
+  --xr-bg-sunken:     #07070A;
+  --xr-line:          rgba(241, 242, 245, 0.08);   /* hairlines on dark */
+  --xr-line-gold:     rgba(217, 179, 108, 0.45);   /* gold rules */
+
+  --xr-ink:           #F1F2F5;   /* primary text */
+  --xr-ink-2:         #C3C8D4;   /* secondary text, English companions on emphasis */
+  --xr-mute:          #8D93A3;   /* English companion lines, meta */
+  --xr-faint:         #6E7484;   /* captions, footnotes */
+
+  --xr-gold:          #D9B36C;   /* champagne gold: the brand accent ("power distributes") */
+  --xr-gold-light:    #EFD9A8;   /* English under gold Chinese, hover */
+  --xr-gold-hi:       #F8EAC4;   /* top of gold gradient */
+  --xr-gold-deep:     #9C7A3C;   /* bottom of gold gradient */
+  --xr-gold-glow:     rgba(217, 179, 108, 0.45);
+
+  --xr-cold:          #3A6FD8;   /* cold blue: ONLY for "power concentrates" / the problem */
+  --xr-cold-light:    #C8D6F5;
+  --xr-cold-mid:      #7F93BD;
+
+  --xr-gold-gradient: linear-gradient(180deg, var(--xr-gold-hi) 0%, var(--xr-gold) 55%, var(--xr-gold-deep) 100%);
+  --xr-fog-gold:      radial-gradient(ellipse 120% 70% at 50% 100%, rgba(128, 92, 32, 0.55) 0%, rgba(128, 92, 32, 0) 70%);
+  --xr-fog-cold:      radial-gradient(ellipse 120% 70% at 50% 80%, rgba(30, 55, 120, 0.55) 0%, rgba(30, 55, 120, 0) 70%);
+  --xr-vignette:      radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,0.7) 100%);
+
+  /* ---------- type ---------- */
+  --xr-font-sans:  "Inter", "Noto Sans SC", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  --xr-font-serif: "Noto Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", "SimSun", serif;   /* principles & quotes only */
+
+  /* film sizes at 1080p → fluid web sizes */
+  --xr-size-slam:    clamp(56px, 8.8vw, 160px);  /* single-line punch: 它为谁服务？ / 而是一套开放标准 */
+  --xr-size-display: clamp(40px, 6vw, 96px);     /* hero statements */
+  --xr-size-h1:      clamp(32px, 4.2vw, 72px);   /* section headline (zh 72 @1080) */
+  --xr-size-h2:      clamp(24px, 2.8vw, 46px);   /* sub statements (zh 46 @1080) */
+  --xr-size-body:    clamp(16px, 1.15vw, 19px);
+  --xr-size-label:   12px;                        /* tracked caps label */
+  --xr-label-track:  0.5em;
+  --xr-en-ratio:     0.62;                        /* English companion = 62% of the Chinese size */
+
+  /* ---------- motion ---------- */
+  --xr-ease-out:     cubic-bezier(0.33, 1, 0.68, 1);    /* easeOutCubic: every entrance */
+  --xr-ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);    /* easeInOutCubic: camera / section transitions */
+  --xr-dur-char:     800ms;   /* each character's blur-in */
+  --xr-stagger-char: 45ms;
+  --xr-stagger-word: 60ms;
+  --xr-delay-en:     300ms;   /* English follows Chinese */
+  --xr-dur-slam:     320ms;
+  --xr-dur-out:      600ms;
+  --xr-dur-track:    1200ms;
+
+  /* ---------- layout ---------- */
+  --xr-max:          1200px;
+  --xr-gutter:       clamp(16px, 4vw, 48px);
+  --xr-section-y:    clamp(96px, 16vh, 200px);   /* generous: one idea per screen */
+  --xr-radius:       14px;
+
+  color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+html { background: var(--bg); }
+body.narrative-page {
+  margin: 0; background: transparent; /* the page colour lives on <html> so the fixed .xr-field canvas shows through */
+  color: var(--xr-ink);
+  font-family: var(--xr-font-sans); font-size: var(--xr-size-body); line-height: 1.7;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+.narrative-page ::selection { background: rgba(217, 179, 108, 0.35); color: var(--xr-ink); }
+
+/* fixed living background (sits behind everything; body must stay transparent) */
+.xr-field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; pointer-events: none; }
+
+/* ---------- typographic components ---------- */
+
+/* tracked label: 我们的愿景 · OUR VISION */
+.xr-label {
+  display: inline-flex; gap: 0.9em; align-items: center;
+  font-size: var(--xr-size-label); font-weight: 600; letter-spacing: var(--xr-label-track); text-transform: uppercase;
+  flex-wrap: wrap; justify-content: center; row-gap: 0.4em;
+  color: var(--xr-gold);
+}
+.xr-label .zh { letter-spacing: 0.2em; }
+
+/* bilingual pair: Chinese leads, English sits underneath at 62% */
+.xr-bi { display: flex; flex-direction: column; gap: 0.35em; }
+.xr-bi { font-size: var(--xr-size-h2); }            /* set the size on the pair; .zh is 1em, .en is 0.62em */
+.xr-bi .zh { font-size: 1em; font-weight: 800; letter-spacing: 0.01em; line-height: 1.25; white-space: pre-wrap; }
+.xr-bi .en { font-weight: 300; color: var(--xr-mute); line-height: 1.3; font-size: calc(1em * var(--xr-en-ratio)); white-space: pre-wrap; }
+.xr-bi.is-gold .zh { color: var(--xr-gold); }
+.xr-bi.is-gold .en { color: var(--xr-gold-light); }
+.xr-bi.is-cold .zh { color: var(--xr-cold-light); }
+.xr-bi.is-cold .en { color: var(--xr-cold-mid); }
+
+.xr-h1 { font-size: var(--xr-size-h1); }
+.xr-h2 { font-size: var(--xr-size-h2); }
+.xr-slam { font-size: var(--xr-size-slam); font-weight: 900; line-height: 1.1; letter-spacing: 0; }
+.xr-serif { font-family: var(--xr-font-serif); font-weight: 600; }
+
+/* metallic gold for the few hero words (AI, XRAVITY's X, 而是一套开放标准) */
+.xr-gold-text {
+  background: var(--xr-gold-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 28px var(--xr-gold-glow));
+}
+
+/* gold hairline rule that grows from the centre */
+.xr-rule { height: 1px; width: min(680px, 70%); margin: 0 auto; background: linear-gradient(90deg, transparent, var(--xr-line-gold) 20%, var(--xr-line-gold) 80%, transparent); transform-origin: center; }
+
+/* ---------- surfaces ---------- */
+.xr-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01));
+  border: 1px solid var(--xr-line); border-radius: var(--xr-radius);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: border-color 400ms var(--xr-ease-out), transform 400ms var(--xr-ease-out), box-shadow 400ms var(--xr-ease-out);
+}
+.xr-card:hover { border-color: rgba(217, 179, 108, 0.35); transform: translateY(-2px); box-shadow: 0 0 60px -20px var(--xr-gold-glow); }
+
+.xr-btn {
+  display: inline-flex; align-items: center; gap: 0.6em; padding: 0.85em 1.6em; border-radius: 999px;
+  font: 600 15px/1 var(--xr-font-sans); letter-spacing: 0.04em; cursor: pointer;
+  color: #17130B; background: var(--xr-gold-gradient); border: 0;
+  box-shadow: 0 0 0 1px rgba(248, 234, 196, 0.3) inset, 0 8px 40px -12px var(--xr-gold-glow);
+  transition: transform 300ms var(--xr-ease-out), box-shadow 300ms var(--xr-ease-out);
+}
+.xr-btn:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(248, 234, 196, 0.5) inset, 0 10px 50px -10px var(--xr-gold-glow); color: #17130B; }
+.xr-btn.is-ghost { background: transparent; color: var(--xr-ink); box-shadow: 0 0 0 1px var(--xr-line-gold) inset; }
+.xr-btn.is-ghost:hover { color: var(--xr-gold-light); }
+
+/* ---------- motion: entrances (driven by xravity-motion.js adding .is-in) ---------- */
+[data-xr] { --i: 0; }
+.xr-ch, .xr-wd { display: inline-block; white-space: pre; opacity: 0; filter: blur(12px); transform: translateY(0.35em);
+  transition: opacity var(--xr-dur-char) var(--xr-ease-out), filter var(--xr-dur-char) var(--xr-ease-out), transform var(--xr-dur-char) var(--xr-ease-out);
+  transition-delay: calc(var(--d, 0ms) + var(--i) * var(--xr-stagger-char)); }
+.xr-wd { filter: blur(8px); transform: translateY(0.25em); transition-delay: calc(var(--d, 0ms) + var(--i) * var(--xr-stagger-word)); }
+.is-in .xr-ch, .is-in .xr-wd { opacity: 1; filter: blur(0); transform: none; }
+
+/* slam: whole line punches in from 1.45x + blur */
+.xr-motion-ready [data-xr="slam"] { opacity: 0; transform: scale(1.45); filter: blur(18px);
+  transition: opacity var(--xr-dur-slam) var(--xr-ease-out), transform var(--xr-dur-slam) var(--xr-ease-out), filter var(--xr-dur-slam) var(--xr-ease-out); }
+.xr-motion-ready [data-xr="slam"].is-in { opacity: 1; transform: scale(1); filter: blur(0); }
+
+/* tracking: label letter-spacing expands as it fades in */
+.xr-motion-ready [data-xr="track"] { opacity: 0; letter-spacing: 0.1em; transition: opacity 500ms var(--xr-ease-out), letter-spacing var(--xr-dur-track) var(--xr-ease-out); }
+.xr-motion-ready [data-xr="track"].is-in { opacity: 1; letter-spacing: var(--xr-label-track); }
+
+/* rule grows from centre */
+.xr-motion-ready [data-xr="rule"] { transform: scaleX(0); transition: transform 1100ms var(--xr-ease-out); }
+.xr-motion-ready [data-xr="rule"].is-in { transform: scaleX(1); }
+
+/* fade-up for blocks (cards, images) */
+.xr-motion-ready [data-xr="fade"] { opacity: 0; transform: translateY(24px); filter: blur(6px); transition: opacity 900ms var(--xr-ease-out), transform 900ms var(--xr-ease-out), filter 900ms var(--xr-ease-out); transition-delay: var(--d, 0ms); }
+.xr-motion-ready [data-xr="fade"].is-in { opacity: 1; transform: none; filter: blur(0); }
+
+/* slow push-in while a section is on screen (film: every title creeps 3–4.5% larger) */
+.xr-push { transition: transform 6s linear; }
+.xr-push.is-in { transform: scale(1.035); }
+
+@media (max-width: 600px) { :root { --xr-label-track: 0.28em; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .xr-ch, .xr-wd, [data-xr] { opacity: 1 !important; filter: none !important; transform: none !important; transition: none !important; }
+  [data-xr="track"] { letter-spacing: var(--xr-label-track); }
+}

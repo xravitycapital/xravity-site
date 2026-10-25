@@ -7,7 +7,7 @@ const posts = await getCollection('blog', ({ data }) => !data.draft);
 posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
-<section id="blog">
+<section id="blog" data-field="gold">
   <div class="container">
     <div class="section-header">
       <div>

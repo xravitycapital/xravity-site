@@ -1,0 +1,30 @@
+---
+import '../../styles/xravity-tokens.css';
+import '../../styles/narrative.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import NarrativeHero from '../../components/NarrativeHero.astro';
+import Vision from '../../components/Vision.astro';
+import NarrativePromises from '../../components/NarrativePromises.astro';
+import NarrativeProduct from '../../components/NarrativeProduct.astro';
+import NarrativeSections from '../../components/NarrativeSections.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+---
+<BaseLayout narrative title="Xravity 愿景 — AI that works for you" description="让 AI 为你所用  更有能力  更独立  更安全">
+  <Nav />
+  <main>
+    <NarrativeHero />
+    <Vision />
+    <NarrativeSections part="question" />
+    <NarrativeSections part="futures" />
+    <NarrativePromises />
+    <NarrativeSections part="blueprint" />
+    <NarrativeProduct />
+    <NarrativeSections part="principle" />
+    <NarrativeSections part="standard" />
+    <NarrativeSections part="join" />
+    <Contact />
+  </main>
+  <Footer stacked />
+</BaseLayout>

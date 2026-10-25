@@ -1,9 +1,10 @@
 ---
 import siteData from '../data/site.json';
-const photos = siteData.gallery.photos || [];
+// Hide the supplied placeholder only on the homepage; CMS data stays intact.
+const photos = (siteData.gallery.photos || []).filter(photo => photo.caption?.toLowerCase() !== 'avatar');
 ---
 
-<section id="gallery">
+{photos.length > 0 && <section id="gallery" data-field="gold">
   <div class="container">
     <div class="section-header">
       <div>
@@ -34,7 +35,7 @@ const photos = siteData.gallery.photos || [];
       }
     </div>
   </div>
-</section>
+</section>}
 
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">

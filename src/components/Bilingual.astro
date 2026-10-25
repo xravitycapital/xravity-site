@@ -1,0 +1,9 @@
+---
+interface Props { zh: string; en: string; heading?: 'h1' | 'h2' | 'h3' | 'p' | 'span'; tone?: string; size?: string; motion?: string; class?: string; }
+const { zh, en, heading = 'h2', tone = '', size = '', motion = 'chars', class: extra = '' } = Astro.props;
+const Tag = heading;
+---
+<div class:list={['xr-bi', tone && `is-${tone}`, size, extra]}>
+  <Tag class="zh" lang="zh-CN" data-xr={motion}>{zh}</Tag>
+  <p class="en" lang="en" data-xr="words" data-xr-delay="300">{en}</p>
+</div>

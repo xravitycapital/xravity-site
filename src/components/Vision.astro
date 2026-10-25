@@ -1,10 +1,13 @@
-<section id="vision" class="vision-section" aria-labelledby="vision-title">
+---
+const principlesHref = Astro.url.pathname.startsWith('/vision/') ? '#principles' : '/vision/';
+---
+<section id="vision" class="vision-section" data-field="gold" aria-labelledby="vision-title">
   <div class="container vision-layout">
     <div class="vision-copy" data-brand-reveal>
       <p class="section-tag" data-i18n="vision_tag">The vision / 02:32</p>
-      <h2 id="vision-title" data-i18n="vision_title"><span class="title-line">Powerful AI.</span><span class="title-line">Power to you.</span></h2>
+      <h2 id="vision-title" data-i18n="vision_title"><span class="title-line">Powerful AI</span><span class="title-line">Power to you</span></h2>
       <p data-i18n="vision_intro">The question isn't only what AI can do. It's who gets to decide. This is the future we're building toward.</p>
-      <a href="#principles" class="vision-link" data-i18n="vision_link">Discover our principles</a>
+      <a href={principlesHref} class="vision-link" data-i18n="vision_link">Discover our principles</a>
     </div>
     <div class="vision-player" data-brand-reveal>
       <video controls preload="none" playsinline poster="/film/xravity-vision-poster.jpg" aria-label="Xravity vision film" data-i18n-aria="vision_video_label">

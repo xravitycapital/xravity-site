@@ -9,25 +9,23 @@ const logo = '/images/tiljot/tiljot-logo.png';
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#11182d" />
+    <meta name="theme-color" content="#0B0B0E" />
     <script is:inline>
       // Read the shared preference before first paint, without requiring storage access.
       (() => {
-        let theme = 'light';
         let lang = 'en';
         try {
-          if (localStorage.getItem('xravity_theme') === 'dark') theme = 'dark';
           if (localStorage.getItem('xravity_lang') === 'zh') lang = 'zh';
         } catch {}
-        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.theme = 'dark';
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#0d0d14' : '#fafaf7';
+        document.querySelector('meta[name="theme-color"]').content = '#0B0B0E';
       })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +45,7 @@ const logo = '/images/tiljot/tiljot-logo.png';
     <Analytics />
   </head>
   <body>
-    <header><a class="site-wordmark" href="/">Xravity</a><nav aria-label={c.navigation} data-tj-aria="navigation"><a href="/#products" data-tj-i18n="back">{c.back}</a><span data-tj-i18n="product">{c.product}</span><div class="preferences"><button id="tiljotLangToggle" type="button" aria-label={c.language}><strong>EN</strong> | 中文</button><button id="tiljotThemeToggle" type="button" aria-label={c.toDark}><span aria-hidden="true">☾</span><span class="theme-label">{c.dark}</span></button></div></nav></header>
+    <header><a class="site-wordmark" href="/">Xravity</a><nav aria-label={c.navigation} data-tj-aria="navigation"><a href="/#products" data-tj-i18n="back">{c.back}</a><span data-tj-i18n="product">{c.product}</span><div class="preferences"><button id="tiljotLangToggle" type="button" aria-label={c.language}><strong>EN</strong> | 中文</button></div></nav></header>
     <main>
       <section class="hero" aria-labelledby="product-title">
         <img class="logo" src={logo} width="600" height="600" alt={c.logo} data-tj-alt="logo" fetchpriority="high" />
@@ -56,7 +54,7 @@ const logo = '/images/tiljot/tiljot-logo.png';
         <p class="tagline" data-tj-i18n="tagline">{c.tagline}</p>
         <p class="intro"><span data-tj-i18n="introOne">{c.introOne}</span>{' '}<br class="desktop-break" /><span data-tj-i18n="introTwo">{c.introTwo}</span></p>
         <a class="contact" href="mailto:xravityai@outlook.com?subject=TilJot%20beta%20testing" data-tj-i18n="contact">{c.contact}</a>
-        <a id="tiljotBetaDownload" class="beta-download" href="https://tiljot-beta-downloads.netlify.app/?lang=en&amp;theme=light" referrerpolicy="no-referrer" data-tj-i18n="download" data-analytics-event="download_entry_click" data-analytics-id="tiljot-mac-beta">{c.download}</a>
+        <a id="tiljotBetaDownload" class="beta-download" href="https://tiljot-beta-downloads.netlify.app/?lang=en&amp;theme=dark" referrerpolicy="no-referrer" data-tj-i18n="download" data-analytics-event="download_entry_click" data-analytics-id="tiljot-mac-beta">{c.download}</a>
         <p class="availability" data-tj-i18n="availability">{c.availability}</p>
       </section>
       <section class="features" aria-label={c.capabilities} data-tj-aria="capabilities">
@@ -77,21 +75,11 @@ const logo = '/images/tiljot/tiljot-logo.png';
   import { tiljotCopy } from '../../data/tiljot-copy';
   let language: 'en' | 'zh' = 'en';
   const langToggle = document.getElementById('tiljotLangToggle')!;
-  const toggle = document.getElementById('tiljotThemeToggle')!;
-  const icon = toggle.querySelector('[aria-hidden]')!;
-  const label = toggle.querySelector('.theme-label')!;
-  function applyTheme(theme: string) {
-    const dark = theme === 'dark';
-    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-    const c = tiljotCopy[language];
-    toggle.setAttribute('aria-label', dark ? c.toLight : c.toDark);
-    icon.textContent = dark ? '☼' : '☾';
-    label.textContent = dark ? c.light : c.dark;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#0d0d14' : '#fafaf7');
+  function updateDownload() {
     const download = document.getElementById('tiljotBetaDownload') as HTMLAnchorElement;
     const address = new URL(download.href);
     address.searchParams.set('lang', language);
-    address.searchParams.set('theme', dark ? 'dark' : 'light');
+    address.searchParams.set('theme', 'dark');
     download.href = address.href;
   }
   function applyLanguage(lang: string) {
@@ -111,39 +99,26 @@ const logo = '/images/tiljot/tiljot-logo.png';
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', c.description);
     langToggle.innerHTML = language === 'zh' ? 'EN | <strong>中文</strong>' : '<strong>EN</strong> | 中文';
     langToggle.setAttribute('aria-label', c.language);
-    applyTheme(document.documentElement.dataset.theme || 'light');
+    updateDownload();
   }
   function restoreLanguage() {
     try { applyLanguage(localStorage.getItem('xravity_lang') || 'en'); }
     catch { applyLanguage(document.documentElement.lang.startsWith('zh') ? 'zh' : 'en'); }
   }
-  function restoreTheme() {
-    try { applyTheme(localStorage.getItem('xravity_theme') || 'light'); }
-    catch { applyTheme(document.documentElement.dataset.theme || 'light'); }
-  }
-  restoreTheme();
   restoreLanguage();
   langToggle.addEventListener('click', () => {
     const next = language === 'en' ? 'zh' : 'en';
     applyLanguage(next);
     try { localStorage.setItem('xravity_lang', next); } catch {}
   });
-  toggle.addEventListener('click', () => {
-    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-    try { localStorage.setItem('xravity_theme', next); } catch {}
-  });
   window.addEventListener('storage', event => {
-    if (event.key === 'xravity_theme' || event.key === null) restoreTheme();
     if (event.key === 'xravity_lang' || event.key === null) restoreLanguage();
   });
-  window.addEventListener('pageshow', restoreTheme);
   window.addEventListener('pageshow', restoreLanguage);
 </script>
 
 <style>
-  :global(html) { --tj-bg: #fafaf7; --tj-text: #1a1a24; --tj-muted: #525e75; --tj-nav: #686879; --tj-card: #fff; --tj-border: rgba(0,0,0,.12); --tj-link: #3352ad; --tj-label: #586da2; --tj-wordmark: linear-gradient(135deg, #b8860b, #8b5e3c 40%, #4a6b6b); color-scheme: light; }
-  :global(html[data-theme="dark"]) { --tj-bg: #0d0d14; --tj-text: #e8e8f0; --tj-muted: #b4b4c8; --tj-nav: #b1b1c6; --tj-card: #181824; --tj-border: rgba(255,255,255,.12); --tj-link: #a6b8ff; --tj-label: #adbaff; --tj-wordmark: linear-gradient(135deg, #d4a843, #b8866c 40%, #5c8a8a); color-scheme: dark; }
+  :global(html) { --tj-bg: #0B0B0E; --tj-text: #e8e8f0; --tj-muted: #b4b4c8; --tj-nav: #b1b1c6; --tj-card: #181824; --tj-border: rgba(255,255,255,.12); --tj-link: #a6b8ff; --tj-label: #adbaff; --tj-wordmark: linear-gradient(135deg, #d4a843, #b8866c 40%, #5c8a8a); color-scheme: dark; }
   :global(*) { box-sizing: border-box; }
   :global(body) { margin: 0; background: var(--tj-bg); color: var(--tj-text); font: 16px/1.8 "Inter", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
   :global(a) { color: var(--tj-link); text-underline-offset: 4px; }

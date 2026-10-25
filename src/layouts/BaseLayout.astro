@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import '../styles/content.css';
-import '../styles/light.css';
 import Analytics from '../components/Analytics.astro';
 import translations from '../../public/data/translations.json';
 import { createHash } from 'node:crypto';
@@ -12,14 +11,16 @@ interface Props {
   lang?: string;
   image?: string;
   type?: string;
+  narrative?: boolean;
 }
 
 const {
   title = 'Xravity — AI, on your terms',
   description = 'Tools and ideas for a more capable, independent, and secure life in an AI-driven world.',
-  lang = 'en',
+  lang = 'zh',
   image = '/images/brand/xravity-og-image.jpg',
-  type = 'website'
+  type = 'website',
+  narrative = false
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString()?.replace(/\/$/, '') ?? 'https://xravity.xyz';
@@ -29,12 +30,8 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 const translationsVersion = createHash('sha256').update(JSON.stringify(translations)).digest('hex').slice(0, 12);
 ---
 <!DOCTYPE html>
-<html lang={lang === 'zh' ? 'zh-CN' : 'en'} data-theme="light">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'} data-theme="dark">
 <head>
-  <script is:inline>
-    // Apply a remembered theme before first paint, without changing first-visit defaults.
-    try { document.documentElement.dataset.theme = localStorage.getItem('xravity_theme') === 'dark' ? 'dark' : 'light'; } catch {}
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
@@ -43,7 +40,8 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
   <!-- Font preconnect for faster loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <meta id="theme-color-meta" name="theme-color" content="#f7f8fa" />
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
+  <meta id="theme-color-meta" name="theme-color" content="#0B0B0E" />
   <title>{title}</title>
 
   <!-- Open Graph -->
@@ -72,7 +70,7 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
   <link rel="apple-touch-icon" href="/brand/favicon-180.png" />
   <Analytics />
 </head>
-<body data-translations-version={translationsVersion}>
+<body class:list={{'narrative-page': narrative}} data-narrative={narrative ? 'true' : undefined} data-translations-version={translationsVersion}>
   <!-- Keep Identity callback parameters intact and on this same origin. -->
   <script>
     import { identityRedirect } from '../utils/identity-redirect.mjs';
@@ -85,11 +83,6 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
 
   <!-- Back to Top -->
   <button id="back-to-top" title="Back to top" aria-label="Back to top" data-i18n-title="back_to_top" data-i18n-aria="back_to_top" type="button">&#8593;</button>
-
-  <!-- Theme Toggle -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme" data-i18n-title="toggle_theme" data-i18n-aria="toggle_theme" type="button">
-    <span>&#9788;</span>
-  </button>
 
   <!-- Custom Cursor -->
   <div id="cursor-dot"></div>
@@ -105,32 +98,8 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
 
   <script>
     import { createBrandNetwork } from '../scripts/brand-network';
-    // ─── Theme ───
+    import { initNarrative } from '../scripts/narrative';
     let i18nMap: Record<string, string> = {};
-    const themeToggle = document.getElementById('themeToggle')!;
-    const themeColorMeta = document.getElementById('theme-color-meta') as HTMLMetaElement | null;
-    function applyTheme(theme: string) {
-      const dark = theme === 'dark';
-      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-      themeToggle.querySelector('span')!.textContent = dark ? '☾' : '☼';
-      if (themeColorMeta) themeColorMeta.content = dark ? '#0b0b0e' : '#f7f8fa';
-    }
-    function restoreTheme() {
-      try { applyTheme(localStorage.getItem('xravity_theme') || 'light'); }
-      catch { applyTheme(document.documentElement.dataset.theme || 'light'); }
-    }
-    restoreTheme();
-
-    themeToggle.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const next = isDark ? 'light' : 'dark';
-      applyTheme(next);
-      try { localStorage.setItem('xravity_theme', next); } catch {}
-    });
-    window.addEventListener('storage', event => {
-      if (event.key === 'xravity_theme' || event.key === null) restoreTheme();
-    });
-    window.addEventListener('pageshow', restoreTheme);
 
     // ─── Progress Bar & Back to Top ───
     const progressBar = document.getElementById('progress-bar')!;
@@ -147,8 +116,9 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
       sections.forEach(s => {
         if (sc >= s.offsetTop - 120) cur = s.id;
       });
-      document.querySelectorAll('.nav-links a').forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+      document.querySelectorAll('.nav-links > li:not(.mobile-page-controls) > a').forEach(a => {
+        const target = new URL(a.getAttribute('href') || '', window.location.href);
+        a.classList.toggle('active', target.pathname === location.pathname && (!target.hash || target.hash === '#' + cur));
       });
     });
     backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -187,7 +157,8 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
     }
 
     // ─── Particles ───
-    createBrandNetwork(document.getElementById('particles') as HTMLCanvasElement);
+    if (document.body.dataset.narrative === 'true') initNarrative();
+    else createBrandNetwork(document.getElementById('particles') as HTMLCanvasElement);
     document.querySelectorAll<HTMLCanvasElement>('.brand-network').forEach(canvas => createBrandNetwork(canvas, true));
 
     // ─── Toast helper ───
