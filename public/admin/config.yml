@@ -1,3 +1,5 @@
+locale: zh_Hans
+
 backend:
   name: git-gateway
   branch: main
@@ -14,7 +16,9 @@ public_folder: "/images/uploads"
 
 site_url: "https://xravity.xyz"
 display_url: "https://xravity.xyz"
-logo_url: "https://xravity.xyz/favicon.svg"
+logo:
+  src: "https://xravity.xyz/brand/favicon.svg"
+  show_in_header: true
 
 # ─── Collections ───
 collections:
@@ -69,7 +73,7 @@ collections:
         name: "lang"
         widget: "select"
         options: ["en", "zh"]
-        default: "en"
+        default: "zh"
         hint: "只影响辅助功能和页面语言标记，不会自动翻译正文。"
       - label: "草稿 / Draft"
         name: "draft"
@@ -117,6 +121,7 @@ collections:
         modes: ["rich_text", "raw"]
         buttons: ["bold", "italic", "strikethrough", "code", "link", "heading-two", "heading-three", "quote", "bulleted-list", "numbered-list"]
         editor_components: ["image", "code-block"]
+        sanitize_preview: true
         hint: "正文支持标题、列表、引用、代码和图片。"
 
   - name: "resources"
@@ -168,19 +173,19 @@ collections:
         name: "lang"
         widget: "select"
         options: ["en", "zh"]
-        default: "en"
+        default: "zh"
       - { label: "精选 / Featured", name: "featured", widget: "boolean", default: false }
 
   # ── Site Settings (edits src/data/site.json) ──
   - name: "settings"
     label: "站点设置 / Site Settings"
-    description: "首页文字、图片和联系方式。展开需要修改的区域即可。"
+    description: "联系方式、图片及兼容数据。当前首页中英界面文案在 translations.json 中维护，不由这里的旧版文字覆盖。"
     delete: false
     editor:
       preview: false
     files:
       - name: "general"
-        label: "General Settings"
+        label: "通用设置"
         file: "src/data/site.json"
         fields:
           - label: "Site"
@@ -203,6 +208,7 @@ collections:
             name: "hero"
             widget: "object"
             collapsed: true
+            hint: "旧版兼容数据：当前首页标题与按钮由中英界面词条控制，修改此组不会覆盖当前首页。"
             summary: "{{fields.tag}} — {{fields.name}}"
             fields:
               - { label: "Tag Line", name: "tag", widget: "string" }
@@ -213,6 +219,7 @@ collections:
             name: "about"
             widget: "object"
             collapsed: true
+            hint: "旧版兼容数据：当前关于区域文案由中英界面词条控制。"
             summary: "{{fields.title}}"
             fields:
               - { label: "Section Title", name: "title", widget: "string" }
@@ -226,6 +233,7 @@ collections:
             name: "timeline"
             widget: "list"
             collapsed: true
+            hint: "当前首页时间线配合中英界面词条显示；已定义的翻译会优先于此处文字。"
             summary: "{{fields.year}} — {{fields.title}}"
             fields:
               - { label: "Period", name: "year", widget: "string" }
@@ -264,6 +272,7 @@ collections:
             name: "contact"
             widget: "object"
             collapsed: true
+            hint: "链接会直接更新；标题和副标题优先使用中英界面词条。"
             summary: "{{fields.title}}"
             fields:
               - { label: "Section Title", name: "title", widget: "string" }

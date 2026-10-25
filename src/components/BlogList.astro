@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
-import { formatDate, readingTime } from '../utils/date';
-import siteData from '../data/site.json';
+import { readingTime } from '../utils/date';
+import LocalizedDate from './LocalizedDate.astro';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -23,13 +23,13 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
       {posts.length === 0
         ? <p style="text-align:center;color:var(--text-muted);padding:3rem;" data-i18n="blog_empty">No posts yet.</p>
         : posts.slice(0, 5).map(post => (
-            <a href={`/blog/${post.slug}`} class="blog-card">
+            <a href={`/blog/${post.slug}`} class="blog-card" lang={post.data.lang === 'zh' ? 'zh-CN' : 'en'}>
               {post.data.cover && (
                 <div class="blog-card-cover">
-                  <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+                  <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} loading="lazy" />
                 </div>
               )}
-              <div class="blog-date">{formatDate(post.data.date)}</div>
+              <div class="blog-date"><LocalizedDate date={post.data.date} /></div>
               <div class="blog-info">
                 <h3>{post.data.title}</h3>
                 <p>{post.data.excerpt}</p>

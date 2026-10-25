@@ -1,0 +1,63 @@
+/* The journal and library share the brand's editorial rhythm, not the hero's scale. */
+:root { --font-cjk: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif; }
+.content-page { min-height: 80vh; padding: 9rem 3rem 6rem; }
+.content-page-heading { display: grid; grid-template-columns: 1fr .8fr; align-items: end; gap: 4rem; margin-bottom: 3.5rem; }
+.content-page-title { font: 700 clamp(2.75rem, 6vw, 5rem)/1.08 var(--font-sans); letter-spacing: -.065em; color: var(--text); text-wrap: balance; }
+.content-page-heading .section-tag { margin-bottom: 1.1rem; }
+.content-page-intro { max-width: 26rem; color: var(--text-muted); font-size: .95rem; line-height: 1.8; }
+html:lang(zh-CN) .content-page-title { font-family: var(--font-cjk); letter-spacing: -.025em; line-height: 1.14; }
+html:lang(zh-CN) .content-page-intro { line-height: 1.9; }
+.content-page .blog-tools { margin-top: 0; }
+.blog-card { min-width: 0; padding-block: 2.2rem; }
+.blog-info { min-width: 0; }
+.blog-info :is(h2,h3) { font-family: var(--font-sans); font-size: clamp(1.3rem, 2.1vw, 1.7rem); font-weight: 700; line-height: 1.35; letter-spacing: -.035em; margin-bottom: .7rem; overflow-wrap: anywhere; }
+.blog-info p { max-width: 45rem; line-height: 1.8; }
+.blog-info :is(h2,h3), .blog-full-header h1, .resource-card :is(h2,h3), .related-card h3 { text-wrap: balance; }
+.blog-card:lang(zh-CN), .blog-full:lang(zh-CN), .resource-card:lang(zh-CN), .related-card:lang(zh-CN) { font-family: var(--font-cjk); }
+.blog-card:lang(zh-CN) .blog-info :is(h2,h3), .blog-full:lang(zh-CN) :is(h1,h2,h3,h4), .resource-card:lang(zh-CN) :is(h2,h3), .related-card:lang(zh-CN) h3 { font-family: var(--font-cjk); letter-spacing: 0; line-height: 1.35; }
+.blog-meta { gap: .45rem .6rem; margin-top: 1rem; }
+.blog-full-meta { flex-wrap: wrap; gap: .5rem .9rem; line-height: 1.8; }
+.blog-full-meta > span:last-child { display: flex; flex-wrap: wrap; gap: .4rem; }
+.blog-full-header { padding-bottom: 2rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--border-strong); }
+.blog-full-header h1 { font-family: var(--font-sans); font-size: clamp(2rem, 4.4vw, 3.25rem); line-height: 1.18; font-weight: 700; letter-spacing: -.04em; overflow-wrap: anywhere; margin-bottom: 1.3rem; }
+.article-back { display: inline-block; margin-bottom: 2rem; color: var(--text-muted); font-size: .8rem; text-decoration: none; border-bottom: 1px solid var(--border-strong); }
+.article-back:hover { color: var(--accent); border-color: var(--accent); }
+.post-body { overflow-wrap: anywhere; }
+.blog-full:lang(zh-CN) .post-body { line-height: 1.95; letter-spacing: .01em; }
+.post-body :is(h2,h3,h4) { font-family: var(--font-sans); font-weight: 700; line-height: 1.4; margin: 2.5rem 0 1rem; }
+.post-body :is(ul,ol) { padding-left: 1.4em; margin-bottom: 1.4rem; }
+.post-body li + li { margin-top: .45rem; }
+.post-body img { max-width: 100%; height: auto; }
+.post-body pre { max-width: 100%; overflow-x: auto; padding: 1.2rem; background: var(--bg-alt); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+.post-body table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.post-body :is(th,td) { padding: .6rem .8rem; border-bottom: 1px solid var(--border-strong); text-align: left; }
+.share-row { flex-wrap: wrap; align-items: center; }
+.share-btn { flex-shrink: 0; width: 44px; height: 44px; }
+.resource-card { min-width: 0; display: flex; flex-direction: column; padding: 2rem; }
+.resource-card[hidden] { display: none; }
+.resource-card :is(h2,h3) { font: 700 clamp(1.2rem, 2vw, 1.6rem)/1.25 var(--font-sans); letter-spacing: -.025em; overflow-wrap: anywhere; margin:0 0 .7rem; }
+.resource-card p { line-height: 1.8; overflow-wrap: anywhere; }
+.resource-card .blog-meta { margin-bottom: 1.5rem; }
+.resource-link { align-self: flex-start; margin-top: auto; padding-block: .3rem; }
+.blog-filter { min-height: 40px; }
+.blog-date { white-space: nowrap; }
+@media (max-width: 900px) {
+  .content-page { padding: 7.5rem 1.5rem 5rem; }
+  .content-page-heading { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+  .content-page-intro { max-width: 36rem; }
+  .blog-card, .blog-card:has(.blog-card-cover) { gap: .9rem; }
+  .blog-date { font-size: .72rem; }
+  .blog-card:hover { padding-left: 0; }
+}
+@media (max-width: 500px) {
+  .content-page { padding: 7rem 1.25rem 4.5rem; }
+  .content-page-title { font-size: clamp(2.5rem, 11vw, 3.3rem); }
+  .content-page-heading { gap: 1.25rem; }
+  .blog-info :is(h2,h3) { font-size: 1.4rem; }
+  .blog-full-header h1 { font-size: clamp(1.85rem, 7.5vw, 2.3rem); }
+  .blog-full-header { padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .blog-full-meta { font-size: .75rem; }
+  .resource-card { padding: 1.4rem; }
+  .blog-filters { justify-content: flex-start; }
+  .blog-search input { font-size: 1rem; }
+}

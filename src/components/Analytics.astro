@@ -2,14 +2,8 @@
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-60NSLRCLLD';
 ---
 
-{gaMeasurementId && (
-  <>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
-    <script define:vars={{ gaMeasurementId }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', gaMeasurementId);
-    </script>
-  </>
-)}
+<meta name="xravity-analytics-id" content={gaMeasurementId} />
+<script>
+  import { startAnalytics } from '../scripts/analytics.mjs';
+  startAnalytics(document.querySelector('meta[name="xravity-analytics-id"]')?.getAttribute('content'));
+</script>

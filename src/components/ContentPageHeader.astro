@@ -1,0 +1,14 @@
+---
+interface Props { kind: 'blog' | 'resources'; }
+const { kind } = Astro.props;
+const copy = kind === 'blog'
+  ? { tag: 'The journal', title: 'Notes & ideas', intro: 'Product experiments, AI workflows, and notes on building independently. Practical lessons worth carrying into your next project.' }
+  : { tag: 'The library', title: 'Tools & references', intro: 'A considered collection of tools, documentation, and references. Less noise, more things you can actually use.' };
+---
+<header class="content-page-heading">
+  <div>
+    <p class="section-tag" data-i18n={`${kind}_page_tag`}>{copy.tag}</p>
+    <h1 class="content-page-title" data-i18n={`${kind}_page_title`}>{copy.title}</h1>
+  </div>
+  <p class="content-page-intro" data-i18n={`${kind}_page_intro`}>{copy.intro}</p>
+</header>

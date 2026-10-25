@@ -1,12 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
+import ContentPageHeader from './ContentPageHeader.astro';
 
 interface Props {
   limit?: number;
   showHeader?: boolean;
+  standalone?: boolean;
 }
 
-const { limit = 4, showHeader = true } = Astro.props;
+const { limit = 4, showHeader = true, standalone = false } = Astro.props;
 const resources = await getCollection('resources');
 resources.sort((a, b) => {
   const featuredDiff = Number(b.data.featured) - Number(a.data.featured);
@@ -14,11 +16,14 @@ resources.sort((a, b) => {
   return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
 });
 const visibleResources = limit ? resources.slice(0, limit) : resources;
+const categories = [...new Set(resources.map(resource => resource.data.category))];
+const ResourceTitle = standalone ? 'h2' : 'h3';
 ---
 
-<section id="resources">
+<section id="resources" class:list={{ 'content-page': standalone, 'resources-index-page': standalone }}>
   <div class="container">
-    {showHeader && (
+    {standalone && <ContentPageHeader kind="resources" />}
+    {!standalone && showHeader && (
       <div class="section-header">
         <div>
           <p class="section-tag" data-i18n="resources_tag">Resources</p>
@@ -28,25 +33,38 @@ const visibleResources = limit ? resources.slice(0, limit) : resources;
       </div>
     )}
 
-    <p class="section-subtitle" data-i18n="resources_sub">
+    {!standalone && <p class="section-subtitle" data-i18n="resources_sub">
       Tools, references, and creative finds worth saving.
-    </p>
+    </p>}
+    {standalone && (
+      <div class="blog-tools resource-tools">
+        <label class="blog-search">
+          <span data-i18n="resources_search_label">Search resources</span>
+          <input id="resourceSearch" type="search" autocomplete="off" placeholder="Search tools, descriptions, or tags" data-i18n-placeholder="resources_search_placeholder" />
+        </label>
+        <div class="blog-filters" role="group" aria-label="Filter resources" data-i18n-aria="resources_filter_label">
+          <button type="button" class="blog-filter is-active" data-resource-filter="all" aria-pressed="true" data-i18n="blog_filter_all">All</button>
+          {categories.map(category => <button type="button" class="blog-filter" data-resource-filter={category} aria-pressed="false">{category}</button>)}
+        </div>
+      </div>
+    )}
+    {standalone && <p id="resourceNoResults" class="blog-no-results" role="status" hidden data-i18n="resources_no_results">No resources match your search.</p>}
 
     <div class="resource-grid">
       {visibleResources.length === 0
         ? <p class="empty-state" data-i18n="resources_empty">No resources yet.</p>
         : visibleResources.map(resource => (
-            <article class="resource-card">
+            <article class="resource-card" lang={resource.data.lang === 'zh' ? 'zh-CN' : 'en'} data-resource-card data-search={[resource.data.title, resource.data.description, ...resource.data.tags].join(' ').toLowerCase()} data-category={resource.data.category}>
               <div class="resource-card-top">
                 <span class="resource-category">{resource.data.category}</span>
                 {resource.data.featured && <span class="resource-featured" data-i18n="resource_featured">Featured</span>}
               </div>
-              <h3>{resource.data.title}</h3>
+              <ResourceTitle>{resource.data.title}</ResourceTitle>
               <p>{resource.data.description}</p>
               <div class="blog-meta">
                 {resource.data.tags.slice(0, 3).map(tag => <span class="tag">{tag}</span>)}
               </div>
-              <a href={resource.data.url} target="_blank" rel="noopener noreferrer" class="resource-link">
+              <a href={resource.data.url} target="_blank" rel="noopener noreferrer" class="resource-link" data-analytics-event="resource_open" data-analytics-id={resource.slug}>
                 <span data-i18n="resource_visit">Visit</span>
                 <span aria-hidden="true">&rarr;</span>
               </a>
@@ -56,3 +74,29 @@ const visibleResources = limit ? resources.slice(0, limit) : resources;
     </div>
   </div>
 </section>
+
+<script>
+  const search = document.getElementById('resourceSearch') as HTMLInputElement | null;
+  if (search) {
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-resource-card]')];
+    const filters = [...document.querySelectorAll<HTMLButtonElement>('[data-resource-filter]')];
+    let selected = 'all';
+    const render = () => {
+      let count = 0;
+      const query = search.value.trim().toLowerCase();
+      cards.forEach(card => {
+        const visible = (selected === 'all' || card.dataset.category === selected) && (!query || (card.dataset.search || '').includes(query));
+        card.hidden = !visible;
+        if (visible) count++;
+      });
+      const empty = document.getElementById('resourceNoResults');
+      if (empty) empty.hidden = count > 0;
+    };
+    search.addEventListener('input', render);
+    filters.forEach(filter => filter.addEventListener('click', () => {
+      selected = filter.dataset.resourceFilter || 'all';
+      filters.forEach(button => { const active = button === filter; button.classList.toggle('is-active', active); button.setAttribute('aria-pressed', String(active)); });
+      render();
+    }));
+  }
+</script>

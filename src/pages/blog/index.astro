@@ -3,7 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
-import { formatDate, readingTime } from '../../utils/date';
+import { readingTime } from '../../utils/date';
+import LocalizedDate from '../../components/LocalizedDate.astro';
+import ContentPageHeader from '../../components/ContentPageHeader.astro';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -17,10 +19,9 @@ const filterOptions = [...filterOptionMap.values()].sort((a, b) => a.localeCompa
 
 <BaseLayout title="Blog — Xravity" description="Xravity 的实践、产品与思考：在 AI 驱动的世界里，更有能力、更加独立，也更加安全。">
   <Nav />
-  <section class="blog-page-section">
+  <main><section class="content-page blog-index-page">
     <div class="container">
-      <p class="section-tag" data-i18n="blog_tag">03 · Blog</p>
-      <h1 class="section-title" data-i18n="blog_title">Blog</h1>
+      <ContentPageHeader kind="blog" />
 
       {posts.length === 0 ? (
         <p class="blog-empty" data-i18n="blog_empty_admin">No posts yet. Start writing with Decap CMS at /admin.</p>
@@ -39,13 +40,13 @@ const filterOptions = [...filterOptionMap.values()].sort((a, b) => a.localeCompa
             </label>
             <div class="blog-filters" role="group" aria-label="Filter blog posts" data-i18n-aria="blog_filter_group_label">
               <span class="blog-filter-label" data-i18n="blog_filter_label">Filter by</span>
-              <button type="button" class="blog-filter is-active" data-filter="all" data-i18n="blog_filter_all">All</button>
+              <button type="button" class="blog-filter is-active" data-filter="all" data-i18n="blog_filter_all" aria-pressed="true">All</button>
               {filterOptions.map(filter => (
-                <button type="button" class="blog-filter" data-filter={filter.toLowerCase()}>{filter}</button>
+                <button type="button" class="blog-filter" data-filter={filter.toLowerCase()} aria-pressed="false">{filter}</button>
               ))}
             </div>
           </div>
-          <p class="blog-no-results" id="blogNoResults" data-i18n="blog_no_results" hidden>No posts match your search.</p>
+          <p class="blog-no-results" id="blogNoResults" data-i18n="blog_no_results" role="status" hidden>No posts match your search.</p>
 
           <div class="blog-list" id="blogList">
             {posts.map(post => {
@@ -68,7 +69,7 @@ const filterOptions = [...filterOptionMap.values()].sort((a, b) => a.localeCompa
                       <img src={post.data.cover} alt={post.data.coverAlt || post.data.title} loading="lazy" />
                     </div>
                   )}
-                  <div class="blog-date">{formatDate(post.data.date)}</div>
+                  <div class="blog-date"><LocalizedDate date={post.data.date} /></div>
                   <div class="blog-info">
                     <h2>{post.data.title}</h2>
                     <p>{post.data.excerpt}</p>
@@ -85,7 +86,7 @@ const filterOptions = [...filterOptionMap.values()].sort((a, b) => a.localeCompa
         </>
       )}
     </div>
-  </section>
+  </section></main>
   <Footer />
 </BaseLayout>
 
@@ -118,7 +119,10 @@ const filterOptions = [...filterOptionMap.values()].sort((a, b) => a.localeCompa
   filters.forEach(filter => {
     filter.addEventListener('click', () => {
       activeFilter = filter.dataset.filter || 'all';
-      filters.forEach(item => item.classList.toggle('is-active', item === filter));
+      filters.forEach(item => {
+        item.classList.toggle('is-active', item === filter);
+        item.setAttribute('aria-pressed', String(item === filter));
+      });
       renderBlogResults();
     });
   });

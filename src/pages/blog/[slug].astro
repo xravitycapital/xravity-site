@@ -5,7 +5,8 @@ import Footer from '../../components/Footer.astro';
 import GiscusComment from '../../components/GiscusComment.astro';
 import StructuredData from '../../components/StructuredData.astro';
 import { getCollection } from 'astro:content';
-import { formatDate, readingTime } from '../../utils/date';
+import { readingTime } from '../../utils/date';
+import LocalizedDate from '../../components/LocalizedDate.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -49,13 +50,14 @@ const contentLanguage = post.data.lang === 'zh' ? 'zh-CN' : 'en';
     image={post.data.cover}
   />
   <Nav />
-  <section class="blog-page-section">
+  <main><section class="content-page article-page">
     <div class="container">
       <article class="blog-full" lang={contentLanguage}>
+        <a class="article-back" href="/blog/" data-i18n="back_to_blog">Back to the journal</a>
         <div class="blog-full-header">
           <h1>{post.data.title}</h1>
           <div class="blog-full-meta">
-            <span>{formatDate(post.data.date)}</span>
+            <LocalizedDate date={post.data.date} />
             <span>·</span>
             <span>{readMin} <span data-i18n="min_read">min read</span></span>
             {post.data.tags && post.data.tags.length > 0 && (
@@ -68,7 +70,7 @@ const contentLanguage = post.data.lang === 'zh' ? 'zh-CN' : 'en';
         {post.data.cover && (
           <img
             src={post.data.cover}
-            alt={post.data.title}
+            alt={post.data.coverAlt || post.data.title}
             class="blog-cover-image"
             loading="eager"
             width="720"
@@ -113,7 +115,7 @@ const contentLanguage = post.data.lang === 'zh' ? 'zh-CN' : 'en';
                 href={`/blog/${related.slug}`}
                 lang={related.data.lang === 'zh' ? 'zh-CN' : 'en'}
               >
-                <span class="related-card-date">{formatDate(related.data.date)}</span>
+                <span class="related-card-date"><LocalizedDate date={related.data.date} /></span>
                 <h3>{related.data.title}</h3>
                 <p>{related.data.excerpt}</p>
                 <span class="related-card-link" data-i18n="read_article">Read article</span>
@@ -126,7 +128,7 @@ const contentLanguage = post.data.lang === 'zh' ? 'zh-CN' : 'en';
       <!-- Giscus Comments -->
       <GiscusComment discussionKey={post.slug} />
     </div>
-  </section>
+  </section></main>
   <Footer />
 
   <script>

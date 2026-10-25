@@ -1,212 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
+---
+import { getCollection } from 'astro:content';
+const posts = await getCollection('blog');
+const resources = await getCollection('resources');
+const published = posts.filter(post => !post.data.draft).length;
+const drafts = posts.length - published;
+const builtAt = new Date().toISOString();
+const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-60NSLRCLLD';
+---
+<!doctype html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta name="referrer" content="no-referrer" />
-  <title>Content Manager — Xravity</title>
-  <style>
-    :root { color-scheme: dark; }
-    body { margin: 0; background: #0d0d14; font-family: system-ui, sans-serif; }
-    #login-prompt {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #e8e8f0;
-      gap: 1.5rem;
-      padding: 2rem;
-      text-align: center;
-    }
-    #login-prompt h1 { font-size: 1.4rem; font-weight: 500; margin: 0; }
-    #login-prompt p { color: #aaaabd; font-size: 0.9rem; line-height: 1.6; margin: 0; max-width: 32rem; }
-    #status-text[data-tone="error"] { color: #f08b81; }
-    #status-text[data-tone="success"] { color: #d4a843; }
-    #login-prompt button {
-      padding: 0.85rem 2.5rem;
-      font-size: 1rem;
-      border: 1.5px solid #d4a843;
-      background: transparent;
-      color: #d4a843;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
-    }
-    #login-prompt button:hover:not(:disabled) { background: #d4a843; color: #0d0d14; }
-    #login-prompt button:focus-visible { outline: 3px solid #f0d58a; outline-offset: 4px; }
-    #login-prompt button:disabled { opacity: 0.4; cursor: not-allowed; }
-    #retryBtn { display: none; }
-    .spinner {
-      display: inline-block;
-      width: 22px; height: 22px;
-      border: 2px solid #333;
-      border-top-color: #d4a843;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      vertical-align: middle;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
-    #nc-root { min-height: 100vh; }
-  </style>
+  <title>管理与维护 — Xravity</title>
+  <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/admin/shell.css" />
+  <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
 </head>
-<body>
-  <main id="login-prompt" aria-labelledby="admin-title">
-    <h1 id="admin-title">Content Manager</h1>
-    <p id="status-text" role="status" aria-live="polite">Checking authentication…</p>
-    <div>
-      <button id="loginBtn" type="button" disabled>Login with Netlify Identity</button>
-      <button id="retryBtn" type="button">Retry</button>
+<body data-identity-url="https://xravity.xyz/.netlify/identity">
+  <header class="admin-bar">
+    <a class="admin-brand" href="/" aria-label="返回 Xravity"><img src="/brand/xravity-lockup-horizontal.svg" width="438" height="100" alt="Xravity" /></a>
+    <span class="admin-bar-label">管理与维护</span>
+    <nav aria-label="后台导航">
+      <button id="overviewBtn" type="button" hidden>维护总览</button>
+      <a href="/" target="_blank" rel="noopener noreferrer">查看网站 ↗</a>
+      <button id="logoutBtn" type="button" hidden>退出登录</button>
+    </nav>
+  </header>
+
+  <main id="login-prompt" class="admin-login" aria-labelledby="admin-title">
+    <p class="admin-eyebrow">OWNER WORKSPACE</p>
+    <h1 id="admin-title">专心创作<br />其余交给系统</h1>
+    <p>使用原有管理员账号登录，管理文章、资源和网站设置。</p>
+    <p id="status-text" class="admin-status" role="status" aria-live="polite">正在连接登录服务…</p>
+    <div class="admin-actions">
+      <button id="loginBtn" type="button" class="admin-primary" disabled>登录管理后台</button>
+      <button id="retryBtn" type="button" hidden>重新连接</button>
     </div>
+    <p class="admin-note">仅限受邀管理员。这里不收集访问统计，也不提供公开注册。</p>
   </main>
-  <div id="nc-root" aria-live="polite"></div>
 
-  <script is:inline>
-    (function () {
-      var prompt = document.getElementById('login-prompt');
-      var loginBtn = document.getElementById('loginBtn');
-      var retryBtn = document.getElementById('retryBtn');
-      var statusText = document.getElementById('status-text');
-      var cmsStarted = false;
-      var authTimer = null;
-      var identityScript = null;
-
-      function setStatus(message, tone) {
-        if (!statusText) return;
-        statusText.textContent = message;
-        statusText.dataset.tone = tone || '';
-      }
-
-      function showRetry() {
-        if (retryBtn) retryBtn.style.display = 'inline-block';
-        if (loginBtn) loginBtn.style.display = 'none';
-      }
-
-      function clearAuthTimer() {
-        if (authTimer) window.clearTimeout(authTimer);
-        authTimer = null;
-      }
-
-      function startCMS() {
-        if (cmsStarted) return;
-        cmsStarted = true;
-        clearAuthTimer();
-        if (prompt) prompt.style.display = 'none';
-
-        var cmsScript = document.createElement('script');
-        cmsScript.src = 'https://unpkg.com/decap-cms@^3.12.0/dist/decap-cms.js';
-        cmsScript.async = true;
-        cmsScript.onload = function () {
-          var previewScript = document.createElement('script');
-          previewScript.src = '/admin/preview.js';
-          previewScript.async = true;
-          document.body.appendChild(previewScript);
-        };
-        cmsScript.onerror = function () {
-          cmsStarted = false;
-          if (prompt) prompt.style.display = 'flex';
-          setStatus('The editor could not load. Check your connection and retry.', 'error');
-          showRetry();
-        };
-        document.body.appendChild(cmsScript);
-      }
-
-      function initializeIdentity() {
-        var widget = window.netlifyIdentity;
-        if (!widget) {
-          setStatus('Authentication is unavailable. Check your connection and retry.', 'error');
-          showRetry();
-          return;
-        }
-
-        var hash = window.location.hash;
-        var hasToken = hash && (
-          hash.indexOf('invite_token') !== -1 ||
-          hash.indexOf('recovery_token') !== -1 ||
-          hash.indexOf('confirmation_token') !== -1
-        );
-
-        widget.on('init', function (user) {
-          clearAuthTimer();
-          if (hasToken) {
-            setStatus('Finish setting your password in the Identity window.', 'success');
-            return;
-          }
-          if (user) {
-            setStatus('Welcome back. Loading the editor…', 'success');
-            if (loginBtn) loginBtn.style.display = 'none';
-            startCMS();
-          } else {
-            setStatus('Sign in to edit and publish your site.', '');
-            if (loginBtn) {
-              loginBtn.disabled = false;
-              loginBtn.style.display = 'inline-block';
-            }
-          }
-        });
-
-        widget.on('login', function (user) {
-          if (user && !cmsStarted) {
-            setStatus('Login successful. Loading the editor…', 'success');
-            if (loginBtn) loginBtn.style.display = 'none';
-            startCMS();
-          }
-        });
-
-        widget.on('error', function () {
-          clearAuthTimer();
-          setStatus('Authentication failed. Please retry or check Netlify Identity.', 'error');
-          if (loginBtn) loginBtn.disabled = false;
-          showRetry();
-        });
-
-        widget.on('logout', function () { window.location.reload(); });
-        widget.init();
-
-        authTimer = window.setTimeout(function () {
-          setStatus('Authentication is taking too long. Check your connection and retry.', 'error');
-          if (loginBtn) loginBtn.disabled = false;
-          showRetry();
-        }, 10000);
-
-        if (hasToken) {
-          if (loginBtn) loginBtn.style.display = 'none';
-          widget.open();
-        }
-      }
-
-      function loadIdentity() {
-        cmsStarted = false;
-        clearAuthTimer();
-        if (retryBtn) retryBtn.style.display = 'none';
-        if (loginBtn) {
-          loginBtn.style.display = 'inline-block';
-          loginBtn.disabled = true;
-        }
-        setStatus('Checking authentication…', '');
-
-        if (identityScript) identityScript.remove();
-        identityScript = document.createElement('script');
-        identityScript.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
-        identityScript.async = true;
-        identityScript.onload = initializeIdentity;
-        identityScript.onerror = function () {
-          setStatus('Authentication could not load. Check your connection and retry.', 'error');
-          showRetry();
-        };
-        document.head.appendChild(identityScript);
-      }
-
-      if (loginBtn) loginBtn.addEventListener('click', function () {
-        if (window.netlifyIdentity) window.netlifyIdentity.open();
-      });
-      if (retryBtn) retryBtn.addEventListener('click', loadIdentity);
-
-      loadIdentity();
-    })();
-  </script>
+  <main id="adminWorkspace" class="admin-workspace" hidden>
+    <section class="admin-heading" aria-labelledby="workspace-title">
+      <div><p class="admin-eyebrow">XRAVITY / WORKSPACE</p><h1 id="workspace-title">把想法变成下一次发布</h1></div>
+      <button id="editorBtn" type="button" class="admin-primary">进入内容编辑器</button>
+    </section>
+    <p id="editor-status" class="admin-status" role="status" aria-live="polite">文章和资源保存后提交至 main，由自动构建发布。开启草稿的文章不会公开。</p>
+    <section class="admin-counts" aria-label="站内内容概览">
+      <div><span>已发布文章</span><strong>{published}</strong><small>构建时的公开内容</small></div>
+      <div><span>文章草稿</span><strong>{drafts}</strong><small>不会显示在公开列表</small></div>
+      <div><span>收录资源</span><strong>{resources.length}</strong><small>在资源库中管理</small></div>
+    </section>
+    <div class="admin-grid">
+      <section class="admin-card" aria-labelledby="analytics-title">
+        <p class="admin-eyebrow">01 / ANALYTICS</p>
+        <h2 id="analytics-title">浏览与下载点击</h2>
+        <p>访问量、访客来源和事件次数在 GA4 查看。此页只提供入口，不读取你的 Google 数据，也不显示未经核实的数字。</p>
+        <a class="admin-link" href="https://analytics.google.com/analytics/web/" target="_blank" rel="noopener noreferrer">打开 Google Analytics ↗</a>
+        <p class="admin-note">选择 xravity.xyz 对应的数据流 · <code>{measurementId}</code></p>
+        <dl class="metric-guide">
+          <div><dt>页面浏览</dt><dd><code>page_view</code></dd></div>
+          <div><dt>下载入口点击</dt><dd><code>download_entry_click</code></dd></div>
+          <div><dt>文件链接点击</dt><dd><code>download_click</code></dd></div>
+          <div><dt>资源访问点击</dt><dd><code>resource_open</code></dd></div>
+        </dl>
+        <details><summary>这些数字该怎么看</summary><p>在 GA4 的实时报告查看近期活动，在“互动 → 事件”查看事件次数。按上方事件名称查找；标准报告有处理延迟，事件未出现时不代表次数为零。</p><p>点击下载入口不代表用户通过密码验证、下载成功或完成安装。实际下载完成量需要下载服务端单独接入，这一版不会混算。统计会受广告拦截、隐私设置和网络影响。</p></details>
+      </section>
+      <section class="admin-card" aria-labelledby="maintenance-title">
+        <p class="admin-eyebrow">02 / MAINTENANCE</p>
+        <h2 id="maintenance-title">发布与安全</h2>
+        <p id="security-status" class="security-status" role="status">正在核查后台注册策略…</p>
+        <div class="admin-links">
+          <a href="https://github.com/xravitycapital/xravity-site/actions" target="_blank" rel="noopener noreferrer">查看自动构建 ↗</a>
+          <a href="https://github.com/xravitycapital/xravity-site/commits/main/" target="_blank" rel="noopener noreferrer">发布记录与回滚 ↗</a>
+          <a href="https://github.com/xravitycapital/xravity-site/discussions" target="_blank" rel="noopener noreferrer">管理文章评论 ↗</a>
+          <a href="https://app.netlify.com/projects/xravity/identity?tab=registration" target="_blank" rel="noopener noreferrer">管理员与注册设置 ↗</a>
+        </div>
+        <details><summary>发布后没有更新怎么办</summary><p>先确认文章没有开启草稿，再检查 GitHub 构建和 Cloudflare 发布状态。保存成功不等于构建完成；若失败，先查看日志，不要重复提交同一篇内容。</p><p>设置了草稿仍会在仓库中保存。不要把密钥、密码或私人资料写入文章和站点设置。</p></details>
+      </section>
+    </div>
+    <footer class="admin-footer">本页内容概览生成于 <time datetime={builtAt}>{builtAt}</time> · 数据随每次成功构建更新</footer>
+  </main>
+  <section id="editorShell" class="editor-shell" aria-label="内容编辑器" hidden>
+    <p class="editor-note">编辑器采用浅色阅读界面 · 保存即提交，草稿不会公开 · 返回维护总览不会清空编辑器</p>
+    <div id="nc-root"></div>
+  </section>
+  <noscript><p class="admin-status">后台需要 JavaScript 才能登录和编辑。公开网站内容仍可正常阅读。</p></noscript>
+  <script is:inline src="/admin/admin.js"></script>
 </body>
 </html>
