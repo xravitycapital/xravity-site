@@ -36,6 +36,16 @@ const requiredKeys = [
   'comments_loading',
   'comments_retry',
   'comments_error',
+  'field_heading',
+  'field_footer',
+  'vision_tag',
+  'vision_title',
+  'vision_intro',
+  'vision_link',
+  'vision_video_label',
+  'vision_download',
+  'vision_credits',
+  'vision_accessibility',
 ];
 
 const translations = JSON.parse(await readFile(translationPath, 'utf8'));
@@ -55,6 +65,9 @@ for (const locale of ['en', 'zh']) {
       throw new Error(`Missing ${locale} translation: ${key}`);
     }
   }
+  if ((map.vision_title.match(/class="title-line"/g) || []).length !== 2) {
+    throw new Error(`Vision title must keep two complete phrases: ${locale}`);
+  }
 }
 
 for (const requiredFile of [
@@ -67,6 +80,12 @@ for (const requiredFile of [
   'public/admin/preview.css',
   'public/admin/robots.txt',
   'DEPLOY.md',
+  'public/brand/favicon.svg',
+  'public/brand/xravity-lockup-horizontal.svg',
+  'public/brand/xravity-mark.svg',
+  'public/images/brand/xravity-og-image.jpg',
+  'public/film/xravity-vision-poster.jpg',
+  'public/film/xravity-vision-web.mp4',
 ]) {
   await access(new URL(requiredFile, root));
 }
@@ -105,6 +124,14 @@ for (const requiredGuideText of ['Invite only', 'two-factor authentication', 'Fu
 
 if (!adminPage.includes('id="nc-root"')) {
   throw new Error('Admin config check failed: Decap mount point #nc-root');
+}
+
+const vision = await readFile(new URL('src/components/Vision.astro', root), 'utf8');
+if (!/preload="none"/.test(vision) || /<video[^>]*autoplay/.test(vision)) {
+  throw new Error('Vision film must load on demand and must not autoplay');
+}
+if (!vision.includes('Scott Buckley') || !vision.includes('CC BY 4.0')) {
+  throw new Error('Vision film attribution is missing');
 }
 
 console.log(`Content checks passed: ${requiredKeys.length} UI keys × 2 locales; Admin config checks passed.`);

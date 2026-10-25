@@ -1,0 +1,45 @@
+<section id="vision" class="vision-section" aria-labelledby="vision-title">
+  <div class="container vision-layout">
+    <div class="vision-copy" data-brand-reveal>
+      <p class="section-tag" data-i18n="vision_tag">The vision / 02:32</p>
+      <h2 id="vision-title" data-i18n="vision_title"><span class="title-line">Powerful AI.</span><span class="title-line">Power to you.</span></h2>
+      <p data-i18n="vision_intro">The question isn't only what AI can do. It's who gets to decide. This is the future we're building toward.</p>
+      <a href="#principles" class="vision-link" data-i18n="vision_link">Discover our principles</a>
+    </div>
+    <div class="vision-player" data-brand-reveal>
+      <video controls preload="none" playsinline poster="/film/xravity-vision-poster.jpg" aria-label="Xravity vision film" data-i18n-aria="vision_video_label">
+        <source src="/film/xravity-vision-web.mp4" type="video/mp4" />
+        <p><a href="/film/xravity-vision-web.mp4" data-i18n="vision_download">Open the vision film</a></p>
+      </video>
+      <div class="film-caption"><span>XRAVITY / VISION FILM</span><span>2026 · 02:32</span></div>
+      <p class="film-music">Music: ‘Patagonia’ by <a href="https://www.scottbuckley.com.au/library/patagonia/" target="_blank" rel="noopener noreferrer">Scott Buckley</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p>
+      <details class="film-credits">
+        <summary data-i18n="vision_credits">Film credits & accessibility</summary>
+        <p data-i18n="vision_accessibility">The film contains Chinese and English on-screen text. The core vision is also available as text in the principles below.</p>
+        <p>Historical images: Ljubljana Marshes Wheel — Petar Milošević (CC BY-SA 4.0); Steam engine model, MHS 78 — Rama (CC BY-SA 3.0 FR); BBN Interface Message Processor — Don DeBold (CC BY 2.0); iPhone generations — Yutaka Tsutano (CC BY 2.0). Courtesy of The Metropolitan Museum of Art, Library of Congress, NASA, U.S. Army, U.S. Department of Energy (public domain), Gary Todd and Daderot (CC0). People footage: Pexels. Web version resized and compressed from the supplied film; content unchanged.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<script>
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const revealItems = document.querySelectorAll<HTMLElement>('[data-brand-reveal]');
+  if (!motion.matches && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('brand-visible');
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.15 });
+    revealItems.forEach(item => { item.classList.add('brand-reveal'); observer.observe(item); });
+    motion.addEventListener('change', event => {
+      if (event.matches) { revealItems.forEach(item => item.classList.add('brand-visible')); observer.disconnect(); }
+    });
+  }
+  const film = document.querySelector<HTMLVideoElement>('#vision video');
+  // Never keep audio running when the visitor leaves the tab.
+  document.addEventListener('visibilitychange', () => { if (document.hidden) film?.pause(); });
+</script>

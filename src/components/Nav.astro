@@ -1,7 +1,7 @@
 <nav id="nav">
   <div class="nav-brand">
-    <a href="/#hero" class="nav-logo">Xravity</a>
-    <span class="nav-context" data-i18n="nav_context">Capability console</span>
+    <a href="/#hero" class="nav-logo" aria-label="Xravity"><img src="/brand/xravity-lockup-horizontal.svg" width="438" height="100" alt="Xravity" /></a>
+    <span class="nav-context" data-i18n="nav_context">Independent by design</span>
   </div>
 
   <!-- Hamburger toggle (mobile only) -->
@@ -71,5 +71,10 @@
       hamburger.setAttribute('aria-label', label);
       hamburger.setAttribute('title', label);
     });
+  });
+  document.addEventListener('xravity:i18n', () => {
+    const open = hamburger.getAttribute('aria-expanded') === 'true';
+    const label = (window as any).xravityT?.(open ? 'menu_close' : 'menu_open', open ? 'Close menu' : 'Open menu');
+    if (label) { hamburger.setAttribute('aria-label', label); hamburger.setAttribute('title', label); }
   });
 </script>
