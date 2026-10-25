@@ -127,6 +127,14 @@ if (!adminPage.includes('id="nc-root"')) {
 }
 
 const vision = await readFile(new URL('src/components/Vision.astro', root), 'utf8');
+// Editorial display copy is intentionally punctuation-free in Chinese.
+// Body/article copy is NOT stripped; its punctuation is necessary for reading.
+for (const key of ['hero_title_1', 'hero_title_2', 'hero_title_3', 'hero_title_4',
+  'vision_title', 'principles_title', 'products_title', 'about_title',
+  'tiljot_tagline', 'field_heading', 'field_footer', 'footer_motto']) {
+  const text = translations.zh[key].replace(/<[^>]*>/g, '');
+  if (/[，。]/.test(text)) throw new Error(`Chinese display copy should not use commas or full stops: ${key}`);
+}
 if (!/preload="none"/.test(vision) || /<video[^>]*autoplay/.test(vision)) {
   throw new Error('Vision film must load on demand and must not autoplay');
 }

@@ -887,6 +887,7 @@ section:nth-child(even) { background: var(--bg-alt); }
 /* Balance display headings instead of leaving a short orphan on the last line.
    Ordinary article/body text retains its natural reading flow. */
 :is(h1, h2, h3, h4) { text-wrap: balance; }
+.section-title .title-line { display: block; white-space: nowrap; }
 .blog-card { border-color: var(--border-strong); }
 .blog-card:hover { padding-left: 1rem; background: var(--accent-bg); }
 .resource-card, .skill-card { border-radius: var(--radius); box-shadow: none; }
@@ -985,20 +986,21 @@ html:lang(zh-CN) .signal-label small { font-size: 0.7rem; letter-spacing: 0.02em
 html:lang(zh-CN) .signal-caption { font-size: 0.7rem; line-height: 1.8; }
 html:lang(zh-CN) .section-title {
   font-family: var(--font-sans);
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   text-wrap: balance;
   line-break: strict;
 }
 html:lang(zh-CN) .principles-heading .section-title { max-width: 560px; }
 html:lang(zh-CN) :is(.principles-intro, .principle-card p, .about-text p, .product-description) { line-height: 1.95; }
-html:lang(zh-CN) .principle-card h3 { font-weight: 600; letter-spacing: 0.06em; }
+html:lang(zh-CN) .principle-card h3 { font-weight: 700; letter-spacing: 0.02em; }
 html:lang(zh-CN) .principle-card a { font-size: 0.8rem; }
 html:lang(zh-CN) .product-status { font-size: 0.75rem; }
-html:lang(zh-CN) .product-copy h3 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; letter-spacing: 0.04em; }
+html:lang(zh-CN) .product-copy h3 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: 0.01em; }
 html:lang(zh-CN) :is(.timeline-desc, .skill-level, .resource-description, .blog-info p) { line-height: 1.85; }
-html:lang(zh-CN) .footer-motto { font-size: 0.8rem; letter-spacing: 0.06em; }
+html:lang(zh-CN) .footer-motto { display: flex; justify-content: center; flex-wrap: wrap; gap: .35rem 1.2rem; font-size: 0.8rem; letter-spacing: 0.06em; }
+html:lang(zh-CN) .footer-motto span { white-space: nowrap; }
 html:lang(zh-CN) .post-body { line-height: 2; }
 html:lang(zh-CN) .post-body :is(h2, h3, h4) { letter-spacing: 0.02em; line-height: 1.55; }
 

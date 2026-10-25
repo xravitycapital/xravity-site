@@ -20,6 +20,9 @@ deployment instructions or a reason to remove existing functionality.
 - Vision headings keep two complete phrases in non-wrapping line spans, with
   type sized to the copy column rather than the viewport. Other display headings
   use balanced wrapping. Check both languages at 320–1920px before release.
+- Chinese display headlines omit ornamental commas and full stops, and use
+  deliberate meaning-based line breaks. This rule never strips punctuation from
+  article text, explanatory paragraphs or form/status messages.
 
 ## Files and motion
 
