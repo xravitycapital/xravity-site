@@ -7,11 +7,14 @@ deployment instructions or a reason to remove existing functionality.
 ## Shared brand, distinct website
 
 - Dark: neutral `#0b0b0e`, champagne `#d9b36c`, white `#f1f2f5`.
-- Light: warm paper `#f6f4ef`, ink `#17171b`, accessible deep gold `#8a6a2e`.
+- Light: platinum `#f7f8fa`, blue-black ink `#152033`, white surfaces, restrained
+  bronze `#835d25`. Primary actions use deep ink rather than a flat mustard fill.
 - Keep the three-line capability / independence / security hero, the selected
   self-hosted Chinese display font, separate UI language toggle, and light/dark
   switch. First visits remain Chinese + light; explicit preferences persist.
-- Use the supplied outlined SVG logos unchanged on a dark stage in both themes.
+- Preserve the supplied SVG files. Light navigation/footer use a monochrome ink
+  CSS treatment without a black badge; the hero field keeps the original gold
+  artwork on its dark stage in both themes. Dark navigation remains unchanged.
 - The field is a website-native interpretation, not a copy of all film scenes:
   connected nodes, travelling pulses, slow breathing, pointer attraction and
   elastic return. Do not replace the three commitments with four unrelated labels.

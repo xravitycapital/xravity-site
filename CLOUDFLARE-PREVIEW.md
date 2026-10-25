@@ -78,9 +78,13 @@ applicable quotas; this is not an unlimited or dependency-free backend.
 - Media upload and account-recovery links (recovery mail still targets original
   site settings unless separately adapted).
 - Contact form receipt verified in Netlify (not only HTTP 200).
-- Giscus currently permits formal/local origins in default-branch `giscus.json`.
-  Preview comments may be rejected; add only the exact verified preview origin
-  in a separate reviewed default-branch change if needed. Do not allow wildcards.
+- With owner approval, default-branch `giscus.json` now permits only the exact
+  verified preview origin in addition to the existing formal/local origins
+  (`7e3570ce289c8920b0e63548aa000ae8b49963ad`). No wildcards or new app permissions.
+  Verify the actual embedded discussion before treating comments as accepted.
+- Identity callback routing preserves search parameters before the fragment,
+  stays on the same origin, and does not store tokens. Unit coverage is not a
+  substitute for an owner-completed recovery email / password-reset test.
 - GA4 must stay off on preview/Admin; canonical URLs keep the formal domain.
 - Revisit dependency audit warnings before production migration. Existing Astro
   major-version advisories are not solved by moving static hosting; do not run
@@ -89,3 +93,22 @@ applicable quotas; this is not an unlimited or dependency-free backend.
 Only after acceptance: decide on production config, merge/review, switch the
 formal domain, verify HTTPS/redirects/auth again, then stop duplicate Netlify
 production builds. None of those cutover steps is automatic in this branch.
+
+## Verification record — October 25, 2026
+
+- Existing owner account saved a temporary article and uploaded cover through
+  the preview CMS. The automatic build published both on the preview alias.
+  The two test-only files were removed in a follow-up commit; both now return
+  404 and the Blog/RSS contain only the existing welcome article. No content
+  was added to main. CMS deletion itself was not verified.
+- The Giscus embed renders its reaction control, comment editor and GitHub
+  login link on the preview alias after the approved exact-origin addition.
+  No public test comment was posted.
+- Platinum/ink light surfaces retain the existing composition and original
+  particle implementation. At 390px, Chinese and English headline height and
+  total hero height match; 320px, 430px and desktop overflow checks pass.
+  Dark/shared layout and typography CSS remain unchanged.
+- Build, bilingual content validation, 29 logic tests and Worker type checking
+  pass. Light palette tests cover normal-text contrast on all three surfaces.
+- Domain/DNS cutover, owner-completed recovery and the production configuration
+  remain separate acceptance work, not implied by a successful preview build.

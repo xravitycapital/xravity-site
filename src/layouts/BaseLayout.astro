@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/content.css';
+import '../styles/light.css';
 import Analytics from '../components/Analytics.astro';
 import translations from '../../public/data/translations.json';
 import { createHash } from 'node:crypto';
@@ -42,7 +43,7 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
   <!-- Font preconnect for faster loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <meta id="theme-color-meta" name="theme-color" content="#f6f4ef" />
+  <meta id="theme-color-meta" name="theme-color" content="#f7f8fa" />
   <title>{title}</title>
 
   <!-- Open Graph -->
@@ -72,18 +73,11 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
   <Analytics />
 </head>
 <body data-translations-version={translationsVersion}>
-  <!-- Redirect Netlify Identity tokens to /admin/ (once only) -->
+  <!-- Keep Identity callback parameters intact and on this same origin. -->
   <script>
-    (function() {
-      var h = window.location.hash;
-      var key = 'xravity_id_redirect';
-      if (h && (h.includes('invite_token') || h.includes('recovery_token') || h.includes('confirmation_token') || h.includes('error'))) {
-        if (!sessionStorage.getItem(key)) {
-          sessionStorage.setItem(key, '1');
-          window.location.replace('/admin/' + h + window.location.search);
-        }
-      }
-    })();
+    import { identityRedirect } from '../utils/identity-redirect.mjs';
+    const identityTarget = identityRedirect(window.location.href);
+    if (identityTarget) window.location.replace(identityTarget);
   </script>
 
   <!-- Progress Bar -->
@@ -119,7 +113,7 @@ const translationsVersion = createHash('sha256').update(JSON.stringify(translati
       const dark = theme === 'dark';
       document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
       themeToggle.querySelector('span')!.textContent = dark ? '☾' : '☼';
-      if (themeColorMeta) themeColorMeta.content = dark ? '#0b0b0e' : '#f6f4ef';
+      if (themeColorMeta) themeColorMeta.content = dark ? '#0b0b0e' : '#f7f8fa';
     }
     function restoreTheme() {
       try { applyTheme(localStorage.getItem('xravity_theme') || 'light'); }

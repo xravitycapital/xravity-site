@@ -1,0 +1,94 @@
+/* Platinum / ink. Same composition, deliberately different surface treatment.
+   Every rule is light-only; the approved dark presentation stays untouched. */
+html[data-theme="light"] #nav {
+  background: rgba(255,255,255,.82);
+  border-bottom: 1px solid rgba(29,49,78,.09);
+}
+html[data-theme="light"] #nav.scrolled {
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 4px 24px rgba(25,44,71,.045);
+}
+/* Reuse the original outlined artwork as a monochrome ink wordmark, rather
+   than placing a black badge on the light navigation. Source SVGs stay intact. */
+html[data-theme="light"] :is(.nav-logo,.footer-brand) {
+  background: transparent;
+  padding-inline: 0;
+}
+html[data-theme="light"] :is(.nav-logo,.footer-brand) img {
+  filter: brightness(0) saturate(100%);
+  opacity: .88;
+}
+html[data-theme="light"] .nav-links a { color: #49576b; }
+html[data-theme="light"] .nav-links a:is(:hover,.active) { color: #835d25; }
+html[data-theme="light"] .lang-toggle {
+  background: #fff;
+  border-color: rgba(29,49,78,.16);
+}
+html[data-theme="light"] #hero {
+  background:
+    radial-gradient(ellipse at 86% 24%, rgba(157,183,215,.13), transparent 52%),
+    radial-gradient(ellipse at 9% 76%, rgba(255,255,255,.9), transparent 56%);
+}
+html[data-theme="light"] .hero-headline { color: #152033; }
+html[data-theme="light"] .hero-headline .hero-accent { color: #835d25; }
+html[data-theme="light"] .hero-headline .hero-tail { color: #526075; }
+html[data-theme="light"] .hero-cta {
+  background: #192b43;
+  border-color: #192b43;
+  color: #fff;
+  box-shadow: 0 7px 18px rgba(25,43,67,.13), inset 0 1px 0 rgba(255,255,255,.12);
+}
+html[data-theme="light"] .hero-cta::after { color: #e8cc94; }
+html[data-theme="light"] .hero-cta:hover {
+  background: #253e5c;
+  border-color: #253e5c;
+  color: #fff;
+  box-shadow: 0 11px 26px rgba(25,43,67,.19);
+}
+html[data-theme="light"] .hero-secondary {
+  color: #40536c;
+  border-bottom-color: rgba(29,49,78,.25);
+}
+html[data-theme="light"] .hero-secondary:hover { color: #835d25; }
+html[data-theme="light"] .brand-field {
+  border-color: rgba(176,141,76,.48);
+  border-radius: 10px;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.85), 0 28px 70px -24px rgba(26,44,70,.28);
+}
+html[data-theme="light"] .vision-section { background: #eef1f5; }
+html[data-theme="light"] .vision-player video {
+  border-color: rgba(29,49,78,.2);
+  box-shadow: 0 16px 36px -18px rgba(26,44,70,.3);
+}
+html[data-theme="light"] .principles-section { background: #fff; }
+html[data-theme="light"] :is(.resource-card,.skill-card,.product-card) {
+  background-color: #fff;
+  border-color: rgba(29,49,78,.13);
+  box-shadow: 0 6px 24px rgba(25,44,71,.045);
+}
+html[data-theme="light"] :is(.resource-card,.skill-card):hover {
+  border-color: rgba(131,93,37,.5);
+  box-shadow: 0 12px 32px rgba(25,44,71,.09);
+}
+html[data-theme="light"] .blog-card:hover { background: rgba(255,255,255,.88); }
+html[data-theme="light"] :is(.blog-search input,.contact-form input,.contact-form textarea) {
+  background: #fff;
+  border-color: rgba(29,49,78,.18);
+}
+html[data-theme="light"] :is(.blog-search input,.contact-form input,.contact-form textarea):focus {
+  border-color: #835d25;
+  box-shadow: 0 0 0 3px rgba(131,93,37,.08);
+}
+html[data-theme="light"] :is(.theme-toggle,#back-to-top) {
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  color: #253e5c;
+  border-color: rgba(29,49,78,.16);
+  box-shadow: 0 4px 18px rgba(25,44,71,.1);
+}
+@media (max-width: 900px) {
+  html[data-theme="light"] .brand-field {
+    box-shadow: 0 0 0 2px rgba(255,255,255,.9), 0 20px 45px -22px rgba(26,44,70,.26);
+  }
+}
