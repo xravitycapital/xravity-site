@@ -105,4 +105,8 @@ test('Chinese animation preserves phrase boundaries and never splits AI across l
   const phrases=heading.children.filter(x=>x.className==='xr-phrase');assert.equal(phrases.length,2);
   const latin=phrases[1].children.find(x=>x.className==='xr-phrase');assert.ok(latin);
   assert.equal(latin.children.map(x=>x.textContent).join(''),'AI');
+  const css=await readFile(new URL('src/styles/narrative.css',root),'utf8');
+  assert.match(css,/\.founding-lines > span \{ display: block/);
+  assert.doesNotMatch(css,/\.founding-lines span \{ display: block/);
+  assert.match(css,/\.narrative-page \.story-section \{ background-color: transparent/);
 });
