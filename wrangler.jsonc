@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  // Non-main builds upload an isolated version of the EXISTING Worker.
-  // Do not merge this preview-only configuration into main before cutover review.
+  // Workers Builds deploys main; cloudflare-preview only uploads an isolated
+  // version. The postbuild script selects the matching CMS branch and indexing.
   "name": "xravity-site",
   "main": "cloudflare/worker.mjs",
   "compatibility_date": "2026-10-25",

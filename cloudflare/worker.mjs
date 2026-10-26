@@ -125,12 +125,16 @@ export async function handle(request, env, fetchUpstream = fetch) {
     if (url.pathname.startsWith('/.netlify/') || url.pathname.startsWith('/api/')) return fail('Not found', 404);
     const response = await env.ASSETS.fetch(request);
     const headers = new Headers(response.headers);
-    headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    // Only the approved public hostname is indexable; workers.dev and branch
+    // previews stay private to crawlers, as do all admin and API responses.
+    if (url.hostname !== 'xravity.xyz' || /^\/admin(?:\/|$)/.test(url.pathname)) {
+      headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    }
     headers.set('X-Content-Type-Options', 'nosniff');
     return new Response(response.body, { status:response.status, statusText:response.statusText, headers });
   } catch (_) {
     // Deliberately omit error.message: fetch failures can include private URLs.
-    console.error(JSON.stringify({ event:'preview_upstream_unavailable' }));
+    console.error(JSON.stringify({ event:'upstream_unavailable' }));
     return fail('Service temporarily unavailable', 502);
   }
 }

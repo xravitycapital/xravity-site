@@ -5,16 +5,20 @@ Production: `https://xravity.xyz` · Repository: `xravitycapital/xravity-site`
 ## Publishing Flow
 
 ```text
-Decap CMS (Netlify Identity + Git Gateway) → GitHub main → Netlify production deploy → xravity.xyz
+Decap CMS (existing Netlify Identity + Git Gateway) → GitHub main → Cloudflare Workers Builds → xravity.xyz
 ```
 
-Netlify currently serves the production domain and provides Identity and Git Gateway. Verified on October 25, 2026: the Netlify project showed the current main commit as Published, production responses came from Netlify Edge, and www points to xravity.netlify.app. Cloudflare Workers Builds also runs on repository commits, but its successful check alone does not prove the public domain has changed. Keep `netlify.toml` and the existing auth services in place.
+This is the target production architecture for the Cloudflare cutover. A successful build alone does not prove the public domain has switched: verify DNS, TLS, response headers and `/__release.json` on the public hostname. Until those checks pass, the existing Netlify site can still be serving production.
+
+Keep the Netlify project, `netlify.toml`, existing Identity users, Git Gateway, and the published Forms deploy `6addd771a99d20b6b49a286d`. Cloudflare serves the frontend and forwards only the fixed Identity/Git Gateway paths to `xravity.netlify.app`; it does not create new administrator accounts or grant anonymous repository access. Contact forms on all pages use `/api/contact`, forwarded to the retained Forms deploy. Domain registration and renewal stay at GoDaddy; changing DNS hosting is not a registrar transfer.
+
+Workers Builds deploys `main` with `npm run build` and `npx wrangler deploy`. Non-production builds use `npx wrangler versions upload`. The build script generates production assets only for `WORKERS_CI_BRANCH=main`; `cloudflare-preview` remains isolated, saves CMS changes to that branch only, and excludes previews from indexing. Local production-bundle checks can use `CLOUDFLARE_BUILD_MODE=production`. Preserve the existing encrypted Worker secrets; no new API token is needed in the public repository.
 
 ## Admin Publishing
 
 Open `https://xravity.xyz/admin/` and sign in with the existing invited Netlify Identity account. The maintenance overview provides content counts, analytics, build history, comments, and registration settings. Counts are generated at build time, not live visitor totals. No analytics run on Admin.
 
-Choose **进入内容编辑器** to open the Chinese Decap editor. Returning to the overview keeps the editor mounted, but closing/reloading the tab can lose unsaved changes. Saving commits directly to `main`; Netlify then builds automatically.
+Choose **进入内容编辑器** to open the Chinese Decap editor. Returning to the overview keeps the editor mounted, but closing/reloading the tab can lose unsaved changes. Saving commits directly to `main`; Cloudflare then builds automatically. Saving successfully does not mean the build has finished.
 
 - Keep `Draft` enabled for unpublished articles; disable it and save to publish.
 - Drafts still exist in the public Git repository. Never store secrets or private information in drafts, settings, or uploads.
@@ -40,10 +44,10 @@ Run `ASTRO_TELEMETRY_DISABLED=1 npm run check` before pushing. This builds all r
 
 After pushing `main`:
 
-1. Confirm the commit's GitHub checks, including **Workers Builds: xravity-site** and **build**, then verify that Netlify Deploys shows the same main commit as **Published**.
+1. Confirm the commit's GitHub checks, including **Workers Builds: xravity-site** and **build**, then verify the same production commit at `/__release.json` (`mode: production`, `branch: main`). Netlify builds may remain paused due to its free-plan quota; they are not the Cloudflare publication signal.
 2. Compare production HTML/CSS asset hashes with the fresh local build; do not equate a successful push with a completed deployment.
-3. Check Blog, Resources, and Admin in a real browser. Test both UI languages and light/dark themes at mobile widths.
-4. If a release is wrong, revert the specific commit through normal Git history and let Netlify rebuild. Never reset shared `main` destructively.
+3. Check Home, Vision, Blog, Resources, and Admin in a real browser. Test both UI languages and the dark-only layout at mobile widths. Public pages must be indexable; Admin/API responses must remain private and uncached. Check that the homepage and vision contact forms both use the Cloudflare endpoint.
+4. If a release is wrong, revert the specific commit through normal Git history and let Cloudflare rebuild. Never reset shared `main` destructively. For a hosting rollback, retain the pre-cutover GoDaddy zone export and the original Netlify origin. Restore only the intended web records or previous nameservers; preserve mail/verification records and consider DNS propagation and certificates before changing delegation.
 
 CMS commits use `content:` or `media:` prefixes. Inspect commit history for accidental publishes and revert only the relevant change.
 
@@ -103,7 +107,7 @@ ASTRO_TELEMETRY_DISABLED=1 npm run dev -- --host 127.0.0.1 --port 4321
 ASTRO_TELEMETRY_DISABLED=1 npm run check
 ```
 
-Node 20 is used by CI. The local dev server may choose the next port if 4321 is busy; read its output. Local tests do not send GA4 events. Localhost is for layout previews, not production publishing: the Identity service may reject cross-origin settings requests. Perform real login/publishing checks on `https://xravity.xyz/admin/`; do not weaken CORS or authentication for a preview.
+Node 22 is used by CI. The local dev server may choose the next port if 4321 is busy; read its output. Local tests do not send GA4 events. Localhost is for layout previews, not production publishing. Perform real login/publishing checks on `https://xravity.xyz/admin/` or the same-origin Cloudflare preview Admin; do not weaken CORS or authentication for a preview.
 
 ## Domains and Search
 

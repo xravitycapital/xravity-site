@@ -13,6 +13,17 @@ test('static fallback keeps preview out of indexes', async () => {
   assert.match(result.headers.get('X-Robots-Tag'), /noindex/);
 });
 
+test('production pages are indexable but production admin and auth stay private', async () => {
+  const publicPage = await handle(new Request('https://xravity.xyz/vision/'), env, unexpected);
+  assert.equal(publicPage.headers.get('X-Robots-Tag'), null);
+  const admin = await handle(new Request('https://xravity.xyz/admin/'), env, unexpected);
+  assert.match(admin.headers.get('X-Robots-Tag'), /noindex/);
+  const privateApi = await handle(new Request('https://xravity.xyz/.netlify/git/github/contents/'), env, unexpected);
+  assert.equal(privateApi.status, 401);
+  assert.match(privateApi.headers.get('X-Robots-Tag'), /noindex/);
+  assert.equal(privateApi.headers.get('Cache-Control'), 'no-store');
+});
+
 test('anonymous Git Gateway access is denied before contacting upstream', async () => {
   const result = await handle(request('/.netlify/git/github/contents/'), env, unexpected);
   assert.equal(result.status, 401);
