@@ -2,7 +2,6 @@
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Cache-Control: public, max-age=0, must-revalidate
 
 https://:version.:subdomain.workers.dev/*
   X-Robots-Tag: noindex, nofollow, noarchive

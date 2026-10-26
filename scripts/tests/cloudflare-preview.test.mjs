@@ -31,6 +31,19 @@ test('public production is indexable but admin and all preview pages are exclude
   assert.match(cloudflareHeaders(source, 'preview'), /^\/\*\n  X-Robots-Tag: noindex/);
 });
 
+test('admin no-store policy does not merge with an explicit global public-cache policy', async () => {
+  const source = await readFile(new URL('../../cloudflare/headers', import.meta.url), 'utf8');
+  assert.doesNotMatch(source.split('\n\n')[0], /Cache-Control/);
+  assert.match(source, /\/admin\n[^\n]*\n  Cache-Control: no-store/);
+  assert.match(source, /\/admin\/\*\n[^\n]*\n  Cache-Control: no-store/);
+});
+
+test('production routing stays limited to the public apex hostname', async () => {
+  const source = await readFile(new URL('../../wrangler.jsonc', import.meta.url), 'utf8');
+  assert.match(source, /"pattern": "xravity.xyz\/\*", "zone_name": "xravity.xyz"/);
+  assert.doesNotMatch(source, /"pattern": "\*\.xravity.xyz/);
+});
+
 test('every contact form is adapted, not just the first homepage form', () => {
   const source = '<form data-contact-endpoint="/"></form><form data-contact-endpoint="/"></form>';
   assert.equal(cloudflareHtml(source), source.replaceAll('endpoint="/"', 'endpoint="/api/contact"'));

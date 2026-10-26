@@ -8,7 +8,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
   "preview_urls": true,
-  "routes": [],
+  "routes": [{ "pattern": "xravity.xyz/*", "zone_name": "xravity.xyz" }],
   "assets": {
     "directory": "./dist-cloudflare",
     "binding": "ASSETS",
