@@ -8,7 +8,11 @@ Production: `https://xravity.xyz` · Repository: `xravitycapital/xravity-site`
 Decap CMS (existing Netlify Identity + Git Gateway) → GitHub main → Cloudflare Workers Builds → xravity.xyz
 ```
 
-This is the target production architecture for the Cloudflare cutover. A successful build alone does not prove the public domain has switched: verify DNS, TLS, response headers and `/__release.json` on the public hostname. Until those checks pass, the existing Netlify site can still be serving production.
+This is the live production architecture, verified on October 25, 2026 (America/Los_Angeles). GoDaddy delegates DNS to `kallie.ns.cloudflare.com` and `yisroel.ns.cloudflare.com`. Cloudflare Universal SSL is active for the apex and first-level subdomains. Only the apex A and www CNAME are proxied; mail and `_domainconnect` records remain DNS-only. Registration and renewal remain at GoDaddy.
+
+The apex uses Worker Route `xravity.xyz/*`, persisted in `wrangler.jsonc`. A Cloudflare Single Redirect matches the exact host `www.xravity.xyz` and returns 308 to `https://xravity.xyz` plus the original path and query. Always Use HTTPS redirects HTTP requests. Keep the original apex A and www CNAME values for rollback; the Worker route serves the public frontend without fetching the old Netlify origin.
+
+A real authenticated Admin **立即发布** operation re-saved the welcome article, producing main commit `d2ad8a1f3c52818bf6f0d3700a9f68b9cf62d22c`. GitHub CI passed and the public hostname's `/__release.json` returned that exact production/main commit after automatic deployment. The article's wording was unchanged; Decap normalized Markdown/YAML and added its missing explicit `draft: false` field. No test article was published. A successful save alone still does not prove deployment: verify DNS, TLS, response headers and the current release marker for every future release.
 
 Keep the Netlify project, `netlify.toml`, existing Identity users, Git Gateway, and the published Forms deploy `6addd771a99d20b6b49a286d`. Cloudflare serves the frontend and forwards only the fixed Identity/Git Gateway paths to `xravity.netlify.app`; it does not create new administrator accounts or grant anonymous repository access. Contact forms on all pages use `/api/contact`, forwarded to the retained Forms deploy. Domain registration and renewal stay at GoDaddy; changing DNS hosting is not a registrar transfer.
 
@@ -21,6 +25,7 @@ Open `https://xravity.xyz/admin/` and sign in with the existing invited Netlify 
 Choose **进入内容编辑器** to open the Chinese Decap editor. Returning to the overview keeps the editor mounted, but closing/reloading the tab can lose unsaved changes. Saving commits directly to `main`; Cloudflare then builds automatically. Saving successfully does not mean the build has finished.
 
 - Keep `Draft` enabled for unpublished articles; disable it and save to publish.
+- For an older imported article whose Draft control looks off but is reported as missing, toggle it on and back off before publishing. This writes an explicit `false` without changing the article's public status. The existing welcome article has already been normalized this way.
 - Drafts still exist in the public Git repository. Never store secrets or private information in drafts, settings, or uploads.
 - The content-language selector describes the actual article/resource language. The website UI language does not translate authored content.
 - Decap is pinned to `3.17.1` and the Identity widget to `2.0.3`, with fallback CDNs, bounded loading, and visible errors. Update deliberately and test login, preview, media, save, and publish after changes.
