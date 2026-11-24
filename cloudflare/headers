@@ -24,3 +24,7 @@ https://:version.:subdomain.workers.dev/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store
   Referrer-Policy: no-referrer
+
+/games/jiliju/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: public, max-age=0, must-revalidate
