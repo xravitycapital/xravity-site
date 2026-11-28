@@ -54,7 +54,7 @@ const logo = '/images/tiljot/tiljot-logo.png';
         <p class="tagline" data-tj-i18n="tagline">{c.tagline}</p>
         <p class="intro"><span data-tj-i18n="introOne">{c.introOne}</span>{' '}<br class="desktop-break" /><span data-tj-i18n="introTwo">{c.introTwo}</span></p>
         <a class="contact" href="mailto:xravityai@outlook.com?subject=TilJot%20beta%20testing" data-tj-i18n="contact">{c.contact}</a>
-        <a class="beta-download" href="https://downloads.xravity.xyz/TilJot-1.0.1-2611.27.57-macos-arm64.pkg" referrerpolicy="no-referrer" data-tj-i18n="download" data-analytics-event="download_entry_click" data-analytics-id="tiljot-mac-beta">{c.download}</a>
+        <a id="tiljotBetaDownload" class="beta-download" href="https://tiljot-beta-downloads.netlify.app/?lang=en&amp;theme=dark" referrerpolicy="no-referrer" data-tj-i18n="download" data-analytics-event="download_entry_click" data-analytics-id="tiljot-mac-beta">{c.download}</a>
         <p class="availability" data-tj-i18n="availability">{c.availability}</p>
       </section>
       <section class="features" aria-label={c.capabilities} data-tj-aria="capabilities">
@@ -75,6 +75,13 @@ const logo = '/images/tiljot/tiljot-logo.png';
   import { tiljotCopy } from '../../data/tiljot-copy';
   let language: 'en' | 'zh' = 'en';
   const langToggle = document.getElementById('tiljotLangToggle')!;
+  function updateDownload() {
+    const download = document.getElementById('tiljotBetaDownload') as HTMLAnchorElement;
+    const address = new URL(download.href);
+    address.searchParams.set('lang', language);
+    address.searchParams.set('theme', 'dark');
+    download.href = address.href;
+  }
   function applyLanguage(lang: string) {
     language = lang === 'zh' ? 'zh' : 'en';
     const c = tiljotCopy[language];
@@ -92,6 +99,7 @@ const logo = '/images/tiljot/tiljot-logo.png';
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', c.description);
     langToggle.innerHTML = language === 'zh' ? 'EN | <strong>中文</strong>' : '<strong>EN</strong> | 中文';
     langToggle.setAttribute('aria-label', c.language);
+    updateDownload();
   }
   function restoreLanguage() {
     try { applyLanguage(localStorage.getItem('xravity_lang') || 'en'); }
